@@ -1,0 +1,232 @@
+
+\documentclass[a4paper,UKenglish,cleveref, autoref, english, thm-restate]{lipics-v2019}
+%This is a template for producing LIPIcs articles. 
+%See lipics-manual.pdf for further information.
+%for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
+%for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
+%for section-numbered lemmas etc., use "numberwithinsect"
+%for enabling cleveref support, use "cleveref"
+%for enabling autoref support, use "autoref"
+%for anonymousing the authors (e.g. for double-blind review), add "anonymous"
+%for enabling thm-restate support, use "thm-restate"
+
+%\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
+
+\bibliographystyle{plainurl}% the mandatory bibstyle
+
+\title{Interval space models: a semantics of approximate transformations through partial metric spaces} %TODO Please add
+
+\titlerunning{Interval space models  } %TODO optional, please use if title is longer than one line
+
+\author{Guillaume Geoffroy}
+{Universit\`a di Bologna, Dipartimento Informatica-Scienza e Ingegneria, Italy}
+{guillaume.geoffroy@unibo.it} 
+{}
+{}
+
+\author{Paolo Pistone}
+{Universit\`a di Bologna, Dipartimento Informatica-Scienza e Ingegneria, Italy}
+{paolo.pistone2@unibo.it} 
+{}
+{}
+%{johnqpublic@dummyuni.org}{https://orcid.org/0000-0002-1825-0097}{(Optional) author-specific funding acknowledgements}%TODO mandatory, please use full name; only 1 author per \author macro; first two parameters are mandatory, other parameters can be empty. Please provide at least the name of the affiliation and the country. The full address is optional
+
+
+\authorrunning{G. Geoffroy and P. Pistone} %TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
+
+\Copyright{G. Geoffroy and P. Pistone} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+
+\ccsdesc[100]{\textcolor{red}{Replace ccsdesc macro with valid one}} %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
+
+\keywords{Differential semantics, program metrics, approximate transformations, partial metric spaces} %TODO mandatory; please add comma-separated list of keywords
+
+\category{} %optional, e.g. invited paper
+
+\relatedversion{} %optional, e.g. full version hosted on arXiv, HAL, or other respository/website
+%\relatedversion{A full version of the paper is available at \url{...}.}
+
+\supplement{}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
+
+%\funding{(Optional) general funding statement \dots}%optional, to capture a funding statement, which applies to all authors. Please enter author specific funding statements as fifth argument of the \author macro.
+
+\acknowledgements{I want to thank \dots}%optional
+
+%\nolinenumbers %uncomment to disable line numbering
+
+%\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{John Q. Open and Joan R. Access}
+\EventNoEds{2}
+\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
+\EventShortTitle{CVIT 2016}
+\EventAcronym{CVIT}
+\EventYear{2016}
+\EventDate{December 24--27, 2016}
+\EventLocation{Little Whinging, United Kingdom}
+\EventLogo{}
+\SeriesVolume{42}
+\ArticleNo{23}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%packages
+
+
+\usepackage{booktabs}   %% For formal tables:
+                        %% http://ctan.org/pkg/booktabs
+\usepackage{subcaption} %% For complex figures with subfigures/subcaptions
+%% http://ctan.org/pkg/subcaption
+\usepackage{amsmath, amssymb}
+\usepackage{xifthen}
+\usepackage{tikz,pgfplots}
+\usepackage{stmaryrd}
+\usetikzlibrary{cd}
+
+\usepackage{rotating}
+\usepackage{comment}
+\usepackage{adjustbox}
+\usepackage{pgfplots}
+\usetikzlibrary{intersections}
+
+
+
+\tikzset{commutative diagrams/.cd,
+mysymbol/.style={start anchor=center,end anchor=center,draw=none}
+}
+\newcommand\Lessone[2][\begin{rotate}{25}{\huge$\leq$}\end{rotate}]{%
+  \arrow[mysymbol]{#2}[description]{#1}}
+\newcommand\Lesstwo[2][\begin{rotate}{25}{\huge$\geq$}\end{rotate}]{%
+  \arrow[mysymbol]{#2}[description]{#1}}
+
+
+
+%macros
+
+
+%% Custom command definitions
+\newcommand{\ob}[1]{\operatorname{Ob}\left(#1\right)}
+\newcommand{\close}[1]{\overline{#1}}
+% \newcommand{\intervals}[1]{???}
+%\newcommand{\intervalsx}[1]{\left[#1\right]}
+%\newcommand{\intervals}[1]{\overline{\left[#1\right]}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\J}{\mathcal{J}}
+\newcommand{\K}{\mathcal{K}}
+\newcommand{\apcat}{\mathcal{A}}
+\newcommand{\apcatT}{\mathcal{A}^{\tang}}
+\newcommand{\apcatd}{\mathcal{A}_d}
+\newcommand{\pmcat}{\mathcal{M}}
+\newcommand{\epcat}{\mathcal{E}}
+\newcommand{\diff}{\partial}
+\newcommand{\tang}{T}
+\newcommand{\pmofap}[1]{\ifthenelse{\isempty{#1}}{\left\vert-\right\vert}{\left\vert#1\right\vert}}
+\newcommand{\setcat}{\operatorname{Set}}
+\newcommand{\posetcat}{\operatorname{Poset}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cart}{\times}%{\mathbin{\&}}
+\newcommand{\projL}{\pi_1}
+\newcommand{\projR}{\pi_2}
+
+\newcommand{\oneap}{1}
+\newcommand{\onequantale}{1}
+
+\newcommand{\id}[1][]{\ifthenelse{\isempty{#1}}{\operatorname{id}}{\operatorname{id}_{#1}}}
+
+\newcommand{\ev}{\operatorname{ev}}
+\newcommand{\lam}{\lambda}
+
+\newcommand{\dsp}{\operatorname{Diam}}
+\newcommand{\bs}[1]{\left\vert#1\right\vert}
+
+%\newcommand{\oplam}{\operatorname{lam}}
+
+\newcommand{\STLC}{\mathsf{ST\lambda C}(\mathcal F_{n})}
+\newcommand{\QMet}{\mathsf{Met}_Q}
+\newcommand{\RMet}{\mathsf{Met}_{\R_+^\infty}}
+%\newcommand{\GPMS}{\mathsf{GPMet}}
+\newcommand{\gpms}[1]{#1}
+\newcommand{\real}{\R}
+%\newcommand{\Int}{\mathsf{Int}}
+\newcommand{\To}[2]{#1 \Rightarrow #2}
+\newcommand{\abs}{\lambda}
+
+
+\newcommand{\ball}{\mathsf{B}}
+
+
+\newcommand{\B}[1]{\mathbf{#1}}%{\mathbin{\&}}
+\newcommand{\powerset}{\mathcal{P}}
+
+\newcommand{\intervals}[1]{\llbracket #1 \rrbracket}
+\newcommand{\distances}[1]{\llparenthesis #1 \rrparenthesis}
+\newcommand{\tointerval}[1]{\overline{#1}}
+\newcommand{\quantaleleq}{\sqsubseteq}
+\newcommand{\quantalegeq}{\sqsupseteq}
+\newcommand{\quantaleop}{\mathbin{\ast}}
+\newcommand{\diam}{\delta}
+\newcommand{\oeq}{\approx}
+
+\newcommand{\metalambda}{%
+  \mathop{%
+    \rlap{$\lambda$}%
+    \mkern2mu
+    \raisebox{.275ex}{$\lambda$}%
+  }%
+}
+
+
+
+\begin{document}
+
+\maketitle
+
+%TODO mandatory: add short abstract of the document
+\begin{abstract}
+Abstract
+\end{abstract}
+
+
+\section{Introduction}
+
+\input{intro}
+
+
+\section{Preliminaries?}
+
+\input{preliminaries}
+
+\section{Intervals and program distances for a simply-typed $\lambda$-calculus with a type of reals}
+\label{section:stlc}
+
+\input{variation}
+
+\section{Compositional computation of program distances}
+
+\input{examples}
+
+\section{Interval space models over a cartesian closed category}
+
+\input{categoricalmodels}
+
+\section{Related work}
+
+\input{relatedwork}
+
+\section{Conclusions}
+
+\input{conclusions}
+
+\bibliography{CSL2021.bib}
+
+
+\appendix
+
+\section{Generalized partial metric spaces}
+
+\input{partialmetricspaces}
+
+\section{Cartesian lax-closed categories}
+
+\input{cclaxc}
+\end{document}

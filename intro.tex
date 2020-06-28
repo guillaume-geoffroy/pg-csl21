@@ -1,0 +1,192 @@
+% !TEX root = CSL 2021.tex
+
+\subparagraph*{Measuring sensitivity and similarity of programs in a compositional way}
+While in program semantics one is usually interested in capturing notions of behavioral equivalence between programs, 
+%\textit{i.e.} to describe when two programs behave in the same way, so that replacing one by the other in any context produces no observable change in the result. However, 
+in several fields like approximate \cite{Mittal2016}, incremental \cite{Cai2014, Picallo2019} and probabilistic \cite{10.1109/LICS.2015.64} computation, it is often more useful to be able to describe when two programs behave in a similar, although non equivalent way, so that replacing one by the other in a given context produces a change in the result which can be quantified and bounded in some way.
+A similar concern is found in fields like differential privacy \cite{10.1145/1932681.1863568, 10.1007/978-3-642-29420-4_3, Barthe_2012}, where one looks for means to measure the \emph{sensitivity} of a program, that is, of how much a change in the input will affect changes in the output.
+
+
+
+In all these fields the treatment of similarity and sensitivity measures seems to demand some form of \emph{compositionality}. 
+For instance, in numerical methods based on the Taylor's approximation of a continuous function (e.g. Gauss-Newton method), one looks for functions which approximate well a given function \emph{around some given point}. 
+In \emph{approximate computing} techniques (e.g. loop perforation \cite{loopperf}) a compiler can be asked to replace some computationally intensive piece of program by a more efficient, although only approximately equivalent, one.
+Hence, in all such cases one looks for methods to measure the similarity between two programs \emph{in a given context} $\mathtt C[t], \mathtt C[u]$, as a result of the similarity between $t$ and $u$ and, possibly, of the sensitivity of the context $\mathtt C[\ ]$ itself. 
+
+Some compositional frameworks for program differences have appeared in the recent literature \cite{chaudhuri, dallago:differential-stlc}. A common ground for these approaches is the idea that compositionality forces to think of program differences as being themselves some kind of programs, relating potential errors in input with errors in the output. For this reasons, in such frameworks we find two different classes of programs (with different typing structure): \emph{exact} programs, leading from well-defined inputs to well-defined outputs, and \emph{approximate} programs, leading from errors in the input into errors in the output.
+
+%
+%
+%\subsection{Differential logical relations}
+%
+%
+%
+%%A highly desirable property for a program metrics is \emph{compositionality}: if $t$ and $u$ are programs behaving in a very similar way and $C[\cdot]$ is some context which does not amplify distances too much, then we would like to justify the transformation from $C[t]$ to $C[u]$ by saying that it does not affect the result too much. 
+%While metric spaces and similar constructions usually do not play well with function spaces, the recent work of Dal Lago, Gavazzo and Yoshimizu on differential logical relations \cite{dallago:differential-stlc} 
+%introduces one key ingredient to make it work: varying the quantale in which distances are measured. In this way they provided a cartesian closed category in which types are endowed with a notion of distance. 
+%
+%In their model the distance between two real-valued functions
+% $f,g:\R\to \R$ is taken in the quantale of functions from $\R\times \R_{+}^{\infty}$ to $\R_{+}^{\infty}$: intuitively, 
+%  $d(f,g)$ is a function mapping changes in the input (changes ``around $x$'') to changes in the output (changes ``around $f(x)$'' or ``around $g(x)$''). More precisely,
+%   $d(f,g)$ associates to an interval $[x-\varepsilon, x+\varepsilon]$ (represented by the pair $(x,\varepsilon)$) the smallest distance $\delta$ such that $[ f(x)-\delta, f(x)+\delta]$ and $[g(x)-\delta,g(x)+\delta]$ contain the images of $[x-\varepsilon, x+\varepsilon]$ through
+% $g$ and $f$ respectively (see Fig. \ref{fig:graph1}).
+%
+%  
+%%$d(f,g)$ is the map that associates the pair $(x, \varepsilon)$ with the minimum $\delta$ bounding both distances $|f(x)-g(y)|$ and $|g(x)-f(y)|$, whenever $y$ is at distance at most $\varepsilon$ from $x$. In other words,
+%
+%
+% 
+% 
+%% the interval $
+%% 
+%%  an input $x\in \R$ and a \emph{rate of change} $\varepsilon\in \R_{+}^{\infty}$, a rate of change corresponding to the maximum distance between $f(x)$ and $g(y)$ (or between $g(x)$ and $f(y)$) when $y$ is at most $\varepsilon$ away from $x$. 
+%% 
+%%{Compared to the usual sup-(pseudo-)metrics on Lipschitz-continuous functions, this definition of distance enforces
+%%\emph{compositionality}. For instance, take the two programs $\lambda x.\sin x$ and $\lambda x.x$; 
+%%while their sup-metric distance is unbounded, and thus provides no workable information, their functional distance $(x,\varepsilon)\mapsto | \sin(x)-x|$ 
+%%.... 
+%%}
+%
+%Observe that the \emph{self-distance} of a function $f$, that is, its distance $d(f,f)$ from $\emph{itself}$, provides a measure of the sensitivity of $f$ ``around $x$'', and mapping $(x,\varepsilon)\mapsto (f(x), d(f,f)\linebreak[1](x,\linebreak[1]\varepsilon))$ give a function
+%$\diff (f): \R \times \R_{+}^{\infty} \  \to \  \R \times \R_{+}^{\infty}$
+%sending a closed interval centered in $x$ into a closed interval centered in $f(x)$, that we can think of as a sort of \emph{derivative} of $f$. %: it associates a change around the input to a change around  the output.
+%
+%
+%This fact implies that the self-distances are almost never $0$, unlike in standard metric spaces where $d(x,x)=0$ always holds: $d(f,f)$, now a \emph{function} and not a real number, is constantly equal to 0 only when $f$ is a constant function.  
+%In fact, the new distances $d(f,g)$ live in spaces, called \emph{generalized metric domains}, which satisfy weaker metric axioms: 
+%the usual axiom ``$d(x,y)=0$ \textit{iff} $x=y$'' is weakened to ``$d(x,y)=0$ implies $x=y$'' (indistancy implies equality), and the triangular inequality $d(x,z)\leq d(x,y)+d(y,z)$ is weakened to
+%$d(x,z) \leq d(x,y) + d(y,z) +d(y,y)$\footnote{Moreover, distances are not defined by a function $d(x,y)$ but by a \emph{ternary} relation $\rho(x, \varepsilon,y)$ involving two points and a distance $\varepsilon$.}.
+%
+%While considering metrics over an arbitrary quantale is common in the literature on metric spaces and quantale-enriched categories \cite{doi:10.1111/j.1749-6632.1994.tb44144.x}, 
+%generalized metric domains first appear in \cite{dallago:differential-stlc}, 
+%and their connection with the standard theory of metric spaces is not well-understood.
+%A natural question is thus whether the ideas in \cite{dallago:differential-stlc} can be transported into a more standard metric setting.
+%
+%
+%
+%\begin{figure}
+%\begin{tikzpicture}[domain=-2:2]
+%%\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
+%\draw[dashed, |<->|]   (-2,0) -- (2,0);
+%\draw[<->] (0,-0.4) -- (0,4); % node[above] {$f(x)$};
+%
+%    \node at (0,0)[circle,fill,inner sep=1pt]{};
+%%    \node at (-2,0)[circle,fill,inner sep=1pt]{};
+%%    \node at (2,0)[circle,fill,inner sep=1pt]{};
+%\node(z) at (0.2,-0.2) {$x$};
+%\node(-e) at (-2,-0.2) {$x-\varepsilon$};
+%\node(e) at (2,-0.2) {$x+\varepsilon$};
+%
+%
+%\node(f) at (0,0.8+0.5)[circle,fill,inner sep=1pt]{};
+%\node(f) at (0,1.5+0.3)[circle,fill,inner sep=1pt]{};
+%
+%\node(f) at (-0.3,2) {$f(x)$};
+%
+%\node(f) at (-0.3,1) {$g(x)$};
+%
+%
+%\node(ff) at (1.3,2.2) {{$f$}};
+%\node(gg) at (1.2,0.7) {{$g$}};
+%
+%%\draw[color=red] plot (\x,\x) node[right] {$f(x) =x$};
+%% \x r means to convert ?\x? from degrees to _r_adians:
+%\draw[color=blue] plot (\x,{0.8+ 0.5*(cos(\x r))}) ;
+%\draw[color=orange] plot (\x,{1.5+0.3*exp(\x)}) ;
+%
+%\draw[dotted] (0,1.8) -- (2.6,1.8);
+%\draw[dotted] (2,0.62) -- (2.6,0.62);
+%\draw[dotted] (0,1.3) -- (2.4,1.3);
+%\draw[dotted] (2,3.66) -- (2.4,3.66);
+%
+%%
+%%\draw[dotted] (0,1.8) -- (2, 0.62);
+%%\draw[dotted] (0,1.3) -- (2, 3.66);
+%
+%\draw[dashed,|<->| ] (2.4,3.66) -- node[right] {\tiny$\delta_{2}$} (2.4,1.3);
+%\draw[dashed,|<->| ] (2.6,1.8) -- node[right] {\tiny$\delta_{1}$} (2.6,0.62);
+%
+%\end{tikzpicture}
+%
+%\caption{\small In differential logical relations the distance between two functions $f,g:\R\to \R$, computed in $(x,\varepsilon)$ is the maximum between 
+%$\delta_{1}=\max\{d(f(x),g(y));~ y\in [x-\varepsilon, x+\varepsilon]\}$ and 
+%$\delta_{2}=\max\{d(g(x), f(y));~ y\in [x-\varepsilon, x+\varepsilon]\}$.}
+%% and 
+%%
+%%
+%%minimum $\delta$ such that for all $y\in [x-\varepsilon, x+\varepsilon]$, both $g(y)\in [f(x)-\delta, f(x)+\delta]$ and $f(y)\in[g(x)-\delta, g(x)+\delta]$ hold. $\delta$ is thus $\max\{\delta_{1},\delta_{2}\}$ in the image above.}
+%\label{fig:graph1}
+%\end{figure}
+%
+%
+%
+%
+%
+%%
+%%The main advantage of the model in \cite{dallago:differential-stlc} is its \emph{compositionality}.
+%%Consider the two programs from reals to reals $\lambda x.x$ and $\lambda x.\sin x$. In the standard frame of (pseudo-)metrics and Lipschitz-continuous functions, where the distance between two functions $f,g:\R\to \R$ is given by the sup-metric $d(f,g)=\sup_{x\in \R}d(f(x),g(x))$, the distance between $\lambda x.x$ and $\lambda x.\sin x$ is $\infty$. Hence replacing one by the other in any environment produces an unbounded change.
+%%The frame of differential logical relations provides a much sharper description of program distances: for instance,  whenever the environment only feeds these programs with reals close to 0, since the distance \emph{around 0} of $\lambda x.x $ and $\lambda x.\sin x$ (that is the value $d(\lambda x.x, \lambda x.\sin x)(0, \varepsilon)$) is small, 
+%%the replacing does not alter much the result.
+%
+%
+%
+%
+
+
+\subparagraph*{Program differences $vs$ program metrics}
+
+
+
+A standard way to measure differences between programs is by means of program metrics, that is, by endowing types $A$ with a distance $d:A\times A\to \mathbb R^{+}$. However, program metrics usually fail our compositional demand. Typically, in such models the distance between two programs $f,g: \mathsf{Real}\to \mathsf{Real}$ is computed as the $\sup$ of the distances between the values $f(r)$ and $g(r)$, for $r$ a ground element of $\mathsf{Real}$. 
+This approach is then not fine enough to capture differences which might depend on the context. For instance, whenever $g$ is obtained from $f$ by a truncated Taylor expansion around a point $r$, or by the replacement of a  $\mathsf{while}$ loop in $f$ by its perforation, the $\sup$-distance between $f$ and $g$ will most likely be infinite.
+
+
+A second issue with program metrics is that devising models of higher-order programming languages in which types are metric spaces still remains a non-trivial task. In fact, it is well-known that usual categories of metric spaces (\textit{e.g.} those generated by \emph{Lipschitz-continuous} functions)
+%\footnote{An exception is the metric model of PCF in \cite{Escardo1999}, based on a cartesian closed category of \emph{ultrametric spaces}, which in particular excludes $\R$.} \cite{Hofmann2014}) 
+are not \emph{cartesian-closed}, that is, do not provide models of the simply-typed lambda-calculus, but only of linear or sub-exponential variations of it (such as the system $\mathsf{Fuzz}$ \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017}).
+Moreover, it has been shown \cite{10.1109/LICS.2015.64} that in a probabilistic setting the non-linearity of higher-order programs has the effect of \emph{trivialising} metrics, that is, of forcing distances to be either 0 or 1, hence collapsing program distances onto usual notions of program equivalence.
+%
+%; 
+
+
+%second, such models are not at first sight compatible with the compositional approach advocated above: in a metric model the distance between two functional program is a real number (e.g. the max of the distances between the inputs), and this hardly provides a good compositional notion of difference [EXAMPLE HERE, e.g. sin/id, highlight the role of context, you can't justify contextual transformations].
+
+%EXAMPLE: Newton's approximation works well around some point (so it is contextual) -- see Di Cosmo Tweet on Apollo 11
+
+
+
+
+
+
+\subparagraph*{Contributions}
+
+
+
+In this paper we introduce a class of higher-order denotational models that we call \emph{interval space models}, which 
+provide \emph{both} a compositional model for exact/approximate programs \emph{and} a characterization of program differences in terms of program metrics.
+ 
+In these models a higher-order type $\sigma$ is interpreted by a 4-tuple $(A, \mathcal I, \mathbb Q, \delta)$, called an \emph{interval space}, which combines both qualitative and quantitative information on $\sigma$: $A$ is a set of points, corresponding to exact programs in $\sigma$, while $\mathcal I$ is a complete sublattice of $\mathcal P(A)$ whose elements are called \emph{intervals}, and codify approximate programs from $\sigma$. A map of interval spaces similarly comprises both an exact map between points and an approximate (monotone) map between intervals.
+
+Quantitative information is provided by the map $\delta: \mathcal I\to \mathbb Q$, where $\mathbb Q$ is a (commutative and integral) quantale, which measures the largeness of an interval. 
+For the reasons spelled above, whenever we consider intervals over functional programs, the measure of an interval should not be taken in the standard quantale of positive reals. This is why the quantale $\mathbb Q$ may vary across different interval spaces. For example, to measure an interval $a$ of programs from $\mathsf{Real}$ to $\mathsf{Real}$, we will let $\mathbb Q$ be the quantale of monotone maps from real intervals to $\mathbb R^{+\infty}$, and let $\delta(a)$ be the map associating a real interval $b$ with the maximum distance between $f(x),g(y)$, where $x,y\in b$ and $f,g\in a$.  
+
+A fundamental property of the quantitative measure $\delta$ is that it can be equivalently described through a program metric. In fact, by composing $\delta$ with the map associating two exact programs with their least common approximation, one obtains a \emph{partial metric} $d: A\times A \to \mathbb{Q}$ such that the measure $\delta(a)$ of an interval can be computed as the \emph{diameter} of $a$ (that is, as $\sup\{d(x,y)\mid x\in a\}$).
+%
+%by composing $\delta$ with the map $\vee$ associating two exact programs with their least common approximation, we obtain a binary map over exact programs $d= \vee\circ \delta: A\times A\to \mathbb{Q}$, which is in fact a \emph{partial metric}.
+
+
+ Partial metrics are a well-investigated class of metrics which is widely applied in program semantics \cite{bkmp:partial-metrics, doi:10.1111/j.1749-6632.1994.tb44144.x, Samet:2013aa}. 
+Such metrics generalize usual metrics by not requiring self-distances to be $0$ (and modifying the triangular law accordingly).\footnote{In fact, from any partial metric $d$ one can retrieve a standard metric $d'$ by letting $d'(x,y)=2d(x,y)-d(x,x)-d(y,y)$.}
+The appeal to partial metrics was indeed forced on us by compositionality: when $f$ is a functional program, its self-distance $d(f,f)$ must itself be a function relating changes in the input of $f$ with changes in its output, hence a function $f$ such that $d(f,f)$ is constantly $0$ would be one which is not sensitive to its input at all or, in other words, a constant function.   
+ As this example suggests, the self-distances of functional programs behave as sort derivatives, in particular, they compose through a (lax) chain-rule.
+
+      
+\subparagraph*{Interval spaces over your favorite higher-order language }
+
+
+%While our framework retains several aspects from existing frameworks for program approximations (\cite{}), it is the first one to provide a clear connection with standard techniques for program metrics. Moreover, 
+Beyond establishing a connection with program metrics, our approach has the advantage of being \emph{language-independent}: interval space models can be constructed for potentially any higher-order programming language with a reasonable denotational semantics. To demonstrate this fact we show how to construct, from an arbitrary cartesian closed category $\mathbb C$, an interval space model $\mathcal I(\mathbb C)$ in which exact programs coincide with the arrows in $\mathbb C$. The step from $\mathbb C$ to $\mathcal I(\mathbb C)$ preserves the cartesian closed structure in a \emph{lax} way: this reflects the fact that, by composing approximations in a higher-order setting, also their error rates compose (typically, approximating non $\beta$-normal $\lambda$-terms will lead to higher error-rates than approximating their $\beta$-normal forms). 
+
+
+%[MODIFY WHEN EXAMPLES ARE CLEARER] While being based on a general categorical construction, interval spaces adapt well to the specific features of each language. We show that the approximate programs defined for a specific language L incorporate the features of L, since specific interval structures can be defined starting from programs of L by a pullback operation.
+%For instance, if L has a derivative or finite difference operator $\Delta$, then by pulling back over it we can define an interval structure over $\mathsf{Real}\to \mathsf{Real}$ so that the difference between two programs depends, in addition to their behavior, on the behavior of their derivatives.
