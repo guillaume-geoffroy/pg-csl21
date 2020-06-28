@@ -14,7 +14,7 @@
 
 \bibliographystyle{plainurl}% the mandatory bibstyle
 
-\title{Diameter spaces: a partial metric semantics of higher-order programs} %TODO Please add
+\title{Diameter spaces: a partial metric semantics of higher-order programs and approximate program transformations} %TODO Please add
 
 \titlerunning{A partial metric semantics of higher-order programs  } %TODO optional, please use if title is longer than one line
 
@@ -38,7 +38,7 @@
 
 \ccsdesc[100]{\textcolor{red}{Replace ccsdesc macro with valid one}} %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
 
-\keywords{Differential semantics, program metrics, approximate transformations, partial metric spaces} %TODO mandatory; please add comma-separated list of keywords
+\keywords{Simply typed $\lambda$-calculus, Program metrics, approximate program transformations, partial metric spaces}  %TODO mandatory; please add comma-separated list of keywords
 
 \category{} %optional, e.g. invited paper
 
@@ -80,6 +80,7 @@
 \usepackage{amsmath, amssymb}
 \usepackage{xifthen}
 \usepackage{tikz,pgfplots}
+
 \usepackage{stmaryrd}
 \usetikzlibrary{cd}
 
@@ -87,6 +88,8 @@
 \usepackage{comment}
 \usepackage{adjustbox}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+
 \usetikzlibrary{intersections}
 
 
@@ -186,7 +189,16 @@ mysymbol/.style={start anchor=center,end anchor=center,draw=none}
 
 %TODO mandatory: add short abstract of the document
 \begin{abstract}
-Abstract
+
+While program semantics usually focuses on program equivalence, in fields like approximate, incremental and probabilistic computation it is often more useful to describe to which extent two programs behave in a similar, although non equivalent, way. This has motivated the study of program (pseudo)metrics, which have found widespread applications, \textit{e.g.} in differential privacy. 
+
+In this paper we show that the standard metric on real numbers can be lifted to higher-order types, yielding a metric semantics of the simply typed $\lambda$-calculus in which types are interpreted as partial metric spaces.
+Using such metrics we define a class of higher-order denotational models, called \emph{diameter space models}, that provide a quantitative semantics of approximate program transformations.
+
+
+%
+% a cartesian lax-closed category whose objects are partial metric spaces with distances taken over an arbitrary quantale. While usual categories of metric spaces only model linear or sub-exponential fragments of the simply-typed lambda-calculus, our category provides a non-extensional model of the full calculus.
+
 \end{abstract}
 
 
@@ -195,20 +207,20 @@ Abstract
 \input{intro}
 
 
-\section{Preliminaries?}
+\section{Generalized partial metric spaces}
 
 \input{preliminaries}
 
-\section{Intervals and program distances for a simply-typed $\lambda$-calculus with a type of reals}
+\section{Approximate programs for the simply-typed $\lambda$-calculus with a type of reals}
 \label{section:stlc}
 
 \input{variation}
 
-\section{Compositional computation of program distances}
+\section{Computing program distances with partial metrics}
 
 \input{examples}
 
-\section{Interval space models over a cartesian closed category}
+\section{Diameter space models over a cartesian closed category}
 
 \input{categoricalmodels}
 
@@ -222,14 +234,14 @@ Abstract
 
 \bibliography{CSL2021.bib}
 
-
-\appendix
-
-\section{Generalized partial metric spaces}
-
-\input{partialmetricspaces}
-
-\section{Cartesian lax-closed categories}
-
-\input{cclaxc}
+%
+%\appendix
+%
+%\section{Generalized partial metric spaces}
+%
+%\input{partialmetricspaces}
+%
+%\section{Cartesian lax-closed categories}
+%
+%\input{cclaxc}
 \end{document}

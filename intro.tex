@@ -57,9 +57,9 @@ Similarly, in numerical methods based on Taylor's polynomials (e.g. Gauss-Newton
 
    % \node at (0,0)[circle,fill,inner sep=1pt]{};
 %
-\draw[color=red, domain=-5:5] plot (\x, {sin(\x r) } ) node[above] {\tiny$\sin(x)$};
+\draw[color=red, domain=-5:5, samples=40] plot (\x, {sin(\x r)} ) node[above] {\tiny$\sin(x)$};
 
-\draw[color=blue, domain=-3:3] plot (\x,{\x  } ) node[below] {\tiny$x$};
+\draw[color=blue, domain=-3:3, samples=40] plot (\x,{\x  } ) node[below] {\tiny$x$};
 
 
 \end{tikzpicture}$}
@@ -81,9 +81,9 @@ Similarly, in numerical methods based on Taylor's polynomials (e.g. Gauss-Newton
 \node(r) at (1,-0.3) {\tiny$+\epsilon$};
    % \node at (0,0)[circle,fill,inner sep=1pt]{};
 %
-\draw[color=red, domain=-2:2] plot (\x, {sin(\x r) } ) node[above] {\tiny$\sin(x)$};
+\draw[color=red, domain=-2:2, samples=40] plot (\x, {sin(\x r) } ) node[above] {\tiny$\sin(x)$};
 
-\draw[color=blue, domain=-2:2] plot (\x,{\x  } ) node[below] {\tiny$x$};
+\draw[color=blue, domain=-2:2,samples=40] plot (\x,{\x  } ) node[below] {\tiny$x$};
 
 
 \draw[dotted] (-2,1) -- (2,1);
@@ -171,13 +171,17 @@ Such spaces generalize standard metric spaces in two ways: they are \emph{genera
 }   
 Observe that not only any standard metric space is a GPMS, but from from any partial metric $d$ one can retrieve a (generalized) metric $d'$ by letting $d'(x,y)=2d(x,y)-d(x,x)-d(y,y)$.
 
-The appeal to GPMS was somehow forced on us by the necessity, argued above, that the distance between two functional programs like $\lambda x.\sin(x)$ and $\lambda x.x$ must be itself some kind of function. First, this implies that this distance cannot be taken in $\mathbb R^{+\infty}$; instead, in our model $ d_{\mathsf{Real}\to\mathsf{Real}}(\lambda x.\sin(x),\lambda x.x)$ is the function that maps an approximate value on $\mathsf{Real}$ (i.e. a closed interval $a$) onto the sup of the distances between $\sin(x)$ and $ y$, with $x,y$ ranging in $a$. 
-This forces then to take $\distances{\mathsf{Real}\to\mathsf{Real}}$ as the quantale of non-decreasing maps from $\intervals{\mathsf{Real}}$ to $\distances{\mathsf{Real}}=\mathbb R^{+\infty}$. 
+The appeal to GPMS was somehow forced on us by the necessity, argued above, that the distance between two functional programs like $\lambda x.\sin(x)$ and $\lambda x.x$ must be itself some kind of function. First, this implies that this distance cannot be taken in $\mathbb R^{+\infty}$; instead, in our model 
+we let $\distances{\mathsf{Real}\to\mathsf{Real}}$ be the quantale of non-decreasing maps from $\intervals{\mathsf{Real}}$ to $\distances{\mathsf{Real}}=\mathbb R^{+\infty}$, and the distance of  $\lambda x.\sin(x)$ and $\lambda x.x$ is defined by 
+$$ d_{\mathsf{Real}\to\mathsf{Real}}(\lambda x.\sin(x),\lambda x.x): a \mapsto \mathsf{diam}(f(a)\vee g(a))$$
+that is, as the function that maps an approximate value on $\mathsf{Real}$ (i.e. a closed interval $a$) onto the sup of the distances between $\sin(x)$ and $ y$, with $x,y$ ranging in $a$, that is, into the diameter of the interval $f(a)\vee g(a)$. 
+
+
 Second, with this definition, the \emph{self-distance} of $\lambda x.\sin(x)$ (resp. $\lambda x.x$)  is a function that associates each interval $a$ with a value $\leq 2$ (resp. with $\diam(a)$, see Fig: \ref{fig:sinid}), so it is not constantly 0. Moreover, as this example suggests, the self-distances of functional programs behave as sort of derivatives, in particular, $ d_{\mathsf{Real}\to\mathsf{Real}}(f,f)$ is constantly 0 only if $f$ is constant, and moreover self-distances 
  compose through a (lax) chain-rule.
 
 
-While the closeness of  $\lambda x.\sin(x)$ and $\lambda x.x$ around 0 cannot be expressed in a metric semantics based on the sup-distance, in our framework this will be expressed by the fact that their distance, computed in an interval of 0 with a small enough diameter, is very close to the {self-distances} of both functions (see Fig. \ref{fig:sinid}). 
+While the fact that replacing  $\lambda x.\sin(x)$ by $\lambda x.x$, when applied close to 0 yields a negligible change cannot be expressed in a metric semantics based on the sup-distance, in our framework this will be expressed by the fact that their distance, computed in an interval of 0 with a small enough diameter, is very close to the {self-distance} of $\lambda x.\sin(x)$ (see Fig. \ref{fig:sinid}). 
 
 
 

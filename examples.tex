@@ -1,7 +1,7 @@
 % !TEX root = CSL 2021.tex
 
 
-In the preceding section we showed how to associate each simple type $A$ with a  partial metric $d_{A}$ over the closed terms of type $A$. We now illustrate through a few basic examples how this metric can be used to formalize reasoning about program differences in a compositional way.
+In the preceding section we showed how to associate each simple type $A$ with a  partial metric $d_{A}$ over the closed terms of type $A$. We now illustrate through a few basic examples how the higher-order and metric features of this semantics can be used to formalize contextual reasoning about program differences.
 
 
 
@@ -9,16 +9,21 @@ In the preceding section we showed how to associate each simple type $A$ with a 
 \subparagraph*{Taylor approximation}
 
 Suppose that for all $n$, we can define a term $\mathtt T^{n}: ((\mathsf{Real}\to \mathsf{Real})\times \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathtt T^{n}\langle f, r\rangle$ computes the $n$-th truncated Taylor expansion of $f$ at $r$. 
-Then, given a term $t[x]: \mathsf{Real}\to \mathsf{Real}$, the distance 
-$d_{\mathsf{Real}\to \mathsf{Real}}(\mathsf C[t],\mathsf C[ \mathtt T^{n}\langle t,\mathtt 0 \rangle])$
-between $t$ and its Taylor expansion within a context  $\mathsf C[\ ]= [\ ] r$ which applies them to some value $r$, can be computed as a function of the interval $[0,r]$.   
-For instance, if $t[x]$ is some basic function, say $t[x]=\sin(x)$, using standard analytic reasoning we can compute a bound
-$d_{\mathsf{Real}\to \mathsf{Real}}(\mathsf C[t],\mathsf C[ \mathtt T^{n}\langle t,\mathtt 0 \rangle])([0,r]  )\leq \frac{(d_{\mathsf{Real}}(0,r))^{n+1}}{(n+1)!} $.
+Then, given a term $t: \mathsf{Real}\to \mathsf{Real}$, the distance 
+$d_{\mathsf{Real}\to\mathsf{Real}}(t, \mathtt T^{n}\langle t,\mathtt 0 \rangle)$ is the map associating an interval $a$ with the diameter of $t(a)\vee (\mathtt T^{n}\langle t,\mathtt 0 \rangle)(a)$. 
+The difference between this value and the self-distance of $t$ will approximate 0 when $a$ is a small interval of $0$, and will tend to diverge when $a$ contains points which are far enough from 0. 
 
-\begin{remark}
-If, instead, we had considered the $\sup$-distance for $\mathsf{Real}\to \mathsf{Real}$, \emph{i.e.} the distance $d_{\sup}(t[x],u[x])= \sup\{d_{\mathsf{Real}}(t[r], u[r])\mid r\in \mathsf{Real}\}$, then the reasoning above would be trivialised since we would have that 
-$d_{\sup}(\sin(x), \mathsf T^{n} \langle \sin(x),0\rangle)=\infty$ (as illustrated in Fig. \ref{fig:sintaylor}).  
-\end{remark}
+%between $t$ and its Taylor expansion within a context  $\mathsf C[\ ]= [\ ] r$ which applies them to some value $r$, can be computed as a function of the interval $[0,r]$.   
+For example, if $t$ is the function $t=\lambda x.\sin(x)$, and $a$ is an interval of $0$, then using standard analytic reasoning we can compute a bound
+$d_{\mathsf{Real}\to \mathsf{Real}}(t, \mathtt T^{n}\langle t,\mathtt 0 \rangle)(a  )\leq \frac{\diam_{\mathsf{Real}}(a)^{n+1}}{(n+1)!} $, which tends to $0$ as the diameter of $a$ tends to $0$.
+
+Observe that if, instead, we used the $\sup$-distance $d_{\sup}(t,u)= \sup\{d_{\mathsf{Real}}(tr, ur)\mid r\in \Lambda_{\mathsf{Real}}\}$, then we could not reason as above since  
+$d_{\sup}(\lambda x.\sin(x), \mathsf T^{n} \langle \lambda x.\sin(x),0\rangle)=\infty$ (as illustrated in Fig. \ref{fig:sintaylor}).  
+
+The higher-order structure of our semantics can be used to push this simple example further. For instance, we can define an approximate program 
+$c[y_{1},y_{2}]=\left( \partial (\mathtt T^{n})\langle y_{1}, \tointerval{0}\rangle\right) y_{2}: \intervals{\mathsf{Real}\to \mathsf{Real}}\to \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ which describes the sensitivity of the $n$-th Taylor expansions in 0. Given two programs $t$ and $u$ and a small interval $a$ of $0$, the real number $c[\partial(t)\vee \partial(u),a]$ measures how much the error of replacing the Taylor expansions of $t$ with the Taylor expansion of $u$ in $0$ diverges from the error produced by simply replacing  $t$ and $u$, when these are applied close to $0$. 
+  
+
 
 \begin{figure}
 \begin{subfigure}{0.5\textwidth}
@@ -31,9 +36,9 @@ $d_{\sup}(\sin(x), \mathsf T^{n} \langle \sin(x),0\rangle)=\infty$ (as illustrat
 
    % \node at (0,0)[circle,fill,inner sep=1pt]{};
 %
-\draw[color=red, domain=-5:5] plot (\x, {sin(\x r) } ) node[above] {\tiny$\sin(x)$};
+\draw[color=red, domain=-5:5, samples=40] plot (\x, {sin(\x r) } ) node[above] {\tiny$\sin(x)$};
 
-\draw[color=blue, domain=-4:4] plot (\x,{\x -((\x)^3)/6 + ((\x)^5/120  } ) node[below] {\tiny$\mathtt T^{3}\langle\sin(x),0\rangle$};
+\draw[color=blue, domain=-4:4, samples=40] plot (\x,{\x -((\x)^3)/6 + ((\x)^5/120  } ) node[below] {\tiny$\mathtt T^{3}\langle\sin(x),0\rangle$};
 
 
 \end{tikzpicture}$}
@@ -43,102 +48,236 @@ $d_{\sup}(\sin(x), \mathsf T^{n} \langle \sin(x),0\rangle)=\infty$ (as illustrat
 \end{subfigure} \ \ \ 
 \begin{subfigure}{0.45\textwidth}
 \parbox[h][3.5cm][c]{\textwidth}{
-\adjustbox{scale=0.55}{$
-\begin{tikzpicture}[scale=0.7,
-    declare function={
-        f(\x)=2+sin(deg(\x-2))+sin(deg(3*\x))/2+sin(deg(5*\x))/8 + sin(deg(7*\x))/28;
-    }
-]
+\adjustbox{scale=0.6}{$
+\begin{tikzpicture}
 \begin{axis}[
-    axis lines = middle,
-    %xtick ={1,1.5,2,2.5,3,3.5,4},
-    ytick ={0},
-    %xticklabels = {$a=x_0$,$x_1$,$x_2$,$x_3$, $\ldots$, $x_{n-1}$,$x_n=b$},
-    ymin = -0.2,
-    ymax = 3.7,
-    xmin = -0.2,
-    xmax = 5.2,
-    x=3cm,y=2cm,
-    axis line style = thick,
-    %xlabel={$x$},
-    %ylabel={$y$},
-    %extra x ticks={1.3,1.85,2.2,2.7,3.2,3.75},
-%extra x tick labels={$\xi_1$, $\xi_2$, $\xi_3$, $\xi_4$, $\xi_{n-1}$, $\xi_n$},
-]
+    xticklabels={ , , },yticklabels={ , , },
+    xmax=18,ymax=1.2,ymin=0,xmin=0,
+    enlargelimits=true,
+    axis lines=middle,
+    clip=false,
+    domain=0:17,
+    axis on top
+    ]
 
-\addplot [
-    domain=1:4,
-    samples=300,
-    line width=1pt,
-    fill=red, draw=none,
-    fill opacity=0.1
-] {f(x)} \closedcycle;
+\addplot [draw=red, fill=red!10, ybar interval, samples=9, domain=1:17]
+    {x^-1}\closedcycle;
+%\addplot [draw=green, fill=green!10, ybar interval, samples=9, domain=17:1]
+  %  {x^-1}\closedcycle;
 
-\addplot [
-    domain=0:5,
-    samples=300,
-    line width = 1pt, red] {f(x)};
-
-\addplot [
-    ycomb, thick, red,
-    no markers,
-    samples at={1,1.5,...,4}
-] {f(x)};
-
-\addplot [
-    ycomb, thick, blue,
-    no markers,
-    samples at={1.3,1.85,2.2,2.6,3.2,3.65}
-] {f(x)};
-
-\addplot[ybar, bar width=30pt, domain=1:4,
-samples at={1.3,1.85,2.2,2.6,3.2,3.65}, fill=blue!50!cyan,fill opacity=0.3, draw=cyan]
-  {f(x)};
-
+\addplot[smooth, thick,domain=1:17,samples=40]{x^-1};
 
 \end{axis}
-\end{tikzpicture}$}
+\end{tikzpicture}
+$}
+%
+%\begin{tikzpicture}[scale=0.7,
+%    declare function={
+%        f(\x)=2+sin(deg(\x-2))+sin(deg(3*\x))/2+sin(deg(5*\x))/8 + sin(deg(7*\x))/28;
+%    }
+%]
+%\begin{axis}[
+%    axis lines = middle,
+%    %xtick ={1,1.5,2,2.5,3,3.5,4},
+%    ytick ={0},
+%    %xticklabels = {$a=x_0$,$x_1$,$x_2$,$x_3$, $\ldots$, $x_{n-1}$,$x_n=b$},
+%    ymin = -0.2,
+%    ymax = 3.7,
+%    xmin = -0.2,
+%    xmax = 5.2,
+%    x=3cm,y=2cm,
+%    axis line style = thick,
+%    %xlabel={$x$},
+%    %ylabel={$y$},
+%    %extra x ticks={1.3,1.85,2.2,2.7,3.2,3.75},
+%extra x tick labels={$\xi_1$, $\xi_2$, $\xi_3$, $\xi_4$, $\xi_{n-1}$, $\xi_n$},
+%]
+%
+%\addplot [
+%    domain=1:4,
+%    samples=300,
+%    line width=1pt,
+%    fill=red, draw=none,
+%    fill opacity=0.1
+%] {f(x)} \closedcycle;
+%
+%\addplot [
+%    domain=0:5,
+%    samples=300,
+%    line width = 1pt, red] {f(x)};
+%
+%\addplot [
+%    ycomb, thick, red,
+%    no markers,
+%    samples at={1,1.5,...,4}
+%] {f(x)};
+%
+%\addplot [
+%    ycomb, thick, blue,
+%    no markers,
+%    samples at={1.3,1.85,2.2,2.6,3.2,3.65}
+%] {f(x)};
+%
+%\addplot[ybar, bar width=30pt, domain=1:4,
+%samples at={1.3,1.85,2.2,2.6,3.2,3.65}, fill=blue!50!cyan,fill opacity=0.3, draw=cyan]
+%  {f(x)};
+%
+%
+%\end{axis}
+%\end{tikzpicture}$}
 }
-\caption{\small Real integral $vs$ Riemann sum. \\ TO BE FIXED }
-\label{fig:sintaylor}
+\caption{\small Integral $vs$ Riemann sum. \\ \   }
+\label{fig:riemann}
 \end{subfigure}
 \end{figure}
 
 
 \subparagraph*{Integral approximation}
-A second natural example is numerical integration. Suppose that all functions in $\mathcal F_{n}$ are integrable and suppose we have at our disposal a term $\mathtt I_{r,s}: (\mathsf{Real}\to \mathsf{Real})\to \mathsf{Real}$ such that $\mathtt I_{r,s}f$ is (a precise enough approximation of) the definite integral $\int_{s}^{r}f(x)dx$.
-In many contexts we might prefer to replace the expensive computation of $\mathsf I_{r,s}f$ by the (more economical but less precise) computation of a finite Riemann sum $\mathsf R^{n}_{r,s}f=  \sum_{i=1}^{n}(f x_{i})\cdot \Delta x$, where $\Delta x= |r-s|/n$ and $x_{i}= r+ i\cdot \Delta x$. 
-It is well-known that the distance between the exact integral (that we suppose $\mathtt I_{r,s}$ is close enough to) and its approximation through a finite Riemann sum can be computed as a value $H(f'', n)$ depending on the second derivative of $f$ and $n$, that is
-$d_{\mathsf{Real}}(\mathsf I_{r,s}f, \mathsf R^{n}_{r,s}f)\leq H(f'',n)$.
+A second natural application of contextual metric reasoning is to numerical integration. Suppose that all functions in $\mathcal F_{n}$ are integrable and suppose we have at our disposal a program $\lambda fx.\mathtt I_{[0,x]}f: (\mathsf{Real}\to \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathtt I_{[0,r]}t$ computes (a precise enough approximation of) the definite integral $\int_{0}^{|r|}tx \ dx$.
+In many contexts we might prefer to replace the expensive computation of $\mathsf I_{[0,r]}t$ by the (more economical but less precise) computation of a finite Riemann sum $\mathsf R^{n}_{[0,r]}t=  \sum_{i=1}^{n}(tx_{i})\cdot |r|/n$, where 
+ $x_{i}=  i\cdot |r|/n$ (see Fig. \ref{fig:riemann}).  
 
-A bit more generally, we can consider the problem of bounding, given \emph{different} terms $f,g:\mathsf{Real}\to \mathsf{Real}$, the distance between the real integral of $\mathtt I_{r,s}f$ of $f$ and the approximate integral $\mathtt R^{n}_{r,s}g$ of $g$, supposing $f$ and $g$ are close each other on the interval $[r,s]$. 
- In fact, by standard calculation we can compute the bound
-$d_{\mathsf{Real}} ( \mathsf{R}^{n}_{r,s}f, \mathsf R^{n}_{r,s}g)\leq 
-d_{\mathsf{Real}\to\mathsf{Real}}(f, g)([r,s]) \cdot n (\Delta x)^{n}
-$, which is small for small values of $|r-s|$. Then,
- using the triangular inequality we obtain an explicit bound
-$d_{\mathsf{Real}} ( \mathsf{I}_{r,s}f, \mathsf R^{n}_{r,s}g)\leq
- d_{\mathsf{Real}} ( \mathsf{I}_{r,s}f, \mathsf R^{n}_{r,s}f)+
-  d_{\mathsf{Real}} ( \mathsf{R}^{n}_{r,s}f, \mathsf R^{n}_{r,s}f)\leq 
- H(f'',n)+
-d_{\mathsf{Real}\to\mathsf{Real}}(f, g)([r,s]) \cdot n (\Delta x)^{n}
+%
+%
+%When the second derivative $D^{(2)}t$ of a program $t$ exists (and can be computed efficiently) and moreover is bounded by $M$ on $[0,r]$, the error of replacing the true integral  $\int_{0}^{r}tx dx$ (that we suppose $\mathtt I_{[0,r]}$ is close enough to) by its approximation through a finite Riemann sum, can be bounded
+% as $d_{\mathsf{Real}}(\mathsf I_{[0,r]}t, \mathsf R^{n}_{[0,r]}t)\leq  M\cdot |r|^{3}/24n^{2}$.
+
+
+Suppose now that, in order to approximate the integral of some computationally expensive program $t$ on $[0,r]$, we replace $t$ by some more efficient program $u$ which is very close to $t$ within the interval $[0,r]$.
+Let $\epsilon_{t}(r)$ indicate the error of replacing the true integral of $t$ over $[0,r]$ with $\mathsf{R}^{n}_{[0,r]}t$ (which can be explicitly computed by standard analytic techniques under suitable assumptions for $t$ and its derivatives),
+ and 
+$\delta_{t,u}(r)$ indicate the distance between $t$ and $u$ on the interval $[0,r]$.
+
+Using the metric structure of $\mathsf{Real}$ we can then bound the error we incur in by replacing the true integral \emph{of $t$} with the Riemann sum \emph{of $u$}. 
+In fact, by standard calculation we can compute the bound
+$d_{\mathsf{Real}} ( \mathsf{R}^{n}_{[0,r]}t, \mathsf R^{n}_{[0,r]}u)\leq 
+d_{\mathsf{Real}\to\mathsf{Real}}(t, u)([0,r]) \cdot n \cdot |r|= \delta_{t,u}(r)\cdot n \cdot |r|$.
+Then, using the triangular inequality we deduce
+$d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}t, \mathsf R^{n}_{[0,r]}u)
+\leq
+d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}t, \mathsf R^{n}_{[0,r]}t) +
+d_{\mathsf{Real}} ( \mathsf{R}_{[0,r]}t,\mathsf R^{n}_{0,r]}u) \leq 
+\epsilon_{t}(r)
++ 
+\delta_{t,u}(r)\cdot 
+ n\cdot |r|$.
+ 
+Using the partial metric structure on $\mathsf{Real}\to \mathsf{Real}$, we can also derive a bound expressing how much the error above is \emph{sensitive to changes of $r$}. In fact, for all interval $a\in \intervals{\mathsf{Real}}$, using the triangular inequality of partial metrics we deduce $d_{\mathsf{Real}\to\mathsf{Real}} (\lambda x. \mathsf{I}_{[0,x]}t,\lambda x. \mathsf R^{n}_{[0,x]}u)(a)
+\leq
+d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{I}_{[0,x]}t, \lambda x.\mathsf R^{n}_{[0,x]}t)(a) +
+d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}t, \lambda x.\mathsf R^{n}_{0,x]}u)(a) -
+d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}t,\lambda x. \mathsf R^{n}_{0,x]}t)(a)
+\leq 
+\partial(\epsilon_{t})(a)
++ 
+(\partial(\delta_{t,u})(a)-\partial(\delta_{t,t})(a))\cdot 
+ n\cdot \diam_{\mathsf{Real}}(a)
 $.
 
-As in the previous example, we could not use the distance between $f$ and $g$ in a relevant way if this were the $\sup$-distance, since, although close on $[r,s]$, $f$ and $g$ might get arbitrarily far from each other over all reals. 
+
+
+
+%using the triangular inequality of partial metrics, we can deduce a bound for the distance 
+%$ d_{\mathsf{Real}\to\mathsf{Real}} (\lambda x. \mathsf{I}_{[0,x]}t,\lambda x. \mathsf R^{n}_{[0,x]}u)\in \intervals{Real}\to \distances{Real}$ by 
+%$d_{\mathsf{Real}\to\mathsf{Real}} (\lambda x. \mathsf{I}_{[0,x]}t,\lambda x. \mathsf R^{n}_{[0,x]}u)
+%\leq
+%d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{I}_{[0,x]}t, \lambda x.\mathsf R^{n}_{[0,x]}t) +
+%d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{0,x]}t, \lambda x.\mathsf R^{n}_{0,x]}u) -
+%d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{0,x]}t,\lambda x. \mathsf R^{n}_{0,x]}t)
+%\leq 
+%\epsilon_{t,a}
+%+ 
+%(\delta_{t,u,a}-\delta_{t,t,a})\cdot 
+% n\cdot \diam_{\mathsf{Real}}(a)
+%$.
+
+%
+%+\lambda x. \mathsf{R}_{x}u, \mathsf R^{n}_{x}t)
+%\leq 
+%
+% d_{\mathsf{Real}} ( \mathsf{I}_{r,s}f, \mathsf R^{n}_{r,s}f)+
+%  d_{\mathsf{Real}} ( \mathsf{R}^{n}_{r,s}f, \mathsf R^{n}_{r,s}f)\leq 
+% H(f'',n)+
+%d_{\mathsf{Real}\to\mathsf{Real}}(f, g)([r,s]) \cdot n (\Delta x)^{n}
+%$.
+%
+%
+%
+% some program $t$ for which we know that the Riemann sum approximates the real integral with a small error $\epsilon_{t}$, and 
+%
+% program $u$ which is close to $t$ between $r$ and $s$, but for which we cannot compute directly a bound for $\epsilon_{u}=d_{\mathsf{Real}}(\mathsf I_{r,s}u, \mathsf R^{n}_{r,s}u)$ (for example, because second derivatives do not exist or cannot be computed efficiently). Then we can use higher-order reasoning, along with the partial metric structures to compute a bound for $\delta_{u}$.
+%
+%Then, 
+%
+%
+%
+%
+%What then if one starts from \emph{different} programs $t,u:\mathsf{Real}\to \mathsf{Real}$ and wants to
+%bound the distance
+%, the distance between the real integral of $\mathtt I_{r,s}f$ of $f$ and the approximate integral $\mathtt R^{n}_{r,s}g$ of $g$, supposing $f$ and $g$ are close each other on the interval $[r,s]$. 
+% In fact, by standard calculation we can compute the bound
+%$d_{\mathsf{Real}} ( \mathsf{R}^{n}_{r,s}f, \mathsf R^{n}_{r,s}g)\leq 
+%d_{\mathsf{Real}\to\mathsf{Real}}(f, g)([r,s]) \cdot n (\Delta x)^{n}
+%$, which is small for small values of $|r-s|$. Then,
+% using the triangular inequality we obtain an explicit bound
+%$d_{\mathsf{Real}} ( \mathsf{I}_{r,s}f, \mathsf R^{n}_{r,s}g)\leq
+% d_{\mathsf{Real}} ( \mathsf{I}_{r,s}f, \mathsf R^{n}_{r,s}f)+
+%  d_{\mathsf{Real}} ( \mathsf{R}^{n}_{r,s}f, \mathsf R^{n}_{r,s}f)\leq 
+% H(f'',n)+
+%d_{\mathsf{Real}\to\mathsf{Real}}(f, g)([r,s]) \cdot n (\Delta x)^{n}
+%$.
+
+%As in the previous example, we could not use the distance between $f$ and $g$ in a relevant way if this were the $\sup$-distance, since, although close on $[r,s]$, $f$ and $g$ might get arbitrarily far from each other over all reals. 
 
 
 
 \subparagraph*{Loop perforation}
-By adapting an example from \cite{chaudhuri}, we discuss a simplified example of the transformation which replaces $n$-iterations by $\lceil n/k \rceil$ iterations, in which only the iterations of $k\cdot i$ are performed and repeated $k$ times. 
+By adapting an example from \cite{chaudhuri}, we discuss a simplified example of the transformation which replaces a program $t$ which performs $n$-iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. 
 
 
-Let $\mathsf{Nat}_{A}$ be a suitable type representing natural numbers in $\STLC$ and suppose  $t: (A\times A\to A) \to \mathsf{Nat}\to (A\to A)\to A$, for $n\geq 1$, is a term such that $th\mathtt n f$ 
-computes the $n$-times iteration of $h$ as follows: $th \mathtt 0f= h\langle f\mathtt 0, f\mathtt 0\rangle$ and $th(\mathtt{n+1})f=h(th\mathtt n f, f\mathtt{n+1})$. 
-Let $\mathsf{Perf}^{k}(t)$, the $k$-th perforation of $t$, be the function 
-$\mathsf{Perf}^{k}(t)h\mathtt nf= t(\lambda x. (h^{(k)}x)) \mathtt{\lfloor n\rfloor_{k}} (\lambda x. f(x\cdot k)$, where $\lfloor n\rfloor_{k}$ indicates the least $m\leq n$ such that $m$ is divisible by $k$. 
-It can then be checked that the distance 
-$d_{A}(th\mathtt n f,  \mathsf{Perf}^{k}(t)h\mathtt nf  )$ between $t$ and its perforation can be bounded by 
-computing the diameter of $\partial(t)   \partial(h) \tointerval{\mathtt n} (\lambda x.\partial (f)([\lfloor x/k\rfloor, x]))$.
+We suppose that our language includes a type $\mathsf{Nat}$ for natural numbers. A natural choice is to let   
+$\intervals{\mathsf{Nat}}=\{ \{ t \mid \exists n\in a \ t\leadsto \mathtt n\}\mid a \text{ finite subset of }\mathbb N \text{ or }a=\mathbb N\}$, $\distances{\mathsf{Nat}}=\mathbb R^{+\infty}$ and $d_{\mathsf{Nat}}(t,u)=| n-m|$, where $t\to^{*}_{\beta}\mathtt n$ and $u\to^{*}_{\beta}\mathtt m$. 
+
+
+%Let $\mathsf{Nat}$ be a suitable type representing natural numbers in $\STLC$ and s
+Suppose now  $t: (A\times A\to A) \to \mathsf{Nat}\to (A\to A)\to A$, for $n\geq 1$, is a term such that $th\mathtt n f$ 
+computes the $n$-times iteration of $h$ as follows: $th \mathtt 0f= h\langle f\mathtt 0, f\mathtt 0\rangle$ and $th(\mathtt{n+1})f=h\langle th\mathtt n f, f\mathtt{n+1}\rangle$. 
+Let $\mathsf{Perf}^{k}(t)$, the $k$-th perforation of $t$, be the program satisfying  
+$(\mathsf{Perf}^{k}(t))h\mathtt nf= t(\lambda x. (h^{(k)}x)) \mathtt{\lfloor n\rfloor_{k}} (\lambda x. f(x* \mathtt k)$, where $\lfloor n\rfloor_{k}$ indicates the least $m\leq n$ such that $m$ is divisible by $k$, and $x*\mathtt k$ is the multiplication of $x$ by $k$. 
+
+
+
+
+
+To compute the distance 
+$d_{A}(v_{n},w_{n}    )$ between  $v_{n}=th\mathtt n f $ and its perforation $w_{n}=\mathsf{Perf}^{k}(t)h\mathtt nf$  we can reason as follows: 
+\begin{itemize}
+
+\item[i.] $v_{n}$ performs $n$-iterations while $w_{n}$ performs $k\lfloor n\rfloor_{k}  \leq n$ iterations, and we can compute  
+$d_{A}(v_{n}, v_{(k \lfloor n\rfloor_{k})})$ as the diameter of 
+$\partial(t)(\partial(h), [ k \lfloor n\rfloor_{k}, n]_{\mathsf{Nat}}, \partial(f))$.
+
+
+
+
+\item[ii.] If $n$ is divisible by $k$, then for $i\leq n$, at the $i$-th iteration of $v_{n}$ the function $f$ is applied  to $\mathtt i$, while at the $i$-th iteration of $w_{n}$, $f$ is applied to $\lfloor i\rfloor_{k}$. Now, the error of replacing  $f\mathtt i$ by $ f(\lfloor \mathtt j\rfloor_{k})$, with $\mathtt i,\mathtt j$ in some $a\in \intervals{\mathsf{Nat}}$ is accounted for by the approximate program $c[y]= \partial(f)(y-k  )$, where $y-k= y \vee \{u-\mathtt k\mid u \in y\}$.
+We deduce then that 
+$d_{A}(v_{n}, w_{n})$ is bounded by the diameter of $\partial(t)\partial(f)( \tointerval{\mathtt{k* \lfloor n\rfloor_{k}}} )(\lambda y.c[y])$.
+
+\item[iii.] From the fact that $w_{n}=w_{(k\cdot \lfloor n\rfloor_{k})}$ and the triangular inequality of the partial metric $d_{A}$ we deduce  
+$d_{A}(v_{n}, w_{n})=
+d_{A}(v_{n},w_{(k\cdot \lfloor n\rfloor_{k})}) \leq
+d_{A}(v_{n}, v_{(k\cdot \lfloor n\rfloor_{k})})+
+d_{A}(v_{(k\cdot \lfloor n\rfloor_{k})}, w_{(k\cdot \lfloor n\rfloor_{k})})-
+d_{A}(v_{(k\cdot \lfloor n\rfloor_{k})},v_{(k\cdot \lfloor n\rfloor_{k})} )$
+
+
+\end{itemize}
+
+From facts i.-iii. we immediately derive an explicit bound for $d_{A}(v_{n},w_{n}    )$ as a function of $\partial(t), \partial(f)$ and $n$. 
+
+%
+% $\partial(t)   \partial(h) \tointerval{\mathtt n} (\lambda x.\partial (f)(x-k))$.
 
 %{
 %
