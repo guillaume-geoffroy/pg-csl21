@@ -6,7 +6,7 @@ In the preceding section we showed how to associate each simple type $A$ with a 
 
 
 
-\subparagraph*{Taylor approximation}
+\begin{example}[Taylor approximation]
 
 Suppose that for all $n$, we can define a term $\mathtt T^{n}: ((\mathsf{Real}\to \mathsf{Real})\times \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathtt T^{n}\langle f, r\rangle$ computes the $n$-th truncated Taylor expansion of $f$ at $r$. 
 Then, given a term $t: \mathsf{Real}\to \mathsf{Real}$, the distance 
@@ -18,12 +18,12 @@ For example, if $t$ is the function $t=\lambda x.\sin(x)$, and $a$ is an interva
 $d_{\mathsf{Real}\to \mathsf{Real}}(t, \mathtt T^{n}\langle t,\mathtt 0 \rangle)(a  )\leq \frac{\diam_{\mathsf{Real}}(a)^{n+1}}{(n+1)!} $, which tends to $0$ as the diameter of $a$ tends to $0$.
 
 Observe that if, instead, we used the $\sup$-distance $d_{\sup}(t,u)= \sup\{d_{\mathsf{Real}}(tr, ur)\mid r\in \Lambda_{\mathsf{Real}}\}$, then we could not reason as above since  
-$d_{\sup}(\lambda x.\sin(x), \mathsf T^{n} \langle \lambda x.\sin(x),0\rangle)=\infty$ (as illustrated in Fig. \ref{fig:sintaylor}).  
+$d_{\sup}(\lambda x.\sin(x), \mathtt T^{n} \langle \lambda x.\sin(x),0\rangle)=\infty$ (as illustrated in Fig. \ref{fig:sintaylor}).  
 
 The higher-order structure of our semantics can be used to push this simple example further. For instance, we can define an approximate program 
 $c[y_{1},y_{2}]=\left( \partial (\mathtt T^{n})\langle y_{1}, \tointerval{0}\rangle\right) y_{2}: \intervals{\mathsf{Real}\to \mathsf{Real}}\to \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ which describes the sensitivity of the $n$-th Taylor expansions in 0. Given two programs $t$ and $u$ and a small interval $a$ of $0$, the real number $c[\partial(t)\vee \partial(u),a]$ measures how much the error of replacing the Taylor expansions of $t$ with the Taylor expansion of $u$ in $0$ diverges from the error produced by simply replacing  $t$ and $u$, when these are applied close to $0$. 
   
-
+\end{example}
 
 \begin{figure}
 \begin{subfigure}{0.5\textwidth}
@@ -132,7 +132,7 @@ $}
 \end{figure}
 
 
-\subparagraph*{Integral approximation}
+\begin{example}[Integral approximation]
 A second natural application of contextual metric reasoning is to numerical integration. Suppose that all functions in $\mathcal F_{n}$ are integrable and suppose we have at our disposal a program $\lambda fx.\mathtt I_{[0,x]}f: (\mathsf{Real}\to \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathtt I_{[0,r]}t$ computes (a precise enough approximation of) the definite integral $\int_{0}^{|r|}tx \ dx$.
 In many contexts we might prefer to replace the expensive computation of $\mathsf I_{[0,r]}t$ by the (more economical but less precise) computation of a finite Riemann sum $\mathsf R^{n}_{[0,r]}t=  \sum_{i=1}^{n}(tx_{i})\cdot |r|/n$, where 
  $x_{i}=  i\cdot |r|/n$ (see Fig. \ref{fig:riemann}).  
@@ -173,7 +173,7 @@ d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}t,\lambda x. \ma
 (\partial(\delta_{t,u})(a)-\partial(\delta_{t,t})(a))\cdot 
  n\cdot \diam_{\mathsf{Real}}(a)
 $.
-
+\end{example}
 
 
 
@@ -231,7 +231,7 @@ $.
 
 
 
-\subparagraph*{Loop perforation}
+\begin{example}[Loop perforation]
 By adapting an example from \cite{chaudhuri}, we discuss a simplified example of the transformation which replaces a program $t$ which performs $n$-iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. 
 
 
@@ -274,7 +274,9 @@ d_{A}(v_{(k\cdot \lfloor n\rfloor_{k})},v_{(k\cdot \lfloor n\rfloor_{k})} )$
 
 \end{itemize}
 
-From facts i.-iii. we immediately derive an explicit bound for $d_{A}(v_{n},w_{n}    )$ as a function of $\partial(t), \partial(f)$ and $n$. 
+From facts i.-iii. we immediately deduce an explicit bound for $d_{A}(v_{n},w_{n}    )$ as a function of $\partial(t), \partial(f)$ and $n$. 
+
+\end{example}
 
 %
 % $\partial(t)   \partial(h) \tointerval{\mathtt n} (\lambda x.\partial (f)(x-k))$.
