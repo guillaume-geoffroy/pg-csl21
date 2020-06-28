@@ -43,10 +43,10 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding
 
    % \node at (0,0)[circle,fill,inner sep=1pt]{};
 %
-\draw[color=blue] plot (\x,{sin(\x r)+1}) node[above] {\tiny$\sin(x)+1$};
-\draw[color=orange] plot (\x,{cos(\x r)-1}) node[below] {\tiny$\cos(x)-1$};
+\draw[color=blue, samples=40] plot (\x,{sin(\x r)+1}) node[above] {\tiny$\sin(x)+1$};
+\draw[color=orange, samples=40] plot (\x,{cos(\x r)-1}) node[below] {\tiny$\cos(x)-1$};
 
-\draw[color=gray, dotted, thick] plot (\x,{sin(deg(\x+1) ))}) node[below] {\tiny$\sin(x+1)$};
+\draw[color=gray, dotted, thick, samples=40] plot (\x,{sin(deg(\x+1) ))}) node[below] {\tiny$\sin(x+1)$};
 
 
 \end{tikzpicture}$}
@@ -76,7 +76,7 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding
 \draw[|-|] (5.4,0.35) -- node[right] {\tiny$\delta$} (5.4,0.45);
 
 
-\draw[color=red, domain=-4:4] plot (\x, {(1/2*sqrt(2*pi))*exp(-((\x)^2)) } ) node[above] {\tiny$u[x]$};
+\draw[color=red, domain=-4:4, samples=40] plot (\x, {(1/2*sqrt(2*pi))*exp(-((\x)^2)) } ) node[above] {\tiny$u[x]$};
 %\draw[color=violet, domain=-1.2:1.2] plot (\x, { (\x)^3 } );
 
 \draw[color=blue, domain=-4:0] plot (\x,-1);
