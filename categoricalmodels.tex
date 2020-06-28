@@ -82,8 +82,17 @@ Finally, following Section \ref{section:stlc}, for all $\mathbb{C}$-diameter spa
 
 One can check that what is described in Section \ref{section:stlc} is indeed an instance of this construction. Here are a couple more examples:
 
-\begin{example} We can take $\mathbb{C} = \operatorname{Set}$ (with morphisms ordered by equality), and $\dsp(\operatorname{Set})$ contains an object $\mathsf{Real}_{\operatorname{Set}}$ that represents the real numbers with their standard metric and compact intervals (plus $\emptyset$ and $\mathbb{R}$) as approximate values. Namely, $\bs{\mathsf{Real}_{\operatorname{Set}}} = \mathbb{R}$, $\intervals{\mathsf{Real}_{\operatorname{Set}}} = \{ \text{the compact intervals}, \emptyset, \mathbb{R} \}$, $\distances{\mathsf{Real}_{\operatorname{Set}}} = [0,\infty]$ and $\diam_{\mathsf{Real}_{\operatorname{Set}}}(I) = \operatorname{length}(I)$.
+\begin{example} We can take $\mathbb{C} = \set$ (with morphisms ordered by equality): $\dsp(\set)$ contains an object $\mathsf{Real}_{\set}$ that represents the real numbers with their standard metric and compact intervals (plus $\emptyset$ and $\mathbb{R}$) as approximate values, namely, $\bs{\mathsf{Real}_{\set}} = \mathbb{R}$, $\intervals{\mathsf{Real}_{\set}} = \{ \text{the compact intervals}, \emptyset, \mathbb{R} \}$, $\distances{\mathsf{Real}_{\set}} = [0,\infty]$ and $\diam_{\mathsf{Real}_{\set}}(I) = \operatorname{length}(I)$.
 
-In this case, $\bs{\exp(\mathsf{Real}_{\operatorname{Set}}, \mathsf{Real}_{\operatorname{Set}})}$ is the set of all functions from $\mathbb{R}$ to $\mathbb{R}$, so $d_{\mathsf{Real}_{\operatorname{Set}}}$ defines a partial metric on all such functions.
+In this case, $\bs{\exp(\mathsf{Real}_{\set}, \mathsf{Real}_{\set})}$ is the set of all functions from $\mathbb{R}$ to $\mathbb{R}$, so $d_{\mathsf{Real}_{\set}}$ defines a partial metric on all such functions.
 \end{example}
+
+\begin{example} We can take $\mathbb{C} = \eff$, the effective topos \cite{hyland:effective-topos}: $\eff$ contains an object $\mathbb{R}_{\eff}$ of recursive reals, and we can define an object $\mathsf{Real}_{\eff}$ in $\dsp(\eff)$ by $\bs{\mathsf{Real}_{\eff}} = \mathbb{R}_{\eff}$, $\intervals{\mathsf{Real}_{\eff}} = \{ I \cap \mathbb{R}_{\eff} \mid I \in \intervals{\mathsf{Real}_{\set}} \}$, $\distances{\mathsf{Real}_{\eff}} = [0,\infty]$ and $\diam_{\mathsf{Real}_{\eff}}(I) = \operatorname{length}(I)$.
+
+In this case, $\bs{\exp(\mathsf{Real}_{\eff}, \mathsf{Real}_{\eff})}$ is the set of all recursive functions from $\mathsf{Real}_{\eff}$ to $\mathsf{Real}_{\eff}$, so $d_{\mathsf{Real}_{\eff}}$ defines a partial metric on all such functions.
+\end{example}
+
+\begin{example} We can take $\mathbb{C} = \scott$, the poset-enriched category of Scott domains and continuous functions: $\scott$ contains an object $\mathbb{R}_{\scott} = \mathbb{R} \cup \{ \bot \}$ (with $r \sqsubseteq s$ \textit{iff} $r = s$ or $r = \bot$) representing the reals. Again, we can define in  $\dsp(\scott)$ an object $\mathsf{Real}_{\scott}$ that represents the real numbers with their standard metric and compact intervals (plus $\emptyset$ and $\mathbb{R}$), and this defines a partial metric on $\bs{\exp(\mathsf{Real}_{\scott}, \mathsf{Real}_{\scott})}$, the set of all Scott continuous functions from $\mathsf{Real}_{\scott}$ to $\mathsf{Real}_{\scott}$, which are essentially the partial functions from $\mathbb{R}$ to $\mathbb{R}$.
+\end{example}
+
  
