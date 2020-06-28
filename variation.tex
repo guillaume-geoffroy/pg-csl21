@@ -11,33 +11,22 @@ Given two closed terms $t,u$ of type $A$,  we say that $t$ and $u$ are \emph{obs
 
 
 
-\subsection{Intervals and approximate functions}
+\subsection{Approximate values and approximate programs}
 
-The first step of our construction for $\STLC$ is to associate to each simple type $A$ a set $\intervals{A}$ whose elements are certain sets of programs of type $A$ that we call \emph{intervals of $A$}. 
-A closed term $t\in \Lambda_{A}$ represents a program with return type $A$ and no parameters, so an interval can be thought as a specification of a program with return type $A$ and no parameters \emph{up to} a certain degree of error or approximation (\textit{i.e.} an \emph{approximate program} of type $A$ with no parameters). 
+The first step of our construction for $\STLC$ is to associate to each simple type $A$ a set $\intervals{A}$ whose elements are certain sets of programs of type $A$ that we call \emph{approximate values of type $A$}. 
+A closed term $t\in \Lambda_{A}$ represents a program with return type $A$ and no parameters, so an approximate value can be thought as a specification of a program with return type $A$ and no parameters \emph{up to} a certain degree of error or approximation.
 
-
-%
-%
-%
-% In fact, while for $A=\mathsf{Real}$, the distance $d_{A}$ will coincide with the usual real distance, when $A$ is a higher type, say $A=B\to C$, we will let distances belong to the quantale of monotonically decreasing maps from $\intervals{B}$ to $\distances{C}$: the intuition behind the distance $d_{A}$ is that, given terms $t,u$ of type $A$, 
-%$d_{A}(t,u)$ is the function mapping an interval $a$ of $B$ with the sup of the distances between the values $tv, uw$, with $u,w$ ranging in $a$. 
-%[MORE INTUITIONS HERE]
-
-
-
-
-For each simple type $A$, the set of intervals $\intervals{A}\subseteq \mathcal P(\Lambda_A)$ is defined inductively as follows:
+For each simple type $A$, the set of approximate values $\intervals{A}\subseteq \mathcal P(\Lambda_A)$ is defined inductively as follows:
 \begin{itemize}
 \item $\intervals{\mathsf{Real}} = \{ \{ t \in \Lambda_\mathsf{Real} \mid \exists r \in I, t \to_\beta^* r \} \mid I \subseteq \mathbb{R} \text{ is a compact interval or $\emptyset$ or } \mathbb{R} \}$,
 \item $\intervals{A \times B} = \{ \{ t \in \Lambda_{A \times B} \mid \pi_L t \in a \text{ and } \pi_R t \in b \} \mid a  \in \intervals{A}, b \in \intervals{B} \}$,
 \item $\intervals{A \to B} = \{ \{ t \in \Lambda_{A \to B} \mid \forall u \in \Lambda_{A},~ tu \in I(u) \} \mid I : \Lambda_A \to \intervals{B} \}$.
 \end{itemize}
 
-The intervals for the base type $\mathsf{Real}$ essentially coincide with the compact intervals of $\mathbb R$, plus the empty set and $\mathbb{R}$ itself. An interval in $\intervals{A\times B}$ is uniquely determined by a pair of intervals $(a,b)$, with $a\in \intervals{A}$ and $bs\in \intervals{B}$, while an interval in $\intervals{A\to B}$ is uniquely determined by a function 
-$I$ from closed terms $u\in \Lambda_{ A}$ to intervals $I(u)\in \intervals{B}$.
+The approximate values of type $\mathsf{Real}$ essentially coincide with the compact intervals of $\mathbb R$, plus the empty set and $\mathbb{R}$ itself. An approximate value in $\intervals{A\times B}$ is uniquely determined by a pair of approximate values $(a,b)$, with $a\in \intervals{A}$ and $bs\in \intervals{B}$, while an approximate value in $\intervals{A\to B}$ is uniquely determined by a function 
+$I$ from closed terms $u\in \Lambda_{ A}$ to approximate values $I(u)\in \intervals{B}$.
 
-For example, any two terms $t,u\in \Lambda_{\mathsf{Real}}$, with normal forms $q,r\in \mathbb{R}$ induce an interval $[t,u]_{\mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}}\mid  v\to_{\beta}^{*} s \land q\leq s\leq r\}$. Similarly, any two terms $t,u\in \Lambda_{\mathsf{Real}\to \mathsf{Real}}$ induce an interval
+For example, any two terms $t,u\in \Lambda_{\mathsf{Real}}$ with normal forms $q,r\in \mathbb{R}$ induce an approximate value of type $\mathsf{Real}$ $[t,u]_{\mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}}\mid  v\to_{\beta}^{*} s \land q\leq s\leq r\}$. Similarly, any two terms $t,u\in \Lambda_{\mathsf{Real}\to \mathsf{Real}}$ induce an approximate value
 $[t,u]_{\mathsf{Real}\to \mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}\to\mathsf{Real}}\mid  
 \forall r \in \Lambda_{\mathsf{Real}} \ vr\in [ tr, ur]_{\mathsf{Real}} 
 \}$. With $t= \lambda x.\sin(x)+1$ and $u=\lambda x.\cos(x)-1$, 
@@ -62,7 +51,7 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding
 
 \end{tikzpicture}$}
 }
-\caption{\small $\lambda x.\sin(x+1)$ is in the interval  $[\lambda x.\sin(x)+1, \lambda x.\cos(x)+1]_{\mathsf{Real}\to\mathsf{Real}}$.}
+\caption{\small $\lambda x.\sin(x+1)$ is in $[\lambda x.\sin(x)+1, \lambda x.\cos(x)+1]_{\mathsf{Real}\to\mathsf{Real}}$.}
 \label{fig:interval1}
 \end{subfigure} \ \ \ 
 \begin{subfigure}{0.52\textwidth}
@@ -117,7 +106,7 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding
 For all $A$, as a subset of $\mathcal{P}(\Lambda_A)$, $\intervals{A}$ is closed under arbitrary intersections and is therefore a complete lattice whose meet is given by intersection. In particular, for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$. 
 One can check that $\tointerval{t} = \tointerval{u}$ if and only if $t\oeq_{A} u$.
 
-While the intervals represent approximate programs \emph{without} parameters, monotone functions between them represent approximate programs \emph{with} parameters. Intervals and monotone functions behave like a model of simply-typed $\lambda$-calculus in a weak sense, namely: \begin{itemize}
+Monotone functions from approximate values to approximate values represent \emph{approximate programs}. They behave like a model of simply-typed $\lambda$-calculus in a weak sense, namely: \begin{itemize}
 \item for all monotone functions $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B \to C}$ and $(x_1, \ldots, x_n) \mapsto b[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, we can define a monotone function $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n]~ b[x_1, \ldots, x_n] = \sup\{\tointerval{vu} \mid v \in c[x_1, \ldots, x_n], u \in b[x_1, \ldots, x_n]\} : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$,
 \item for all monotone functions $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$ and all $i \leq n$, we can define a monotone function $(x_j)_{j \neq i} \mapsto \lambda x_i.~ c[x_1, \ldots, x_n] = \{ v \in \Lambda_{A_i \to C} \mid \forall t_i \in \Lambda_{A_i},~ v t_i \in c[x_1, \ldots, \tointerval{t_i}, \ldots, x_n] \} : \prod_{j \neq i} \intervals{A_j} \to \intervals{A_i \to C}$,
 \end{itemize}
@@ -129,14 +118,14 @@ $$\begin{array}{ll} & (x_1, \ldots, x_n) \mapsto \lambda y.~  d[x_1, \ldots, x_n
 where functions are ordered by pointwise inclusion.  In other words, on approximate programs, $\beta$-reduction and $\eta$-expansion \emph{discard} information, and conversely $\beta$-expansion and $\eta$-reduction \emph{recover} some information.
 \end{proposition}
 
-\begin{proof} Without loss of generality we can assume $n=0$.
+\begin{proof} Without loss of generality, we can assume $n=0$.
 
 Let $v \in \lambda y.~ c[y]$ and $u \in b$. By definition, $tu \in c[\tointerval{u}]$, so $\tointerval{tu} \subseteq c[\tointerval{u}] \subseteq c[b]$. Therefore, $(\lambda y.~ c[y])~ b \subseteq b$.
 
 Let $v \in d$. For all $u \in \Lambda_B$, by definition, $vu \in d\tointerval{u}$. Therefore, $v \in \lambda y.~ d~ y$.
 \end{proof}
 
-In addition, we can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $x_{1}:A_{1},\dots,x_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of $\lambda$-calculus, namely:
+In addition, we can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $x_{1}:A_{1},\dots,x_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of the $\lambda$-calculus, namely:
 \begin{itemize}
 \item $\partial (x_{i})(a_{1},\dots, a_{n})=a_{i}$,
 \item $\partial (tu)(a_{1},\dots, a_{n}) \subseteq \partial (t)(a_{1},\dots, a_{n}) ~ \partial (u)(a_{1},\dots, a_{n})$,
@@ -163,7 +152,7 @@ If $a$ is the interval $[-1,+1]$, then $\partial(t)(a)=[-1,1]$, and since $u[x:=
 
 
 
-\subsection{From intervals to the partial metric}
+\subsection{A partial metric on each type}
 
 We will now show how to associate to each type $A$ of $\STLC$ a partial metric space $(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$. The definition of this space will exploit in an essential way the sets of intervals $\intervals{A}$.
 
@@ -186,15 +175,15 @@ For all simple types $A$, we define a \emph{distance function} $d_A : \Lambda_A 
 This distance is clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a partial metric space.
 
 
-To this end we will exploit the fact that, as with the standard metric of the reals (see [ADD REMARK IN PRELIMINARIES SECTION]), the \emph{diameter function} that comes from the metric $d_{A}$ is (almost) submodular on intervals (or rather, using the quantale ordering convention, supermodular). Namely, for all simple types $A$, we define a monotonically decreasing map $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$. One can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
+To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$, and we exploit the fact that, as in the case of the reals (see [TODO: INTRODUCTION]), this diameter function $\diam_{A}$ is (almost) submodular on approximate values (or rather, using the quantale ordering convention, supermodular). First, one can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
 \begin{itemize}
 \item $\diam_\mathsf{Real}(a) = \sup\{s-r \mid s,r \in \mathbb{R} \text{ such that } s,r \in a\}$,
 \item $\diam_\mathsf{A \times B}(p) = \left(\diam_A\left(\sup\left\{\tointerval{\pi_L t} \mid t \in p\right\}\right), \diam_B\left(\sup\left\{\tointerval{\pi_R t} \mid t \in p\right\}\right)\right)$,
 \item $\diam_\mathsf{A \to B}(b) = a \mapsto \diam_B\left(\sup\left\{\tointerval{vt} \mid t\in a, v \in b\right\}\right).$
 \end{itemize}
 
-Furthermore, the diameter function $\diam_{A}$ satisfies the following:
-\begin{proposition} For all simple types $A$, the function $\diam_A : \intervals{A} \to \distances{A}$ is quasi-supermodular, in the sense that for all $a,b \in \intervals{A}$ such that $a \wedge b \neq \emptyset$, $\diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)$.
+With that, we can prove that the diameter function $\diam_{A}$ satisfies the following condition of ``quasi-supermodularity'':
+\begin{proposition} For all simple types $A$ and all $a,b \in \intervals{A}$ such that $a \wedge b \neq \emptyset$, $\diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)$.
 \end{proposition}
 \begin{proof}
 We proceed by induction on types.
@@ -220,7 +209,7 @@ As mentioned above, for all $t,u\in\Lambda_A$, $d_A(t,u) = \diam_A(\tointerval{t
 
 One can check (by induction on types) that the restriction of $\diam_A$ to the ideal generated by the $\tointerval{t}$ (for $t \in \Lambda_A$) is \emph{strictly} decreasing. Therefore, if  $d_A(t,t) = d_A(t,u) = d_A(u,u)$, \textit{i.e.} $\diam_A(\tointerval{t}) = \diam_A(\tointerval{t} \vee \tointerval{u}) = \diam_A(\tointerval{u})$,  then $\tointerval{t} = \tointerval{t} \vee \tointerval{u} = \tointerval{u}$, so $t \oeq_A u$.
 
-The triangular inequality is an immediate consequence of the supermodularity of $\diam_A$: $d(t,v) \quantaleop d(u,u) = \diam(\tointerval{t} \vee \tointerval{v}) \quantaleop \diam(\tointerval{u}) \quantalegeq \diam((\tointerval{t} \vee \tointerval{u}) \vee (\tointerval{u} \vee \tointerval{v})) \quantaleop \diam((\tointerval{t} \vee \tointerval{u}) \wedge (\tointerval{u} \vee \tointerval{v})) \quantalegeq \diam(\tointerval{t} \vee  \tointerval{u}) \quantaleop \diam(\tointerval{u} \vee  \tointerval{v}) = d(t,u) \quantaleop d(u,v)$.
+The triangular inequality is an immediate consequence of the quasi-supermodularity of $\diam_A$: $d(t,v) \quantaleop d(u,u) = \diam(\tointerval{t} \vee \tointerval{v}) \quantaleop \diam(\tointerval{u}) \quantalegeq \diam((\tointerval{t} \vee \tointerval{u}) \vee (\tointerval{u} \vee \tointerval{v})) \quantaleop \diam((\tointerval{t} \vee \tointerval{u}) \wedge (\tointerval{u} \vee \tointerval{v})) \quantalegeq \diam(\tointerval{t} \vee  \tointerval{u}) \quantaleop \diam(\tointerval{u} \vee  \tointerval{v}) = d(t,u) \quantaleop d(u,v)$.
 \end{proof}
 
 
