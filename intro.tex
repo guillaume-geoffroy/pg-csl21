@@ -39,7 +39,7 @@ This idea has motivated much literature on program (pseudo)metrics \cite{ARNOLD1
 will not product a considerable error if $\lambda x.\sin(x)$
 operates in a context in which it is only applied to values close to 0.
 %, replacing $f$ will not produce a considerable error. However, this transformation would no longer be justified if $f$ were applied on values far from 0.
-Similarly, in numerical methods based on Taylor's polynomials (e.g. Gauss-Newton method), one replaces a 
+Similarly, in numerical methods based on Taylor's polynomials (\textit{e.g.}. Gauss-Newton method), one replaces a 
  computationally intensive piece of program by one which approximates the former only \emph{around some given point}, and in {approximate computing} techniques like \emph{loop perforation} \cite{loopperf} a compiler can be asked to modify the execution of a loop provided this transformation does not exceed some error bound.
  
 \subparagraph*{The trade-off between program metrics and higher-order types}
@@ -160,7 +160,7 @@ On the other side of the coin, the approaches from \cite{chaudhuri, dallago:diff
 
 In this paper we introduce a class of higher-order denotational models to reason about program similarity and approximate program transformations, that we call \emph{diameter space models}.
 
-In such models a higher-order type $\sigma$ is interpreted by a 4-tuple $A=(|A|, \intervals{A}, \distances{A}, \diam_{A})$, called a \emph{diameter space}, where $|A|$ is a set of \emph{exact} values, $\intervals{A}\subset \mathcal P(|A|)$ is a complete lattice of \emph{approximate} values, $\distances{A}$ is a \emph{quantale}, and $\diam_{A}: \intervals{A}\to \distances{A}$ is a function, called \emph{diameter}, which provides a quantitative measure of approximate values.
+In such models a higher-order type $A$ is interpreted by a 4-tuple $(|A|, \intervals{A}, \distances{A}, \diam_{A})$ called a \emph{diameter space}, where $|A|$ is a set of \emph{exact} values, $\intervals{A}\subset \mathcal P(|A|)$ is a complete lattice of \emph{approximate} values, $\distances{A}$ is a \emph{quantale}, and $\diam_{A}: \intervals{A}\to \distances{A}$ is a function, called \emph{diameter}, which provides a quantitative measure of approximate values.
 
 
 In any metric space the distance can be recovered from the diameter function by $d(x,y)=\mathsf{diam}([x,y])$ (where $[x,y]$ is the smallest interval containing $x$ and $y$). Similarly, in a diameter space the function $\diam_{A}$ induces a \emph{generalized partial metric} $d_{A}:|A|\times |A|\to \distances{A}$ by letting $d_{A}(x,y)=\diam_{A}(x\vee y)$ (where $x\vee y$ is the smallest approximate value containing $x$ and $y$). 
@@ -174,7 +174,7 @@ Observe that not only any standard metric space is a GPMS, but from from any par
 It is not difficult to see that the need to consider the distance between two functional programs like $\lambda x.\sin(x)$ and $\lambda x.x$ as being itself some kind of function leads naturally towards GPMS. Firstly, this choice implies that such functional distances cannot be taken in $\mathbb R^{+\infty}$; instead, in our model 
 we let $\distances{\mathsf{Real}\to\mathsf{Real}}$ be the quantale of non-decreasing maps from $\intervals{\mathsf{Real}}$ to $\distances{\mathsf{Real}}=\mathbb R^{+\infty}$, and the distance of  $\lambda x.\sin(x)$ and $\lambda x.x$ is defined by 
 $$ d_{\mathsf{Real}\to\mathsf{Real}}(\lambda x.\sin(x),\lambda x.x): a \mapsto \mathsf{diam}(f(a)\vee g(a))$$
-that is, as the function that maps an approximate value on $\mathsf{Real}$ (i.e. a closed interval $a$) onto the sup of the distances between $\sin(x)$ and $ y$, with $x,y$ ranging in $a$, that is, into the diameter of the interval $f(a)\vee g(a)$. 
+that is, as the function that maps an approximate value on $\mathsf{Real}$ (\textit{i.e.} a closed interval $a$) onto the sup of the distances between $\sin(x)$ and $ y$, with $x,y$ ranging in $a$, that is, into the diameter of the interval $f(a)\vee g(a)$. 
 
 
 Second, with this definition, the \emph{self-distance} of $\lambda x.\sin(x)$ (resp. $\lambda x.x$)  is a function that associates each interval $a$ with a value $\leq 2$ (resp. with $\diam(a)$, see Fig: \ref{fig:sinid}), so it is not constantly 0. In fact, as this example suggests, the self-distances of functional programs behave as sort of derivatives, in particular, $ d_{\mathsf{Real}\to\mathsf{Real}}(f,f)$ is constantly 0 only if $f$ is constant. %, and moreover self-distances 
@@ -195,7 +195,7 @@ Second, we show that diameter space models can be constructed for potentially an
 
 
 
-The generality of our construction shows in particular that our partial metric semantics requires no restrictions (e.g. Lipschitz-continuity) on morphisms, and adapts well to the model one starts with. We consider as examples the category $\dsp(\set)$  (which contains a partial metric on the set \emph{all}  set-theoretic functions from $\mathbb R$ to $\mathbb R$) and the categories $\dsp(\eff)$ (where $\eff$ is the \emph{effective topos} \cite{hyland:effective-topos}) and $\dsp(\scott)$, which show that our approach scales well to a more computability-minded setting.
+The generality of our construction shows in particular that our partial metric semantics requires no restrictions (\textit{e.g.} Lipschitz-continuity) on morphisms, and adapts well to the model one starts with. We consider as examples the category $\dsp(\set)$  (which contains a partial metric on the set \emph{all}  set-theoretic functions from $\mathbb R$ to $\mathbb R$) and the categories $\dsp(\eff)$ (where $\eff$ is the \emph{effective topos} \cite{hyland:effective-topos}) and $\dsp(\scott)$, which show that our approach scales well to a more computability-minded setting.
 
 
 %The step from $\mathbb C$ to $\mathsf{Diam}(\mathbb C)$ preserves the cartesian closed structure in a \emph{lax} way: this reflects the fact that,
