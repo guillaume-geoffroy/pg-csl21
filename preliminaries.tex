@@ -1,1 +1,22 @@
-sddfs
+We quickly recall the definitions of a (commutative integral) quantale and a generalised partial metric space, as we will need them throughout this paper.
+
+\begin{definition} A \emph{commutative integral quantale} is a triple $(Q, \quantaleop, \quantaleleq)$ where:
+\begin{itemize}
+\item $(Q, \quantaleleq)$ is a complete lattice,
+\item $(Q, \quantaleop)$ is a commutative monoid,
+\item $\quantaleop$ commutes with arbitrary $\sup$s,
+\item the largest element of $Q$ is neutral for $\quantaleop$.
+\end{itemize}
+\end{definition}
+
+For example, $([0,\infty], +, \geq)$ is a commutative integral whose largest element is $0$ (notice the reversed ordering). It is straightforward to check that for all commutative integral quantales $Q,R$, the product monoid $Q \times R$ equipped with the product ordering is also a commutative integral quantale. In addition, for all posets $X$, the set of monotonically increasing (respectively, decreasing) functions from $X$ to $Q$, equipped with the pointwise monoid operation and the pointwise ordering, is also a commutative integral quantale.
+
+\begin{definition} A \emph{generalised partial metric space} is the data of a set $X$, a commutative integral quantale $Q$ and a function $d : X \times X \to Q$ such that: \begin{itemize}
+\item for all $x,y \in X$, $d(x,x) \quantalegeq d(x,y)$,
+\item for all $x,y \in X$, if $d(x,x) = d(x,y) = d(y,y)$, then $x = y$,
+\item for all $x,y \in X$, $d(x,y) = d(y,x)$,
+\item for all $x,y,z \in X$, $d(x,z) \quantaleop d(y,y) \quantalegeq d(x,y) \quantaleop d(y,z)$.
+\end{itemize}
+\end{definition}
+
+As an archetypal example, for all metric spaces $(X,d)$, $(X, ([0,\infty], +, \geq), d)$ is a generalised partial metric space: notice that the triangular inequality in this definition is the opposite of the usual one, which corresponds to the fact that the quantale ordering on $\mathbb{R}$ is the dual of the usual ordering. One can check that for all partial metric spaces $(X, Q, d_X)$ and $(Y, R, d_Y)$, $(X \times Y, Q \times R, d_{X \times Y})$ is a generalised partial metric space, with $d_{X \times Y}((x_1, y_1), (x_2, y_2)) = (d_X(x_1, x_2), d_Y(y_1, y_2))$. However, in general, it is not clear how one should define a partial metric on a function space: Section \ref{subsection:type-gpms} will do this in a particular case.

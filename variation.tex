@@ -107,8 +107,8 @@ For all $A$, as a subset of $\mathcal{P}(\Lambda_A)$, $\intervals{A}$ is closed 
 One can check that $\tointerval{t} = \tointerval{u}$ if and only if $t\oeq_{A} u$.
 
 Monotone functions from approximate values to approximate values represent \emph{approximate programs}. They behave like a model of simply-typed $\lambda$-calculus in a weak sense, namely: \begin{itemize}
-\item for all monotone functions $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B \to C}$ and $(x_1, \ldots, x_n) \mapsto b[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, we can define a monotone function $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n]~ b[x_1, \ldots, x_n] = \sup\{\tointerval{vu} \mid v \in c[x_1, \ldots, x_n], u \in b[x_1, \ldots, x_n]\} : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$,
-\item for all monotone functions $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$ and all $i \leq n$, we can define a monotone function $(x_j)_{j \neq i} \mapsto \lambda x_i.~ c[x_1, \ldots, x_n] = \{ v \in \Lambda_{A_i \to C} \mid \forall t_i \in \Lambda_{A_i},~ v t_i \in c[x_1, \ldots, \tointerval{t_i}, \ldots, x_n] \} : \prod_{j \neq i} \intervals{A_j} \to \intervals{A_i \to C}$,
+\item for all monotone functions $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B \to C}$ and $(x_1, \ldots, x_n) \mapsto b[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, we can define a monotone function $(x_1, \ldots, x_n) \mapsto (c[x_1, \ldots, x_n]~ b[x_1, \ldots, x_n]) = \sup\{\tointerval{vu} \mid v \in c[x_1, \ldots, x_n], u \in b[x_1, \ldots, x_n]\} : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$,
+\item for all monotone functions $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$ and all $i \leq n$, we can define a monotone function $(x_j)_{j \neq i} \mapsto (\lambda x_i.~ c[x_1, \ldots, x_n]) = \{ v \in \Lambda_{A_i \to C} \mid \forall t_i \in \Lambda_{A_i},~ v t_i \in c[x_1, \ldots, \tointerval{t_i}, \ldots, x_n] \} : \prod_{j \neq i} \intervals{A_j} \to \intervals{A_i \to C}$,
 \end{itemize}
 and these two constructions are weakly compatible with $\beta$-reduction and $\eta$-expansion:
 
@@ -125,17 +125,21 @@ Let $v \in \lambda y.~ c[y]$ and $u \in b$. By definition, $tu \in c[\tointerval
 Let $v \in d$. For all $u \in \Lambda_B$, by definition, $vu \in d\tointerval{u}$. Therefore, $v \in \lambda y.~ d~ y$.
 \end{proof}
 
-In addition, we can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $x_{1}:A_{1},\dots,x_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of the $\lambda$-calculus, namely:
+In addition, we can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $x_{1}:A_{1},\dots,x_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. 
+
+\begin{remark} \label{remark:push-exp-stlc}
+The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of the $\lambda$-calculus, namely:
 \begin{itemize}
 \item $\partial (x_{i})(a_{1},\dots, a_{n})=a_{i}$,
 \item $\partial (tu)(a_{1},\dots, a_{n}) \subseteq \partial (t)(a_{1},\dots, a_{n}) ~ \partial (u)(a_{1},\dots, a_{n})$,
 \item $\partial (\lambda x. t)(a_{1},\dots, a_{n}) \subseteq \lambda x.~ \partial (t)(x, a_{1},\dots, a_{n})$.
 \end{itemize}
+\end{remark}
 
 This map $\partial(t)$ can be taken as a measure of the \emph{sensitivity} of $t$, as it maps an interval $a$, that is a quantifiably uncertain input, to a quantifiably uncertain output $\partial(t)(a)$. 
 For instance, if we take the term $t[x]= \sin(x)+1$ above, then $\partial(t): \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ sends the interval $[-\pi,\pi]_{\mathsf{Real}}$ into $[0,2]_{\mathsf{Real}}$.
 
-\begin{remark}
+\begin{remark} \label{remark:oplax-functor-stlc}
 When composing two maps $\partial(t)$ and $\partial(u)$, we might obtain a worse approximation than by computing $\partial(t[u/x])$.
 For instance, let $t[x]$ and 
 $u[x]$ be, respectively, the discontinuous and Gaussian functions illustrated in Fig. \ref{fig:interval2}.  
@@ -153,17 +157,17 @@ If $a$ is the interval $[-1,+1]$, then $\partial(t)(a)=[-1,1]$, and since $u[x:=
 
 
 \subsection{A partial metric on each type}
+\label{subsection:type-gpms}
 
-We will now show how to associate to each type $A$ of $\STLC$ a partial metric space $(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$. The definition of this space will exploit in an essential way the sets of intervals $\intervals{A}$.
+We will now show how to associate to each type $A$ of $\STLC$ a generalised partial metric space $(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$. The definition of this space will exploit in an essential way the sets of intervals $\intervals{A}$.
 
 
 For all simple types $A$, we define a commutative integral quantale $(\distances{A}, \quantaleleq_A, \quantaleop_A)$ of \emph{distances of type $A$}:
 \begin{itemize}
-\item $(\distances{\mathsf{Real}}, \quantaleleq_\mathsf{Real}, \quantaleop_\mathsf{Real}) = ([0,\infty], \geq, +)$ (note the reversed ordering),
-\item $\distances{A \times B} = \distances{A} \times \distances{B}$ with the product ordering and the product monoid operation,
-\item $\distances{A \to B} = \{ \text{monotonically decreasing functions from } \intervals{A} \text{ to } \distances{B} \}$, with the pointwise ordering and the pointwise monoid operation.
+\item $(\distances{\mathsf{Real}}, \quantaleleq_\mathsf{Real}, \quantaleop_\mathsf{Real}) = ([0,\infty], \geq, +)$,
+\item $\distances{A \times B} = \distances{A} \times \distances{B}$,
+\item $\distances{A \to B} = \{ \text{monotonically decreasing functions from } \intervals{A} \text{ to } \distances{B} \}$.
 \end{itemize}
-It is straightforward to check that this does indeed define a commutative integral quantale.
 
 For all simple types $A$, we define a \emph{distance function} $d_A : \Lambda_A \times \Lambda_A \to \distances{A}$:
 \begin{itemize}
@@ -172,10 +176,10 @@ For all simple types $A$, we define a \emph{distance function} $d_A : \Lambda_A 
 \item $d_{A \to B}(t,u) = a \mapsto \inf \left\{ d_B(tv, uw) \mid v,w \in a \right\}$.
 \end{itemize}
 
-This distance is clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a partial metric space.
+This distance is clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space.
 
 
-To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$, and we exploit the fact that, as in the case of the reals (see [TODO: INTRODUCTION]), this diameter function $\diam_{A}$ is (almost) submodular on approximate values (or rather, using the quantale ordering convention, supermodular). First, one can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
+To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$, and we exploit the fact that, as in the case of the reals (seen in the introduction), this diameter function $\diam_{A}$ is (almost) submodular on approximate values (or rather, using the quantale ordering convention, supermodular). First, one can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
 \begin{itemize}
 \item $\diam_\mathsf{Real}(a) = \sup\{s-r \mid s,r \in \mathbb{R} \text{ such that } s,r \in a\}$,
 \item $\diam_\mathsf{A \times B}(p) = \left(\diam_A\left(\sup\left\{\tointerval{\pi_L t} \mid t \in p\right\}\right), \diam_B\left(\sup\left\{\tointerval{\pi_R t} \mid t \in p\right\}\right)\right)$,
@@ -196,7 +200,7 @@ One can check that $(a \wedge b)_L = a_L \wedge b_L$, $(a \wedge b)_R = a_R \wed
 Let $f,g \in \intervals{A \to B}$ and $a \in \intervals{A}$. For all $h \in \intervals{A \to B}$, let $ha = \sup\{\tointerval{vt} \mid v \in h, t \in a\}$. One can check that $(f \wedge g)a \subseteq (f a) \wedge (g a)$ and $(f \vee g)a = (f a) \vee (g a)$. As a result, $(\diam(f \wedge g)\quantaleop \diam(f \vee g))(a) \quantalegeq \diam((fa) \wedge (ga)) \quantaleop \diam((fa) \vee (ga)) \quantalegeq \diam(fa) \quantaleop \diam(ga) = (\diam(f)\quantaleop\diam(g))(a)$.
 \end{proof}
 
-\begin{corollary} \label{corollary:stlc-metric} For all simple types $A$, $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a partial metric space, that is to say:
+\begin{corollary} \label{corollary:stlc-metric} For all simple types $A$, $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space, that is to say:
 \begin{enumerate}
 \item for all $t,u \in \Lambda_A$, $d_A(t,t) \quantalegeq d_A(t,u)$,
 \item for all $t,u \in \Lambda_A$, if $d_A(t,t) = d_A(t,u) = d_A(u,u)$, then $t \oeq_A u$,
