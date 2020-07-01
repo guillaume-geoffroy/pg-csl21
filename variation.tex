@@ -1,13 +1,13 @@
 % !TEX root = CSL 2021.tex
 
-To illustrate our construction, we start from a relatively concrete example: we consider a simply-typed lambda calculus with a base type and primitives for real numbers, and we follow the plan outlined in the introduction, which yields for each simple type a notion of approximate value, approximate function, diameter and distance between programs. Most definitions are rather intuitive: the interesting, not immediately obvious point is that our construction does yield a \emph{partial metric} on each type.
+To illustrate our construction, we start from a relatively concrete example: we consider a simply-typed lambda calculus with a base type and primitives for real numbers, and we follow the plan outlined in the introduction, which yields for each simple type a notion of approximate value, approximate function, diameter and distance between programs. Most definitions are straightforward and intuitive: the interesting, not immediately obvious point is that our construction does yield a \emph{partial metric} on each type.
 
 \emph{Simple types} are defined as follows: $\mathsf{Real}$ is a simple type; if $A$ and $B$ are simple types, then $A \to B$ and $A \times B$ are simple types.
 
 For all $n>0$, we fix a set $\mathcal{F}_n$ of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We consider the usual Curry-style simply-typed $\lambda$-calculus over the types defined above (the left and right projection are denoted by $\pi_L:A\times B \to A$ and  $\pi_R:A\times B \to B$ respectively, and the constructor for pairs by $\left\langle-,-\right\rangle$), enriched with the following constants: for all $r \in \mathbb{R}$, a constant $r:\mathsf{Real}$; for all $n>0$ and all $f\in\mathcal{F}_n$, a constant $f:\mathsf{R}\to\ldots\to\mathsf{R}\to\mathsf{R}$. We call this calculus $\STLC$, and its terms are simply called \emph{terms}. We write $t[x_1 := u_1, \ldots, x_n := u_n]$ to denote the \emph{simultaneous} substitution of $u_1, \ldots, u_n$ for $x_1, \ldots, x_n$ in $t$. For all types $A$, we denote by $\Lambda_A$ the set of closed terms of type $A$. The relation of $\beta$-reduction is enriched with the following rule, extended to all contexts: for all $n>0$, $f\in\mathcal{F}_n$, and $r_1,\ldots,r_n\in\mathbb{R}$, $f r_1 \ldots r_n \to_\beta s$, where $s = f(r_1, \ldots, r_n)$. By standard arguments, this calculus has the properties of subject reduction, confluence and strong normalisation.
 
 
-Given two closed terms $t,u$ of type $A$,  we say that $t$ and $u$ are \emph{observationally equivalent} and write $t \oeq_A u$, if for all terms $C$ such that $x:A \vdash C : \mathsf{Real}$ is derivable, $C[x:=t]$ is $\beta$-equivalent to $C[x:=u]$ (which amounts to saying that they both $\beta$-reduce to the same real number).  It is clear that observational equivalence is a congruence and that two $\beta$-equivalent terms are always observationally equivalent. The notion of distance we define in the next paragraph will be a generalisation of this notion of equivalence.
+Given two closed terms $t,u$ of type $A$,  we say that $t$ and $u$ are \emph{observationally equivalent} and write $t \oeq_A u$ if for all terms $C$ such that $x:A \vdash C : \mathsf{Real}$ is derivable, $C[x:=t]$ is $\beta$-equivalent to $C[x:=u]$ (which amounts to saying that they both $\beta$-reduce to the same real number).  It is clear that observational equivalence is a congruence and that two $\beta$-equivalent terms are always observationally equivalent. The notion of distance we define in the next paragraph will be a generalisation of this notion of equivalence.
 
 
 
@@ -26,7 +26,7 @@ For each simple type $A$, the set of approximate values $\intervals{A}\subseteq 
 The approximate values of type $\mathsf{Real}$ essentially coincide with the compact intervals of $\mathbb R$, plus the empty set and $\mathbb{R}$ itself. An approximate value in $\intervals{A\times B}$ is a ``rectangle'' $a \times b$, with $a\in \intervals{A}$ and $b \in \intervals{B}$, while an approximate value in $\intervals{A\to B}$ is uniquely determined by a function 
 $I$ from closed terms $u\in \Lambda_{ A}$ to approximate values $I(u)\in \intervals{B}$.
 
-For example, any two terms $t,u\in \Lambda_{\mathsf{Real}}$ with normal forms $q,r\in \mathbb{R}$ induce an approximate value of type $\mathsf{Real}$ $[t,u]_{\mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}}\mid  v\to_{\beta}^{*} s \land q\leq s\leq r\}$. Similarly, any two terms $t,u\in \Lambda_{\mathsf{Real}\to \mathsf{Real}}$ induce an approximate value
+For example, any two terms $t,u\in \Lambda_{\mathsf{Real}}$ with normal forms $q, r\in \mathbb{R}$ induce an approximate value $[t,u]_{\mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}}\mid  v\to_{\beta}^{*} s \land (q\leq s\leq r \vee q\geq s\geq r)\}$ of type $\mathsf{Real}$. Similarly, any two terms $t,u\in \Lambda_{\mathsf{Real}\to \mathsf{Real}}$ induce an approximate value
 $[t,u]_{\mathsf{Real}\to \mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}\to\mathsf{Real}}\mid  
 \forall r \in \Lambda_{\mathsf{Real}} \ vr\in [ tr, ur]_{\mathsf{Real}} 
 \}$. With $t= \lambda x.\sin(x)+1$ and $u=\lambda x.\cos(x)-1$, 
@@ -125,6 +125,8 @@ Let $v \in \lambda y.~ c[y]$ and $u \in b$. By definition, $tu \in c[\tointerval
 Let $v \in d$. For all $u \in \Lambda_B$, by definition, $vu \in d\tointerval{u}$. Therefore, $v \in \lambda y.~ d~ y$.
 \end{proof}
 
+This rule is important because it means that if we compute an approximation of a program from approximations of its parts and then simplify the resulting approximate program using $\beta$-reduction and $\eta$-expansion, what we obtain is still a valid approximation of the original program.
+
 In addition, we can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $x_{1}:A_{1},\dots,x_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. 
 
 \begin{remark} \label{remark:push-exp-stlc}
@@ -132,7 +134,7 @@ The map $\partial$ is constant on classes of observational equivalence, and one 
 \begin{itemize}
 \item $\partial (x_{i})(a_{1},\dots, a_{n})=a_{i}$,
 \item $\partial (tu)(a_{1},\dots, a_{n}) \subseteq \partial (t)(a_{1},\dots, a_{n}) ~ \partial (u)(a_{1},\dots, a_{n})$,
-\item $\partial (\lambda x. t)(a_{1},\dots, a_{n}) \subseteq \lambda x.~ \partial (t)(x, a_{1},\dots, a_{n})$.
+\item $\partial (\lambda y. t)(a_{1},\dots, a_{n}) \subseteq \lambda y.~ \partial (t)(y, a_{1},\dots, a_{n})$.
 \end{itemize}
 \end{remark}
 
@@ -140,10 +142,10 @@ This map $\partial(t)$ can be taken as a measure of the \emph{sensitivity} of $t
 For instance, if we take the term $t[x]= \sin(x)+1$ above, then $\partial(t): \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ sends the interval $[-\pi,\pi]_{\mathsf{Real}}$ into $[0,2]_{\mathsf{Real}}$.
 
 \begin{remark} \label{remark:oplax-functor-stlc}
-When composing two maps $\partial(t)$ and $\partial(u)$, we might obtain a worse approximation than by computing $\partial(t[u/x])$.
+When composing two maps $\partial(t)$ and $\partial(u)$, we might obtain a worse approximation than by computing $\partial(t[u/x])$ directly.
 For instance, let $t[x]$ and 
 $u[x]$ be, respectively, the discontinuous and Gaussian functions illustrated in Fig. \ref{fig:interval2}.  
-If $a$ is the interval $[-1,+1]$, then $\partial(t)(a)=[-1,1]$, and since $u[x:=-1]=u[x:=1]\simeq_{\beta} r$, for some $0<r<1$, we deduce $\partial(u)(\partial(t)(a))=[-1,1] \supset [r,r  ]= \partial (u[t/x])(a)$.
+If $a$ is the interval $[-1,+1]$, then $\partial(t)(a)=[-1,1]$, and since $u[x:=-1]=u[x:=1]\simeq_{\beta} r$ for some $0<r<1$, we deduce that $\partial(u)(\partial(t)(a))=[-1,1] \supsetneq [r,r  ]= \partial (u[t/x])(a)$.
 
 \end{remark}
 
@@ -159,7 +161,7 @@ If $a$ is the interval $[-1,+1]$, then $\partial(t)(a)=[-1,1]$, and since $u[x:=
 \subsection{A partial metric on each type}
 \label{subsection:type-gpms}
 
-We will now show how to associate to each type $A$ of $\STLC$ a generalised partial metric space $(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$. The definition of this space will exploit in an essential way the sets of intervals $\intervals{A}$.
+We will now show how to associate to each type $A$ of $\STLC$ a generalised partial metric space $(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$. The definition of this space will exploit in an essential way the sets of approximate values $\intervals{A}$.
 
 
 For all simple types $A$, we define a commutative integral quantale $(\distances{A}, \quantaleleq_A, \quantaleop_A)$ of \emph{distances of type $A$}:
@@ -179,7 +181,7 @@ For all simple types $A$, we define a \emph{distance function} $d_A : \Lambda_A 
 This distance is clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space.
 
 
-To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$, and we exploit the fact that, as in the case of the reals (seen in the introduction), this diameter function $\diam_{A}$ is (almost) submodular on approximate values (or rather, using the quantale ordering convention, supermodular). First, one can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
+To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$, and we exploit the fact that, as in the case of the reals (seen in the introduction), this diameter function $\diam_{A}$ is (almost) submodular on approximate values -- or rather, using the quantale ordering convention, supermodular. First, one can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
 \begin{itemize}
 \item $\diam_\mathsf{Real}(a) = \sup\{s-r \mid s,r \in \mathbb{R} \text{ such that } s,r \in a\}$,
 \item $\diam_\mathsf{A \times B}(p) = \left(\diam_A\left(\sup\left\{\tointerval{\pi_L t} \mid t \in p\right\}\right), \diam_B\left(\sup\left\{\tointerval{\pi_R t} \mid t \in p\right\}\right)\right)$,
@@ -192,7 +194,7 @@ With that, we can prove that the diameter function $\diam_{A}$ satisfies the fol
 \begin{proof}
 We proceed by induction on types.
 
-Let $a,b \in \intervals{\mathsf{Real}}$ such that $a\wedge b \neq \emptyset$. Let $I = \{r \in \mathbb{R} \mid r \in a\}$ and $J = \{s \in \mathbb{R} \mid s \in b\}$: then $I$ (respectively, $J$, $I \cap J$, $I \cup J$) is either $\mathbb{R}$ or a non-empty compact interval of $\mathbb{R}$, and its length in the usual sense is equal to $\diam_\mathsf{Real}(a)$ (respectively, $\diam_\mathsf{Real}(b)$, $\diam_\mathsf{Real}(a \wedge b)$, $\diam_\mathsf{Real}(a \vee b)$). Note that $I \cup J$ is only an interval because $a\wedge b \neq \emptyset$ implies $I \cap J \neq \emptyset$. The length of an interval of $\mathbb{R}$ is equal to its Lebesgue measure, therefore $\operatorname{length}(I \cap J) + \operatorname{length}(I \cup J) = \operatorname{length}(I) + \operatorname{length}(J)$, so $\diam_\mathsf{Real}(a \wedge b) \quantaleop \diam_\mathsf{Real}(a \vee b) = \diam_\mathsf{Real}(a) \quantaleop \diam_\mathsf{Real}(b)$.
+Let $a,b \in \intervals{\mathsf{Real}}$ such that $a\wedge b \neq \emptyset$. Let $I = \{r \in \mathbb{R} \mid r \in a\}$ and $J = \{s \in \mathbb{R} \mid s \in b\}$: then $I$ (respectively, $J$, $I \cap J$, $I \cup J$) is either $\mathbb{R}$ or a non-empty compact interval of $\mathbb{R}$, and its length in the usual sense is equal to $\diam_\mathsf{Real}(a)$ (respectively, $\diam_\mathsf{Real}(b)$, $\diam_\mathsf{Real}(a \wedge b)$, $\diam_\mathsf{Real}(a \vee b)$). Note that the only reason we know that $I \cup J$ is an interval is because $a\wedge b \neq \emptyset$ implies $I \cap J \neq \emptyset$. The length of an interval of $\mathbb{R}$ is equal to its Lebesgue measure, therefore $\operatorname{length}(I \cap J) + \operatorname{length}(I \cup J) = \operatorname{length}(I) + \operatorname{length}(J)$, so $\diam_\mathsf{Real}(a \wedge b) \quantaleop \diam_\mathsf{Real}(a \vee b) = \diam_\mathsf{Real}(a) \quantaleop \diam_\mathsf{Real}(b)$.
 
 Let $a,b \in \intervals{A_L \times A_R}$ such that $a\wedge b \neq \emptyset$. For all $c \in \intervals{A_L \times A_R}$, let $c_L = \sup\{\tointerval{\pi_L t} \mid t \in c\}$ and $c_R = \sup\{\tointerval{\pi_R t} \mid t \in c\}$.
 One can check that $(a \wedge b)_L = a_L \wedge b_L$, $(a \wedge b)_R = a_R \wedge b_R$, $(a \vee b)_L = a_L \vee b_L$ and $(a \vee b)_R = a_R \vee b_R$, so $\diam(a \wedge b) \quantaleop \diam(a \vee b) = (\diam(a_L \wedge b_L) \quantaleop \diam(a_L \vee b_L),  \diam(a_R \wedge b_R) \quantaleop \diam(a_R \vee b_R)) \quantalegeq (\diam(a_L) \quantaleop \diam(b_L), \diam(a_R) \quantaleop \diam(b_R)) = \diam(a) \quantaleop \diam(b)$.

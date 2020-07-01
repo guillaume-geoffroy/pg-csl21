@@ -36,8 +36,8 @@ This idea has motivated much literature on program (pseudo)metrics \cite{ARNOLD1
 %  
    
  A fundamental aspect to take into account when reasoning about program similarity is that this notion is highly \emph{contextual}. For instance, replacing a program $\lambda x.\sin(x)$ computing the sine function  by the identity function $\lambda x.x$ 
-will not product a considerable error if $\lambda x.\sin(x)$
-operates in a context in which it is only applied to values close to 0.
+will not product a considerable error \emph{if} $\lambda x.\sin(x)$
+operates in a context in which it is only applied to values close to $0$.
 %, replacing $f$ will not produce a considerable error. However, this transformation would no longer be justified if $f$ were applied on values far from 0.
 Similarly, in numerical methods based on Taylor's polynomials (\textit{e.g.}. Gauss-Newton method), one replaces a 
  computationally intensive piece of program by one which approximates the former only \emph{around some given point}, and in {approximate computing} techniques like \emph{loop perforation} \cite{loopperf} a compiler can be asked to modify the execution of a loop provided this transformation does not exceed some error bound.
@@ -119,7 +119,7 @@ To be able to formalize the examples discussed above our choice was to start wit
 
 A standard solution from the literature on program semantics is to define the distance between two programs having a higher-order type $f,g:B\to A$ as the sup of the distances, computed in $A$, between $f(r)$ and $g(r)$, with $r$ ranging on $B$.
 This solution works well in models in which programs are interpreted as \emph{non-expansive} or \emph{Lipschitz-continuous} maps between metric spaces \cite{}. However, as is well-known, such models are not \emph{cartesian-closed}\footnote{In fact, cartesian closed categories of metric spaces and non-expansive functions \emph{do} exist \cite{}, but none of these categories contain real numbers with the standard metric.}, hence they do not account for 
- the simply-typed lambda-calculus, but only of linear or sub-exponential variations of it (such as the system $\mathsf{Fuzz}$ \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017}).
+ the simply-typed lambda-calculus, but only linear or sub-exponential variations of it (such as the system $\mathsf{Fuzz}$ \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017}).
  Also, it has been shown \cite{10.1109/LICS.2015.64} that in a probabilistic setting the non-linearity of higher-order programs has the effect of \emph{trivialising} metrics, that is, of forcing distances to be either 0 or 1, hence collapsing program distances onto usual notions of program equivalence.
 Moreover, even if one restricts to a sub-exponential language, the sup-distance seems inadequate to account for contextual transformations as the replacement of $\lambda x.\sin(x)$ by $\lambda x.x$,  as the sup-distance between such programs is infinite (see Fig. \ref{fig:sinid1}). 
  
@@ -160,14 +160,14 @@ On the other side of the coin, the approaches from \cite{chaudhuri, dallago:diff
 
 In this paper we introduce a class of higher-order denotational models to reason about program similarity and approximate program transformations, that we call \emph{diameter space models}.
 
-In such models a higher-order type $A$ is interpreted by a 4-tuple $(|A|, \intervals{A}, \distances{A}, \diam_{A})$ called a \emph{diameter space}, where $|A|$ is a set of \emph{exact} values, $\intervals{A}\subset \mathcal P(|A|)$ is a complete lattice of \emph{approximate} values, $\distances{A}$ is a \emph{quantale}, and $\diam_{A}: \intervals{A}\to \distances{A}$ is a function, called \emph{diameter}, which provides a quantitative measure of approximate values.
+In such models a higher-order type $A$ is interpreted by a 4-tuple $(\Lambda_A, \intervals{A}, \distances{A}, \diam_{A})$ called a \emph{diameter space}, where $\Lambda_A$ is a set of \emph{exact} values, $\intervals{A}\subset \mathcal P(|A|)$ is a complete lattice of \emph{approximate} values, $\distances{A}$ is a \emph{quantale}, and $\diam_{A}: \intervals{A}\to \distances{A}$ is a function, called \emph{diameter}, which provides a quantitative measure of approximate values.
 
 
 In any metric space the distance can be recovered from the diameter function by $d(x,y)=\mathsf{diam}([x,y])$ (where $[x,y]$ is the smallest interval containing $x$ and $y$). Similarly, in a diameter space the function $\diam_{A}$ induces a \emph{generalized partial metric} $d_{A}:|A|\times |A|\to \distances{A}$ by letting $d_{A}(x,y)=\diam_{A}(x\vee y)$ (where $x\vee y$ is the smallest approximate value containing $x$ and $y$). 
 
 
 Generalized partial metric spaces (henceforth GPMS) are a well-investigated class of metric spaces that has been widely applied in program semantics \cite{}. 
-Such spaces generalize standard metric spaces in two ways: they are \emph{generalized} in that distances need not be taken on the standard quantale $\mathbb R^{+\infty}$ of positive reals plus $\infty$, but over an arbitrary quantale, and they are \emph{partial} in that a point can have a self-distance $d(x,x)$ different from 0 (which in turn leads to strengthen the usual triangular inequality as $d(x,y) + d(z,z)\leq d(x,z)+d(z,y)$).\footnote{The adjective ``partial'' comes from the fact that in partial metric semantics like \cite{} the  programs with a non-zero self-distance are those which are not total, in the sense of Scott domains. This will not be the case in our framework. 
+Such spaces generalize standard metric spaces in two ways: they are \emph{generalized} in that distances need not be taken on the standard quantale $\mathbb R^{+\infty}$ of positive reals plus $\infty$, but over an arbitrary quantale, and they are \emph{partial} in that a point can have a self-distance $d(x,x)$ different from $0$ (which in turn leads to strengthen the usual triangular inequality as $d(x,y) + d(z,z)\leq d(x,z)+d(z,y)$).\footnote{The adjective ``partial'' comes from the fact that in partial metric semantics like \cite{} the  programs with a non-zero self-distance are those which are not total, in the sense of Scott domains. This will not be the case in our framework. 
 }   
 Observe that not only any standard metric space is a GPMS, but from from any partial metric $d$ one can retrieve a (generalized) metric $d'$ by letting $d'(x,y)=2d(x,y)-d(x,x)-d(y,y)$.
 
@@ -181,7 +181,7 @@ Second, with this definition, the \emph{self-distance} of $\lambda x.\sin(x)$ (r
  %compose through a (lax) chain-rule.
 
 
-While the fact that replacing  $\lambda x.\sin(x)$ by $\lambda x.x$, when applied close to 0 yields a negligible change cannot be expressed in a metric semantics based on the sup-distance, in our framework this will be expressed by the fact that their distance, computed in an interval of 0 with a small enough diameter, is very close to the {self-distance} of $\lambda x.\sin(x)$ (see Fig. \ref{fig:sinid}). 
+While the fact that replacing  $\lambda x.\sin(x)$ by $\lambda x.x$, when applied close to 0 yields a negligible change cannot be expressed in a metric semantics based on the sup-distance, in our framework this will be expressed by the fact that their distance, computed in an interval around $0$ with a small enough diameter, is very close to the \emph{self-distance} of $\lambda x.\sin(x)$ (see Fig. \ref{fig:sinid}). 
 
 
 

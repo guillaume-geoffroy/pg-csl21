@@ -133,7 +133,7 @@ $}
 
 
 \begin{example}[Integral approximation]
-A second natural application of contextual metric reasoning is to numerical integration. Suppose that all functions in $\mathcal F_{n}$ are integrable and suppose we have at our disposal a program $\lambda fx.\mathtt I_{[0,x]}f: (\mathsf{Real}\to \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathtt I_{[0,r]}t$ computes (a precise enough approximation of) the definite integral $\int_{0}^{|r|}tx \ dx$.
+A second natural application of contextual metric reasoning is to numerical integration. Suppose that all functions in $\mathcal F_{n}$ are integrable and suppose we have at our disposal a program $\lambda fx.\mathsf I_{[0,x]}f: (\mathsf{Real}\to \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathsf I_{[0,r]}t$ computes (a precise enough approximation of) the definite integral $\int_{0}^{|r|}tx \ dx$.
 In many contexts we might prefer to replace the expensive computation of $\mathsf I_{[0,r]}t$ by the (more economical but less precise) computation of a finite Riemann sum $\mathsf R^{n}_{[0,r]}t=  \sum_{i=1}^{n}(tx_{i})\cdot |r|/n$, where 
  $x_{i}=  i\cdot |r|/n$ (see Fig. \ref{fig:riemann}).  
 
@@ -144,7 +144,7 @@ In many contexts we might prefer to replace the expensive computation of $\maths
 
 
 Suppose now that, in order to approximate the integral of some computationally expensive program $t$ on $[0,r]$, we replace $t$ by some more efficient program $u$ which is very close to $t$ within the interval $[0,r]$.
-Let $\epsilon_{t}(r)$ indicate the error of replacing the true integral of $t$ over $[0,r]$ with $\mathsf{R}^{n}_{[0,r]}t$ (which can be explicitly computed by standard analytic techniques under suitable assumptions for $t$ and its derivatives),
+Let $\varepsilon_{t}(r)$ indicate the error of replacing the true integral of $t$ over $[0,r]$ with $\mathsf{R}^{n}_{[0,r]}t$ (which can be explicitly computed by standard analytic techniques under suitable assumptions for $t$ and its derivatives),
  and 
 $\delta_{t,u}(r)$ indicate the distance between $t$ and $u$ on the interval $[0,r]$.
 
@@ -156,8 +156,8 @@ Then, using the triangular inequality we deduce
 $d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}t, \mathsf R^{n}_{[0,r]}u)
 \leq
 d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}t, \mathsf R^{n}_{[0,r]}t) +
-d_{\mathsf{Real}} ( \mathsf{R}_{[0,r]}t,\mathsf R^{n}_{0,r]}u) \leq 
-\epsilon_{t}(r)
+d_{\mathsf{Real}} ( \mathsf{R}_{[0,r]}t,\mathsf R^{n}_{[0,r]}u) \leq 
+\varepsilon_{t}(r)
 + 
 \delta_{t,u}(r)\cdot 
  n\cdot |r|$.
@@ -166,9 +166,9 @@ Using the partial metric structure on $\mathsf{Real}\to \mathsf{Real}$, we can a
 \leq
 d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{I}_{[0,x]}t, \lambda x.\mathsf R^{n}_{[0,x]}t)(a) +
 d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}t, \lambda x.\mathsf R^{n}_{0,x]}u)(a) -
-d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}t,\lambda x. \mathsf R^{n}_{0,x]}t)(a)
+d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}t, \allowbreak \lambda x. \mathsf R^{n}_{0,x]}t)(a)
 \leq 
-\partial(\epsilon_{t})(a)
+\partial(\varepsilon_{t})(a)
 + 
 (\partial(\delta_{t,u})(a)-\partial(\delta_{t,t})(a))\cdot 
  n\cdot \diam_{\mathsf{Real}}(a)
