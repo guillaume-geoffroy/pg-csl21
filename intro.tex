@@ -37,7 +37,7 @@ This idea has motivated much literature on program (pseudo)metrics \cite{ARNOLD1
 % 
 %  
 
-Some recent literature \cite{chaudhuri, dallago:differential-stlc} has highlighted the importance of \emph{contextuality} to reason about program similarity: in several common situations one looks for ways to measure the error produced by a transformation of the form $\mathtt C[t] \leadsto \mathtt C[u]$, which replaces a program $t$ by $u$ \emph{within a context} $\mathtt C[\ ]$, as a function of the mismatch between $t$ and $u$ and of the sensitivity of the context $\mathtt C[\ ]$ itself.
+Some recent literature \cite{chaudhuri, dallago:differential-stlc} has highlighted the importance of \emph{contextuality} to reason about program similarity: in several common situations one looks for ways to measure the error produced by a transformation of the form $\mathtt C[t] \leadsto \mathtt C[u]$, which replaces a program $t$ by $u$ \emph{within a context} $\mathtt C[\ ]$, from a measure of the mismatch between $t$ and $u$ and of the sensitivity of the context $\mathtt C[\ ]$ itself.
  %one looks for ways to measure the similarity between two programs in a \emph{contextual} way: one seeks a bound for the error of replacing a program $t$ by $u$ within a given context
 %
 %
@@ -54,8 +54,8 @@ Some recent literature \cite{chaudhuri, dallago:differential-stlc} has highlight
 $\lambda x.\sin(x)$
 occurs in a context in which it is applied to values close to $0$.
  Similar cases of contextual reasoning can be found  in many areas of computer science. For instance, 
- in numerical methods like the Gauss-Newton method, in which one replaces a 
- computationally intensive function by its Taylor's expansion {around some given point}, and in {approximate computing} techniques like \emph{loop perforation} \cite{loopperf}, in which a compiler can be asked to skip a certain number of iterations of some piece of code.
+ in numerical methods (\emph{e.g.}~the Gauss-Newton method) in which a 
+ computationally intensive function is replaced by its Taylor's expansion {around some given point}, or in {approximate computing} techniques like \emph{loop perforation} \cite{loopperf}, in which a compiler can be asked to skip a certain number of iterations.% provided this won't exceed some error bound.
  
 
 %, replacing $f$ will not produce a considerable error. However, this transformation would no longer be justified if $f$ were applied on values far from 0.
@@ -138,11 +138,11 @@ program differences using program metrics and that of accounting for  a fully hi
 %
 % The question that motivates this paper is whether a notion of program difference of this kind can itself be seen as a metric over the programs of a programming language with higher-order types.  
 
-Suppose one starts from a language  containing a type $\mathsf{Real}$ for real numbers and on which one can measure errors with the standard metric. The difficult question that immediately arises is then how to lift this metric to higher-order types, \emph{e.g.}~to $\mathsf{Real}\to \mathsf{Real}$.
+Suppose one starts from a language  containing a type $\mathsf{Real}$ for real numbers and on which errors are measured with the standard metric. A difficult  and important question is then how to this metric  can be lifted to higher-order types, \emph{e.g.}~to $\mathsf{Real}\to \mathsf{Real}$.
 
 
 
-A standard solution is to take the sup-distance, that is, to let, for $f,g:\mathsf{Real}\to \mathsf{Real}$, $d(f,g)=\sup\{d(f(r),g(r))\mid r\in \mathsf{Real}\}$. This solution works well in models in which programs are interpreted as \emph{non-expansive} or \emph{Lipschitz-continuous} maps \cite{Hofmann2014, Azevedo_de_Amorim_2017}. However, as is well-known, such models are not \emph{cartesian-closed}\footnote{In fact, cartesian closed categories of metric spaces and non-expansive functions \emph{do} exist \cite{Escardo1999, Stubbe2009}, but, to our knowledge, none of these categories contains the real numbers with the standard metric.}, hence they do not account for 
+A standard solution is to take the sup-distance, that is, to let, for $f,g:\mathsf{Real}\to \mathsf{Real}$, $d(f,g)=\sup\{d(f(r),g(r))\mid r\in \mathsf{Real}\}$. This solution works well in models in which programs are interpreted as \emph{non-expansive} or \emph{Lipschitz-continuous} maps \cite{Hofmann2014, Azevedo_de_Amorim_2017}. However, as is well-known, such models are not \emph{cartesian-closed}\footnote{In fact, cartesian closed categories of metric spaces and non-expansive functions \emph{do} exist \cite{Escardo1999, Stubbe2009}, but, to our knowledge, none of these categories contains the real numbers with the standard metric.}, so they do not account for 
  the simply-typed lambda-calculus, but only for linear or sub-exponential variations of it (such as the system $\mathsf{Fuzz}$ \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017}).
  Also, it has been shown \cite{10.1109/LICS.2015.64} that in a probabilistic setting the non-linearity of higher-order programs has the effect of \emph{trivialising} metrics, that is, of forcing distances to be either 0 or 1, hence collapsing program distances onto usual notions of program equivalence.
 
@@ -151,7 +151,7 @@ Most importantly, even if one restricts to a sub-exponential language, the sup-d
  
  
 On the other side of the coin, other approaches like \cite{chaudhuri, dallago:differential-stlc} are fully contextual and higher-order, but provide, at best, only weak approximations of a standard notion of metric.  
- Nonetheless, these approaches introduce the idea, that we retain here, that program differences must be  themselves some kind of programs, relating errors in input with errors in  output,  and thus that programs should be separated in two different classes: \emph{exact} programs, leading from well-defined inputs to well-defined outputs, and \emph{approximate} programs, leading from errors in the input into errors in the output.
+ Nonetheless, these approaches introduce the idea, that we retain here, that program differences must be  themselves some kind of programs, relating errors in input with errors in  output,  and separate programs accordingly in two different classes: \emph{exact} programs, leading from well-defined inputs to well-defined outputs, and \emph{approximate} programs, leading from errors in the input into errors in the output.
 %
 
 %
@@ -184,7 +184,7 @@ On the other side of the coin, other approaches like \cite{chaudhuri, dallago:di
 
 
 
-In this paper we introduce a class of higher-order denotational models to reason about program similarity and approximate program transformations, that we call \emph{diameter space models}.
+In this paper we introduce a class of higher-order denotational models, that we call \emph{diameter space models}, to reason about program similarity and approximate program transformations.
 In such models a higher-order type $A$ is interpreted by a 4-tuple $(\Lambda_A, \intervals{A}, \distances{A}, \diam_{A})$ called a \emph{diameter space}, where $\Lambda_A$ is a set of \emph{exact} values, $\intervals{A}\subset \mathcal P(|A|)$ is a complete lattice of \emph{approximate} values, $\distances{A}$ is a \emph{quantale}, and $\diam_{A}: \intervals{A}\to \distances{A}$ is a function, called \emph{diameter}, which provides a quantitative measure of approximate values.
 
 
@@ -252,7 +252,7 @@ This property is at the heart of our generalization of diameters.}
 
 In our model, 
 the distance between  two programs $f,g:\mathsf{Real}\to \mathsf{Real}$ lives in the functional quantale of monotone maps from \emph{approximate values} of $\mathsf{Real}$ (\emph{i.e.} closed intervals) to positive reals. This function associates a closed interval $a$ with the diameter of the smallest interval containing \emph{both} $f(a)$ and $g(a)$. 
-Observe that, with this definition,  the distance of $f$ \emph{from itself} needs not be 0, and yields a way to measure the sensitivity of $f$, since it associates each interval $a$ with the size of the interval $f(a)$ spanned by $f$ on $a$. %For instance, the self-distance of $\lambda x.\sin(x)$ associates any interval $a$ with a value $\leq 2$ (the diameter of $\sin(a)$).
+Observe that, with this definition,  the distance of $f$ \emph{from itself} needs not be (constantly) 0. Rather, it  provides a measure of the sensitivity of $f$, since it associates each interval $a$ with the size of the interval $f(a)$ spanned by $f$ on $a$. %For instance, the self-distance of $\lambda x.\sin(x)$ associates any interval $a$ with a value $\leq 2$ (the diameter of $\sin(a)$).
 
 
 % Observe that this implies that, unless $t$ is constant, its distance from itself cannot be constantly 0.

@@ -4,7 +4,7 @@ To illustrate our construction, we start from a relatively concrete example: we 
 
 \emph{Simple types} are defined as follows: $\mathsf{Real}$ is a simple type; if $A$ and $B$ are simple types, then $A \to B$ and $A \times B$ are simple types.
 
-For all $n>0$, we fix a set $\mathcal{F}_n$ of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We consider the usual Curry-style simply-typed $\lambda$-calculus over the types defined above (the left and right projection are denoted by $\pi_L:A\times B \to A$ and  $\pi_R:A\times B \to B$ respectively, and the constructor for pairs by $\left\langle-,-\right\rangle$), enriched with the following constants: for all $r \in \mathbb{R}$, a constant $r:\mathsf{Real}$; for all $n>0$ and all $f\in\mathcal{F}_n$, a constant $f:\mathsf{R}\to\ldots\to\mathsf{R}\to\mathsf{R}$. We call this calculus $\STLC$, and its terms are simply called \emph{terms}. We write $t[x_1 := u_1, \ldots, x_n := u_n]$ to denote the \emph{simultaneous} substitution of $u_1, \ldots, u_n$ for $x_1, \ldots, x_n$ in $t$. For all types $A$, we denote by $\Lambda_A$ the set of closed terms of type $A$. The relation of $\beta$-reduction is enriched with the following rule, extended to all contexts: for all $n>0$, $f\in\mathcal{F}_n$, and $r_1,\ldots,r_n\in\mathbb{R}$, $f r_1 \ldots r_n \to_\beta s$, where $s = f(r_1, \ldots, r_n)$. By standard arguments, this calculus has the properties of subject reduction, confluence and strong normalisation.
+For all $n>0$, we fix a set $\mathcal{F}_n$ of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We consider the usual Curry-style simply-typed $\lambda$-calculus over the types defined above (the left and right projection are denoted by $\pi_L:A\times B \to A$ and  $\pi_R:A\times B \to B$ respectively, and the constructor for pairs by $\left\langle-,-\right\rangle$), enriched with the following constants: for all $r \in \mathbb{R}$, a constant $r:\mathsf{Real}$; for all $n>0$ and all $f\in\mathcal{F}_n$, a constant $f:\mathsf{Real}\to\ldots\to\mathsf{Real}\to\mathsf{Real}$. We call this calculus $\STLC$, and its terms are simply called \emph{terms}. We write $t[x_1 := u_1, \ldots, x_n := u_n]$ to denote the \emph{simultaneous} substitution of $u_1, \ldots, u_n$ for $x_1, \ldots, x_n$ in $t$. For all types $A$, we denote by $\Lambda_A$ the set of closed terms of type $A$. The relation of $\beta$-reduction is enriched with the following rule, extended to all contexts: for all $n>0$, $f\in\mathcal{F}_n$, and $r_1,\ldots,r_n\in\mathbb{R}$, $f r_1 \ldots r_n \to_\beta s$, where $s = f(r_1, \ldots, r_n)$. By standard arguments, this calculus has the properties of subject reduction, confluence and strong normalisation.
 
 
 Given two closed terms $t,u$ of type $A$,  we say that $t$ and $u$ are \emph{observationally equivalent} and write $t \oeq_A u$ if for all terms $C$ such that $x:A \vdash C : \mathsf{Real}$ is derivable, $C[x:=t]$ is $\beta$-equivalent to $C[x:=u]$ (which amounts to saying that they both $\beta$-reduce to the same real number).  It is clear that observational equivalence is a congruence and that two $\beta$-equivalent terms are always observationally equivalent. The notion of distance we define in the next paragraph will be a generalisation of this notion of equivalence.
@@ -30,7 +30,7 @@ For example, any two terms $t,u\in \Lambda_{\mathsf{Real}}$ with normal forms $q
 $[t,u]_{\mathsf{Real}\to \mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}\to\mathsf{Real}}\mid  
 \forall r \in \Lambda_{\mathsf{Real}} \ vr\in [ tr, ur]_{\mathsf{Real}} 
 \}$. With $t= \lambda x.\sin(x)+1$ and $u=\lambda x.\cos(x)-1$, 
-$[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding to maps oscillating between $\sin (x)+1$ and $\cos(x)+1$ (\textit{e.g.} $\lambda x. \sin(x+1)$, as illustrated in Fig. \ref{fig:interval1}).
+$[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding to maps oscillating between $\sin (x)+1$ and $\cos(x)+1$ (\textit{e.g.} the program $\lambda x. \sin(x+1)$, as illustrated in Fig. \ref{fig:interval1}).
 
 \begin{figure}
 %\begin{subfigure}{0.42\textwidth}
@@ -84,7 +84,7 @@ This rule is important because it means that if we compute an approximation of a
 In addition, we can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $x_{1}:A_{1},\dots,x_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. 
 
 \begin{remark} \label{remark:push-exp-stlc}
-The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of the $\lambda$-calculus, namely:
+The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of the $\lambda$-calculus, in particular:
 \begin{itemize}
 \item $\partial (x_{i})(a_{1},\dots, a_{n})=a_{i}$,
 \item $\partial (tu)(a_{1},\dots, a_{n}) \subseteq \partial (t)(a_{1},\dots, a_{n}) ~ \partial (u)(a_{1},\dots, a_{n})$,
@@ -189,7 +189,7 @@ This distance is clearly compatible with observational equivalence (\textit{i.e.
 
 
 To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$. As pointed out in the introduction, 
-the name ``diameter'' refers to the fact that, as the standard diameter on the reals, this diameter function $\diam_{A}$ is (almost) modular on intersecting approximate values, as we show in Proposition \ref{prop:submodular} below. 
+the name ``diameter'' refers to the fact that, as the standard diameter on the reals, the function $\diam_{A}$ is (almost) modular on intersecting approximate values, as we show in Proposition \ref{prop:submodular} below. 
  %-- or rather, using the quantale ordering convention, supermodular. 
  
  
@@ -236,7 +236,7 @@ The triangular inequality is an immediate consequence of the quasi-supermodulari
 
 \begin{remark}
 Corollary \ref{corollary:stlc-metric} is a slight refinement of the well-known fact \cite{6845021} that any 
-function $\delta: L\to \mathbb R^{+\infty}$ on a lattice $L$ that is monotone and \emph{submodular}  (\emph{i.e.}~ satisfying $\delta(a\cup b)+ \delta(a\cap b) \leq \delta(a)+\delta(b)$) induces a pseudo-metric $d: L\times L \to \mathbb R^{+\infty}$ by letting $d(a,b)=2\delta(a\vee b)-\delta(a)-\delta(b)$. In fact, one can decompose this construction: first, one defines a partial pseudometric $p$ on $L$ by $p(a,b) = \diam{a \vee b}$, and then $d$ is just the distance given by equation \eqref{eq:pmettomet}: $d(a,b) = p^*(a,b) = 2p(a,b)-p(a,a)-p(b,b)$.
+function $\delta: L\to \mathbb R^{+\infty}$ on a lattice $L$ that is monotone and \emph{submodular}  (\emph{i.e.}~ satisfying $\delta(a\cup b)+ \delta(a\cap b) \leq \delta(a)+\delta(b)$ - recall that the order on $\mathbb R^{+\infty}$, taken as a quantale, is opposite to the usual order) induces a pseudo-metric $d: L\times L \to \mathbb R^{+\infty}$ by letting $d(a,b)=2\delta(a\vee b)-\delta(a)-\delta(b)$. In fact, one can decompose this construction: first, one defines a partial pseudometric $p$ on $L$ by $p(a,b) = \diam(a \vee b)$, and then $d$ is just the distance given by equation \eqref{eq:pmettomet}: $d(a,b) = p^*(a,b) = 2p(a,b)-p(a,a)-p(b,b)$.
 
  
 

@@ -1,7 +1,7 @@
 % !TEX root = CSL 2021.tex
 
 
-In the preceding section we showed how to associate each simple type $A$ with a  partial metric $d_{A}$ over the closed terms of type $A$. We now illustrate through a few basic examples how the higher-order and metric features of this semantics can be used to formalize contextual reasoning about program differences.
+In the previous section we showed how to associate each simple type $A$ with a  partial metric $d_{A}$ over the closed terms of type $A$. We now illustrate through a few basic examples how the higher-order and metric features of this semantics can be used to formalize contextual reasoning about program differences.
 
 
 
@@ -20,7 +20,7 @@ $d_{\mathsf{Real}\to \mathsf{Real}}(t, \mathtt T^{n}\langle t,\mathtt 0 \rangle)
 Observe that if, instead, we used the $\sup$-distance $d_{\sup}(t,u)= \sup\{d_{\mathsf{Real}}(tr, ur)\mid r\in \Lambda_{\mathsf{Real}}\}$, then we could not reason as above since  
 $d_{\sup}(\lambda x.\sin(x), \mathtt T^{n} \langle \lambda x.\sin(x),0\rangle)=\infty$ (as illustrated in Fig. \ref{fig:sintaylor}).  
 
-The higher-order structure of our semantics can be used to push this simple example further. For instance, we can define an approximate program 
+We can use the higher-order structure of our semantics to push abstraction a bit further. For instance, we can define an approximate program 
 $c[y_{1},y_{2}]=\left( \partial (\mathtt T^{n})\langle y_{1}, \tointerval{0}\rangle\right) y_{2}: \intervals{\mathsf{Real}\to \mathsf{Real}}\to \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ which describes the sensitivity of the $n$-th Taylor expansions in 0. Given two programs $t$ and $u$ and a small interval $a$ of $0$, the real number $c[\partial(t)\vee \partial(u),a]$ measures how much the error of replacing the Taylor expansions of $t$ with the Taylor expansion of $u$ in $0$ diverges from the error produced by simply replacing  $t$ and $u$, when these are applied close to $0$. 
   
 \end{example}
@@ -134,8 +134,8 @@ $}
 
 
 \begin{example}[Integral approximation]
-A second natural application of contextual metric reasoning is to numerical integration. Suppose that all functions in $\mathcal F_{n}$ are integrable and suppose we have at our disposal a program $\lambda fx.\mathsf I_{[0,x]}f: (\mathsf{Real}\to \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathsf I_{[0,r]}t$ computes (a precise enough approximation of) the definite integral $\int_{0}^{|r|}tx \ dx$.
-In many contexts we might prefer to replace the expensive computation of $\mathsf I_{[0,r]}t$ by the (more economical but less precise) computation of a finite Riemann sum $\mathsf R^{n}_{[0,r]}t=  \sum_{i=1}^{n}(tx_{i})\cdot |r|/n$, where 
+A second natural application of metric reasoning is to numerical integration. Suppose that all functions in $\mathcal F_{n}$ are integrable and suppose we have at our disposal a program $\lambda fx.\mathsf I_{[0,x]}(f): (\mathsf{Real}\to \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathsf I_{[0,r]}(t)$ computes (a precise enough approximation of) the definite integral $\int_{0}^{|r|}tx \ dx$.
+In many contexts we might prefer to replace the expensive computation of $\mathsf I_{[0,r]}(t)$ by the (more economical but less precise) computation of a finite Riemann sum $\mathsf R^{n}_{[0,r]}(t)=  \sum_{i=1}^{n}(tx_{i})\cdot |r|/n$, where 
  $x_{i}=  i\cdot |r|/n$ (see Fig. \ref{fig:riemann}).  
 
 %
@@ -144,36 +144,55 @@ In many contexts we might prefer to replace the expensive computation of $\maths
 % as $d_{\mathsf{Real}}(\mathsf I_{[0,r]}t, \mathsf R^{n}_{[0,r]}t)\leq  M\cdot |r|^{3}/24n^{2}$.
 
 
-Suppose now that, in order to approximate the integral of some computationally expensive program $t$ on $[0,r]$, we replace $t$ by some more efficient program $u$ which is very close to $t$ within the interval $[0,r]$.
-Let $\varepsilon_{t}(r)$ indicate the error of replacing the true integral of $t$ over $[0,r]$ with $\mathsf{R}^{n}_{[0,r]}t$ (which can be explicitly computed by standard analytic techniques under suitable assumptions for $t$ and its derivatives),
- and 
-$\delta_{t,u}(r)$ indicate the distance between $t$ and $u$ on the interval $[0,r]$.
+Suppose now that, in order to approximate the integral of some computationally expensive program $t$ on $[0,r]$, we replace $t$ by some more efficient program $u$ which, over $[0,r]$, is very close to $t$. Let $\epsilon_{t}(r)$ indicate the distance between the true integral of $t$ over $[0,r]$ and $\mathsf{R}^{n}_{[0,r]}(t)$,
+ and moreover let 
+$\eta_{t,u}(r)$ be the diameter of $\partial(t)([0,r])\vee\partial(u)([0,r])$.
 
 Using the metric structure of $\mathsf{Real}$ we can then bound the error we incur in by replacing the true integral \emph{of $t$} with the Riemann sum \emph{of $u$}. 
 In fact, by standard calculation we can compute the bound
-$d_{\mathsf{Real}} ( \mathsf{R}^{n}_{[0,r]}t, \mathsf R^{n}_{[0,r]}u)\leq 
-d_{\mathsf{Real}\to\mathsf{Real}}(t, u)([0,r]) \cdot n \cdot |r|= \delta_{t,u}(r)\cdot n \cdot |r|$.
-Then, using the triangular inequality we deduce
-$d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}t, \mathsf R^{n}_{[0,r]}u)
-\leq
-d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}t, \mathsf R^{n}_{[0,r]}t) +
-d_{\mathsf{Real}} ( \mathsf{R}_{[0,r]}t,\mathsf R^{n}_{[0,r]}u) \leq 
+$d_{\mathsf{Real}} ( \mathsf{R}^{n}_{[0,r]}(t), \mathsf R^{n}_{[0,r]}(u))\leq 
+d_{\mathsf{Real}\to\mathsf{Real}}(t, u)([0,r]) \cdot n \cdot |r|=\eta_{t,u}(r)\cdot n \cdot |r|$.
+Then, using the triangular inequality of the standard metric on $\mathsf{Real}$ we deduce
+\begin{align*}
+& d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}(t), \mathsf R^{n}_{[0,r]}(u)) \\ 
+& \leq
+d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}(t), \mathsf R^{n}_{[0,r]}(t)) +
+d_{\mathsf{Real}} ( \mathsf{R}_{[0,r]}(t),\mathsf R^{n}_{[0,r]}(u)) \\
+& \leq 
 \varepsilon_{t}(r)
 + 
-\delta_{t,u}(r)\cdot 
- n\cdot |r|$.
+\eta_{t,u}(r)\cdot 
+ n\cdot |r|
+ \end{align*}
  
-Using the partial metric structure on $\mathsf{Real}\to \mathsf{Real}$, we can also derive a bound expressing how much the error above is \emph{sensitive to changes of $r$}. In fact, for all interval $a\in \intervals{\mathsf{Real}}$, using the triangular inequality of partial metrics we deduce $d_{\mathsf{Real}\to\mathsf{Real}} (\lambda x. \mathsf{I}_{[0,x]}t,\lambda x. \mathsf R^{n}_{[0,x]}u)(a)
-\leq
-d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{I}_{[0,x]}t, \lambda x.\mathsf R^{n}_{[0,x]}t)(a) +
-d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}t, \lambda x.\mathsf R^{n}_{0,x]}u)(a) -
-d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}t, \allowbreak \lambda x. \mathsf R^{n}_{0,x]}t)(a)
-\leq 
-\partial(\varepsilon_{t})(a)
-+ 
-(\partial(\delta_{t,u})(a)-\partial(\delta_{t,t})(a))\cdot 
- n\cdot \diam_{\mathsf{Real}}(a)
-$.
+Using the partial metric on $\mathsf{Real}\to \mathsf{Real}$, we can also derive a bound expressing how much the error above is \emph{sensitive to changes of $r$}. 
+First, using standard analytic techniques (under suitable assumptions for $t$ and its derivatives) one can find a program $v:\mathsf{Real}\to\mathsf{Real}$ such that $vr \to^{*}_{\beta}\epsilon_{t}(r)$. 
+Then, using the triangular inequality of the partial metric on $\mathsf{Real}\to \mathsf{Real}$ we deduce, for all interval $a$, the following bound:
+\begin{align*}
+& d_{\mathsf{Real}\to\mathsf{Real}} (\lambda x. \mathsf{I}_{[0,x]}(t),\lambda x. \mathsf R^{n}_{[0,x]}(u))(a) \\
+ &\leq \
+d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{I}_{[0,x]}(t), \lambda x.\mathsf R^{n}_{[0,x]}(t))(a) +
+d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}(t), \lambda x.\mathsf R^{n}_{[0,x]}(u))(a) \\
+ & \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad
+- d_{\mathsf{Real}\to\mathsf{Real}} ( \lambda x.\mathsf{R}_{[0,x]}(t), \allowbreak \lambda x. \mathsf R^{n}_{0,x]}(t))(a) \\
+ & \leq \ 
+ %\Big(
+d_{\mathsf{Real}\to \mathsf{Real}}(v,v)(a)
+ %\diam_{\mathsf{Real}}(\partial(\lambda x.\epsilon_{t}(x))(y))
+ +
+ \big( d_{\mathsf{Real}\to\mathsf{Real}}(t,u)(a)- d_{\mathsf{Real}\to\mathsf{Real}}(t,t)(a)\big)\cdot n\cdot \diam_{\mathsf{Real}}(a)
+ %\Big)
+%  \bigg ( 
+%\diam_{\mathsf{Real}}\Big ( \big (\partial(\mathsf I_{[0,\_]})\partial(t)y\big ) \vee \big (\partial(\mathsf I_{[0,\_]})\partial(u)y\big)\Big ) \\
+% & \qquad\qquad\qquad\qquad\qquad\qquad
+%+
+%\big(\diam_{\mathsf{Real}} (\partial(t)(y)\vee \partial(u)(y))- \diam_{\mathsf{Real}} (\partial(t)(y))\big)\cdot n \cdot \diam_{\mathsf{Real}}(y)\bigg)
+%% 
+% \ ??(\varepsilon_{t})
+%+ 
+%(\partial(\eta_{t,u})(x)-\partial(\eta_{t,t})(x))\cdot 
+% n\cdot \diam_{\mathsf{Real}}(x)
+\end{align*}
 \end{example}
 
 
@@ -233,17 +252,17 @@ $.
 
 
 \begin{example}[Loop perforation]
-By adapting an example from \cite{chaudhuri}, we discuss a simplified example of the transformation which replaces a program $t$ which performs $n$-iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. 
+By adapting an example from \cite{chaudhuri}, we discuss a simplified example of the transformation that replaces a program $t$ which performs $n$-iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. 
 
 
-We suppose that our language includes a type $\mathsf{Nat}$ for natural numbers. A natural choice is to let   
+We suppose that our language includes a type $\mathsf{Nat}$ for natural numbers, where we indicate for each $n\in \mathbb N$, the corresponding normal forms of $\mathsf{Nat}$ as $\mathtt n$. A natural choice is to let   
 $\intervals{\mathsf{Nat}}=\{ \{ t \mid \exists n\in a \ t\leadsto \mathtt n\}\mid a \text{ finite subset of }\mathbb N \text{ or }a=\mathbb N\}$, $\distances{\mathsf{Nat}}=\mathbb R^{+\infty}$ and $d_{\mathsf{Nat}}(t,u)=| n-m|$, where $t\to^{*}_{\beta}\mathtt n$ and $u\to^{*}_{\beta}\mathtt m$. 
 
 
 %Let $\mathsf{Nat}$ be a suitable type representing natural numbers in $\STLC$ and s
 Suppose now  $t: (A\times A\to A) \to \mathsf{Nat}\to (A\to A)\to A$, for $n\geq 1$, is a term such that $th\mathtt n f$ 
 computes the $n$-times iteration of $h$ as follows: $th \mathtt 0f= h\langle f\mathtt 0, f\mathtt 0\rangle$ and $th(\mathtt{n+1})f=h\langle th\mathtt n f, f\mathtt{n+1}\rangle$. 
-Let $\mathsf{Perf}^{k}(t)$, the $k$-th perforation of $t$, be the program satisfying  
+Let $\mathsf{Perf}^{k}(t)$, the $k$-th perforation of $t$, be the program   
 $(\mathsf{Perf}^{k}(t))h\mathtt nf= t(\lambda x. (h^{(k)}x)) \mathtt{\lfloor n\rfloor_{k}} (\lambda x. f(x* \mathtt k)$, where $\lfloor n\rfloor_{k}$ indicates the least $m\leq n$ such that $m$ is divisible by $k$, and $x*\mathtt k$ is the multiplication of $x$ by $k$. 
 
 
@@ -256,14 +275,14 @@ $d_{A}(v_{n},w_{n}    )$ between  $v_{n}=th\mathtt n f $ and its perforation $w_
 
 \item[i.] $v_{n}$ performs $n$-iterations while $w_{n}$ performs $k\lfloor n\rfloor_{k}  \leq n$ iterations, and we can compute  
 $d_{A}(v_{n}, v_{(k \lfloor n\rfloor_{k})})$ as the diameter of 
-$\partial(t)(\partial(h), [ k \lfloor n\rfloor_{k}, n]_{\mathsf{Nat}}, \partial(f))$.
+$\partial(t)\partial(h)([ k \lfloor n\rfloor_{k}, n]_{\mathsf{Nat}}) \partial(f)$.
 
 
 
 
-\item[ii.] If $n$ is divisible by $k$, then for $i\leq n$, at the $i$-th iteration of $v_{n}$ the function $f$ is applied  to $\mathtt i$, while at the $i$-th iteration of $w_{n}$, $f$ is applied to $\lfloor i\rfloor_{k}$. Now, the error of replacing  $f\mathtt i$ by $ f(\lfloor \mathtt j\rfloor_{k})$, with $\mathtt i,\mathtt j$ in some $a\in \intervals{\mathsf{Nat}}$ is accounted for by the approximate program $c[y]= \partial(f)(y-k  )$, where $y-k= y \vee \{u-\mathtt k\mid u \in y\}$.
+\item[ii.] If $n$ is divisible by $k$, then for $i\leq n$, at the $i$-th iteration of $v_{n}$ the function $f$ is applied  to $\mathtt i$, while at the $i$-th iteration of $w_{n}$, $f$ is applied to $\lfloor i\rfloor_{k}$. Now, the error of replacing  $f\mathtt i$ by $ f\lfloor \mathtt j\rfloor_{k}$, with $\mathtt i,\mathtt j$ in some $a\in \intervals{\mathsf{Nat}}$, is accounted for by the approximate program $c[y]= \partial(f)(y-k  )$, where $y-k= y \vee \{u-\mathtt k\mid u \in y\}$.
 We deduce then that 
-$d_{A}(v_{n}, w_{n})$ is bounded by the diameter of $\partial(t)\partial(f)( \tointerval{\mathtt{k* \lfloor n\rfloor_{k}}} )(\lambda y.c[y])$.
+$d_{A}(v_{n}, w_{n})$ is bounded by the diameter of $\partial(t)\partial(f)\tointerval{\mathtt n} (\lambda y.c[y])$.
 
 \item[iii.] From the fact that $w_{n}=w_{(k\cdot \lfloor n\rfloor_{k})}$ and the triangular inequality of the partial metric $d_{A}$ we deduce  
 $d_{A}(v_{n}, w_{n})=
