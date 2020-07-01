@@ -33,7 +33,7 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}\to\mathsf
 $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding to maps oscillating between $\sin (x)+1$ and $\cos(x)+1$ (\textit{e.g.} $\lambda x. \sin(x+1)$, as illustrated in Fig. \ref{fig:interval1}).
 
 \begin{figure}
-\begin{subfigure}{0.42\textwidth}
+%\begin{subfigure}{0.42\textwidth}
 \parbox[h][3cm][c]{\textwidth}{
 \adjustbox{center}{$
 \begin{tikzpicture}[domain=-5:5, scale=0.5]
@@ -51,57 +51,11 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding
 
 \end{tikzpicture}$}
 }
-\caption{\small $\lambda x.\sin(x+1)$ is in $[\lambda x.\sin(x)+1, \lambda x.\cos(x)+1]_{\mathsf{Real}\to\mathsf{Real}}$.}
+\caption{$\lambda x.\sin(x+1)$ is in $[\lambda x.\sin(x)+1, \lambda x.\cos(x)+1]_{\mathsf{Real}\to\mathsf{Real}}$.}
 \label{fig:interval1}
-\end{subfigure} \ \ \ 
-\begin{subfigure}{0.52\textwidth}
-\parbox[h][3cm][c]{\textwidth}{
-\adjustbox{center}{$
-\begin{tikzpicture}[domain=-4:4, scale=0.65]
-
-%\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
-\draw[<->]   (-4,0) -- (4,0);
-\draw[<->] (0,-2) -- (0,2); % node[above] {$f(x)$};
-
-\draw[dashed, |-|] (-1,0) -- (1,0);
-\node(a) at (-1,-0.3) {\tiny$-1$};
-\node(a) at (1,-0.3) {\tiny$1$};
-
-\node(a) at (0.3,-1.2) {\tiny$-1$};
-\node(a) at (-0.3,0.8) {\tiny$1$};
-   % \node at (0,0)[circle,fill,inner sep=1pt]{};
-
-\draw[|-|] (4.8,0.4) -- node[right] {\tiny$\epsilon$} (4.8,1.3);
-
-\draw[|-|] (5.4,0.35) -- node[right] {\tiny$\delta$} (5.4,0.45);
-
-
-\draw[color=red, domain=-4:4, samples=40] plot (\x, {(1/2*sqrt(2*pi))*exp(-((\x)^2)) } ) node[above] {\tiny$u[x]$};
-%\draw[color=violet, domain=-1.2:1.2] plot (\x, { (\x)^3 } );
-
-\draw[color=blue, domain=-4:0] plot (\x,-1);
-\draw[color=blue, domain=0:4] plot (\x,1) node[above] {\tiny$t[x]$};
-
-\draw[dotted] (-4,0.4) -- (4.8,0.4);
-\draw[dotted] (-4,1.3) -- (4.8,1.3);
-
-\node(z) at (-1,0.4) {\tiny$\bullet$};
-\node(zz) at (1,0.4) {\tiny$\bullet$};
-
-\node(z) at (0,-1) {\tiny$\bullet$};
-\node(zz) at (0,1) {\tiny$\bullet$};
-
-\node(r) at (0,0.4) {\tiny$\bullet$};
-\node(rr) at (0.3,0.5) {\tiny$r$};
-
-
-
-\end{tikzpicture}$}
-}
-\caption{\small $\epsilon=(\partial(u)\circ \partial(t))([-1,1])$ is bigger than $\delta=\partial(u\circ t)([-1,1])=[r,r]$.}
-\label{fig:interval2}
-\end{subfigure}
+%\end{subfigure} \ \ \ 
 \end{figure}
+
 
 For all $A$, as a subset of $\mathcal{P}(\Lambda_A)$, $\intervals{A}$ is closed under arbitrary intersections and is therefore a complete lattice whose meet is given by intersection. In particular, for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$. 
 One can check that $\tointerval{t} = \tointerval{u}$ if and only if $t\oeq_{A} u$.
@@ -141,6 +95,56 @@ The map $\partial$ is constant on classes of observational equivalence, and one 
 This map $\partial(t)$ can be taken as a measure of the \emph{sensitivity} of $t$, as it maps an interval $a$, that is a quantifiably uncertain input, to a quantifiably uncertain output $\partial(t)(a)$. 
 For instance, if we take the term $t[x]= \sin(x)+1$ above, then $\partial(t): \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ sends the interval $[-\pi,\pi]_{\mathsf{Real}}$ into $[0,2]_{\mathsf{Real}}$.
 
+\begin{figure}
+%\begin{subfigure}{0.52\textwidth}
+\parbox[h][3cm][c]{\textwidth}{
+\adjustbox{center}{$
+\begin{tikzpicture}[domain=-4:4, scale=0.65]
+
+%\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
+\draw[<->]   (-4,0) -- (4,0);
+\draw[<->] (0,-2) -- (0,2); % node[above] {$f(x)$};
+
+\draw[dashed, |-|] (-1,0) -- (1,0);
+\node(a) at (-1,-0.3) {\tiny$-1$};
+\node(a) at (1,-0.3) {\tiny$1$};
+
+\node(a) at (0.3,-1.2) {\tiny$-1$};
+\node(a) at (-0.3,0.8) {\tiny$1$};
+   % \node at (0,0)[circle,fill,inner sep=1pt]{};
+
+\draw[|-|] (4.8,0.4) -- node[right] {\tiny$\varepsilon$} (4.8,1.3);
+
+\draw[|-|] (5.4,0.35) -- node[right] {\tiny$\delta$} (5.4,0.45);
+
+
+\draw[color=red, domain=-4:4, samples=40] plot (\x, {(1/2*sqrt(2*pi))*exp(-((\x)^2)) } ) node[above] {\tiny$u[x]$};
+%\draw[color=violet, domain=-1.2:1.2] plot (\x, { (\x)^3 } );
+
+\draw[color=blue, domain=-4:0] plot (\x,-1);
+\draw[color=blue, domain=0:4] plot (\x,1) node[above] {\tiny$t[x]$};
+
+\draw[dotted] (-4,0.4) -- (4.8,0.4);
+\draw[dotted] (-4,1.3) -- (4.8,1.3);
+
+\node(z) at (-1,0.4) {\tiny$\bullet$};
+\node(zz) at (1,0.4) {\tiny$\bullet$};
+
+\node(z) at (0,-1) {\tiny$\bullet$};
+\node(zz) at (0,1) {\tiny$\bullet$};
+
+\node(r) at (0,0.4) {\tiny$\bullet$};
+\node(rr) at (0.3,0.5) {\tiny$r$};
+
+
+
+\end{tikzpicture}$}
+}
+\caption{$\varepsilon=(\partial(u)\circ \partial(t))([-1,1])$ is bigger than $\delta=\partial(u\circ t)([-1,1])=[r,r]$.}
+\label{fig:interval2}
+%\end{subfigure}
+\end{figure}
+
 \begin{remark} \label{remark:oplax-functor-stlc}
 When composing two maps $\partial(t)$ and $\partial(u)$, we might obtain a worse approximation than by computing $\partial(t[u/x])$ directly.
 For instance, let $t[x]$ and 
@@ -175,7 +179,7 @@ For all simple types $A$, we define a \emph{distance function} $d_A : \Lambda_A 
 \begin{itemize}
 \item $d_\mathsf{Real}(t,u) = \left\vert r-s \right\vert$, where $r,s$ are the unique elements of $\mathbb{R}$ such that $t \to_\beta^* r$ and $u \to_\beta^* s$,
 \item $d_{A \times B}(t,u) = (d_A(\pi_L t, \pi_L u), d_B(\pi_R t, \pi_R u))$,
-\item $d_{A \to B}(t,u) = a \mapsto \inf \left\{ d_B(tv, uw) \mid v,w \in a \right\}$.
+\item $d_{A \to B}(t,u) = a \mapsto \inf \left\{ d_B(rv, sw) \mid r,s \in \{t,u\}, v,w \in a \right\}$.
 \end{itemize}
 
 This distance is clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space.

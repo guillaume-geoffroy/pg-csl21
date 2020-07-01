@@ -77,8 +77,8 @@ Similarly, in numerical methods based on Taylor's polynomials (\textit{e.g.}. Ga
 
 
 \draw[|-|] (-1,0) -- (1,0);
-\node(r) at (-1,-0.3) {\tiny$-\epsilon$};
-\node(r) at (1,-0.3) {\tiny$+\epsilon$};
+\node(r) at (-1,-0.3) {\tiny$-\varepsilon$};
+\node(r) at (1,-0.3) {\tiny$+\varepsilon$};
    % \node at (0,0)[circle,fill,inner sep=1pt]{};
 %
 \draw[color=red, domain=-2:2, samples=40] plot (\x, {sin(\x r) } ) node[above] {\tiny$\sin(x)$};
@@ -98,9 +98,11 @@ Similarly, in numerical methods based on Taylor's polynomials (\textit{e.g.}. Ga
 
 \end{tikzpicture}$}
 }
-\caption{\small The self-distances $\delta,\delta'$ of $\sin(x)$ and $x$ in a small interval $[-\epsilon,\epsilon]$ of $0$ are very close.}
+\caption{\small The self-distances $\delta,\delta'$ of $\sin(x)$ and $x$ in a small interval $[-\varepsilon,\varepsilon]$ of $0$ are very close.}
+\label{fig:sinid2}
+\end{subfigure}
+\caption{The sup-distance is inadequate for contextual transformations.}
 \label{fig:sinid}
-\end{subfigure} 
 \end{figure}
  
  In all cases above one looks for ways to measure the similarity between two programs \emph{in a given context} $\mathtt C[t], \mathtt C[u]$, from a measure of the similarity between $t$ and $u$ and, possibly, of the sensitivity of the context $\mathtt C[\ ]$ itself.  
@@ -121,7 +123,7 @@ A standard solution from the literature on program semantics is to define the di
 This solution works well in models in which programs are interpreted as \emph{non-expansive} or \emph{Lipschitz-continuous} maps between metric spaces \cite{}. However, as is well-known, such models are not \emph{cartesian-closed}\footnote{In fact, cartesian closed categories of metric spaces and non-expansive functions \emph{do} exist \cite{}, but none of these categories contain real numbers with the standard metric.}, hence they do not account for 
  the simply-typed lambda-calculus, but only linear or sub-exponential variations of it (such as the system $\mathsf{Fuzz}$ \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017}).
  Also, it has been shown \cite{10.1109/LICS.2015.64} that in a probabilistic setting the non-linearity of higher-order programs has the effect of \emph{trivialising} metrics, that is, of forcing distances to be either 0 or 1, hence collapsing program distances onto usual notions of program equivalence.
-Moreover, even if one restricts to a sub-exponential language, the sup-distance seems inadequate to account for contextual transformations as the replacement of $\lambda x.\sin(x)$ by $\lambda x.x$,  as the sup-distance between such programs is infinite (see Fig. \ref{fig:sinid1}). 
+Moreover, even if one restricts to a sub-exponential language, the sup-distance seems inadequate to account for contextual transformations as the replacement of $\lambda x.\sin(x)$ by $\lambda x.x$,  as the sup-distance between such programs is infinite (see Fig. \ref{fig:sinid}). 
  
  
 On the other side of the coin, the approaches from \cite{chaudhuri, dallago:differential-stlc} are fully contextual and higher-order, but provide, at best, only weak approximations of a standard notion of metric.  
