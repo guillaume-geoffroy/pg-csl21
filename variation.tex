@@ -175,25 +175,34 @@ For all simple types $A$, we define a commutative integral quantale $(\distances
 \item $\distances{A \to B} = \{ \text{monotonically decreasing functions from } \intervals{A} \text{ to } \distances{B} \}$.
 \end{itemize}
 
-For all simple types $A$, we define a \emph{distance function} $d_A : \Lambda_A \times \Lambda_A \to \distances{A}$:
+Observe that the quantale $\distances{A\to B}$ is a set of functions over the approximate values of $A$.
+For all simple types $A$, we now define a \emph{distance function} $d_A : \Lambda_A \times \Lambda_A \to \distances{A}$:
 \begin{itemize}
 \item $d_\mathsf{Real}(t,u) = \left\vert r-s \right\vert$, where $r,s$ are the unique elements of $\mathbb{R}$ such that $t \to_\beta^* r$ and $u \to_\beta^* s$,
 \item $d_{A \times B}(t,u) = (d_A(\pi_L t, \pi_L u), d_B(\pi_R t, \pi_R u))$,
 \item $d_{A \to B}(t,u) = a \mapsto \inf \left\{ d_B(rv, sw) \mid r,s \in \{t,u\}, v,w \in a \right\}$.
 \end{itemize}
 
+
+
 This distance is clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space.
 
 
-To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$, and we exploit the fact that, as in the case of the reals (seen in the introduction), this diameter function $\diam_{A}$ is (almost) submodular on approximate values -- or rather, using the quantale ordering convention, supermodular. First, one can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
+To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$. As pointed out in the introduction, 
+the name ``diameter'' refers to the fact that, as the standard diameter on the reals, this diameter function $\diam_{A}$ is (almost) modular on intersecting approximate values, as we show in Proposition \ref{prop:submodular} below. 
+ %-- or rather, using the quantale ordering convention, supermodular. 
+ 
+ 
+ First, one can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
 \begin{itemize}
 \item $\diam_\mathsf{Real}(a) = \sup\{s-r \mid s,r \in \mathbb{R} \text{ such that } s,r \in a\}$,
 \item $\diam_\mathsf{A \times B}(p) = \left(\diam_A\left(\sup\left\{\tointerval{\pi_L t} \mid t \in p\right\}\right), \diam_B\left(\sup\left\{\tointerval{\pi_R t} \mid t \in p\right\}\right)\right)$,
 \item $\diam_\mathsf{A \to B}(b) = a \mapsto \diam_B\left(\sup\left\{\tointerval{vt} \mid t\in a, v \in b\right\}\right).$
 \end{itemize}
 
-With that, we can prove that the diameter function $\diam_{A}$ satisfies the following condition of ``quasi-supermodularity'':
-\begin{proposition} For all simple types $A$ and all $a,b \in \intervals{A}$ such that $a \wedge b \neq \emptyset$, $\diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)$.
+With that, we can prove that the diameter function $\diam_{A}$ is super-modular over intersecting approximate values: 
+%``quasi-supermodularity'':
+\begin{proposition}\label{prop:submodular} For all simple types $A$ and all $a,b \in \intervals{A}$ such that $a \wedge b \neq \emptyset$, $\diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)$.
 \end{proposition}
 \begin{proof}
 We proceed by induction on types.
@@ -205,6 +214,8 @@ One can check that $(a \wedge b)_L = a_L \wedge b_L$, $(a \wedge b)_R = a_R \wed
 
 Let $f,g \in \intervals{A \to B}$ and $a \in \intervals{A}$. For all $h \in \intervals{A \to B}$, let $ha = \sup\{\tointerval{vt} \mid v \in h, t \in a\}$. One can check that $(f \wedge g)a \subseteq (f a) \wedge (g a)$ and $(f \vee g)a = (f a) \vee (g a)$. As a result, $(\diam(f \wedge g)\quantaleop \diam(f \vee g))(a) \quantalegeq \diam((fa) \wedge (ga)) \quantaleop \diam((fa) \vee (ga)) \quantalegeq \diam(fa) \quantaleop \diam(ga) = (\diam(f)\quantaleop\diam(g))(a)$.
 \end{proof}
+
+
 
 \begin{corollary} \label{corollary:stlc-metric} For all simple types $A$, $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space, that is to say:
 \begin{enumerate}
@@ -223,7 +234,13 @@ The triangular inequality is an immediate consequence of the quasi-supermodulari
 \end{proof}
 
 
+\begin{remark}
+Corollary \ref{corollary:stlc-metric} is a slight refinement of the well-known fact \cite{6845021} that any 
+function $\delta: L\to \mathbb R^{+\infty}$ on a lattice $L$ that is monotone and \emph{submodular}  (\emph{i.e.}~ satisfying $\delta(a\cup b)+ \delta(a\cap b) \leq \delta(a)+\delta(b)$) induces a pseudo-metric $d: L\times L \to \mathbb R^{+\infty}$ by letting $d(a,b)=2\delta(a\vee b)-\delta(a)-\delta(b)$. In fact, one can decompose this construction: first, one defines a partial pseudometric $p$ on $L$ by $p(a,b) = \diam{a \vee b}$, and then $d$ is just the distance given by equation \eqref{eq:pmettomet}: $d(a,b) = p^*(a,b) = 2p(a,b)-p(a,a)-p(b,b)$.
 
+ 
+
+\end{remark}
 
 
 

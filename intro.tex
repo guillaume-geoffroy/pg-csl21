@@ -3,11 +3,11 @@
 %\subparagraph*{Measuring sensitivity and similarity of programs in a compositional way}
 In program semantics one is usually interested in capturing notions of behavioral equivalence between programs. However,  
 %\textit{i.e.} to describe when two programs behave in the same way, so that replacing one by the other in any context produces no observable change in the result. However, 
-in several fields like approximate \cite{Mittal2016}, incremental \cite{Cai2014, Picallo2019} and probabilistic \cite{10.1109/LICS.2015.64} computation, it is often more useful to be able to describe when two programs behave in a similar, although non equivalent way, so that replacing one by the other in a given context produces a change in the result which can be quantified and bounded in some way.
+in several fields like approximate \cite{Mittal2016}, incremental \cite{Cai2014, Picallo2019} and probabilistic \cite{10.1109/LICS.2015.64} computation, it is often more useful to be able to describe when two programs behave in a similar, although non equivalent way, so that replacing one by the other produces a change in the result which can be quantified and bounded in some way.
 
 
 
-This idea has motivated much literature on program (pseudo)metrics \cite{ARNOLD1980181, VANBREUGEL20011,Azevedo_de_Amorim_2017, Escardo1999, BAIER1994171,10.1109/LICS.2015.64, 10.1007/978-3-662-44584-6_4, 10.1007/978-3-662-54434-1_13, 10.1145/3209108.3209149}, that is, of semantics in which types are endowed with a notion of distance measuring the differences in their behaviors. This approach has found widespread applications, for example in differential privacy \cite{10.1145/1932681.1863568, 10.1007/978-3-642-29420-4_3, Barthe_2012}, where one is interested in measuring the \emph{sensitivity} of a program, \textit{i.e.} its capacity to amplify changes in its inputs, and in the study of coinductive models of computation \cite{DESHARNAIS2004323, VANBREUGEL2005115, 10.1007/978-3-662-44584-6_4,10.1007/3-540-48224-5_35}.
+This idea has motivated much literature on program (pseudo)metrics \cite{ARNOLD1980181, VANBREUGEL20011,Azevedo_de_Amorim_2017, Escardo1999, BAIER1994171,10.1109/LICS.2015.64, 10.1007/978-3-662-44584-6_4, 10.1007/978-3-662-54434-1_13, 10.1145/3209108.3209149}, that is, on semantics in which types are endowed with a notion of distance measuring the differences in their behaviors. This approach has found widespread applications, for example in differential privacy \cite{10.1145/1932681.1863568, 10.1007/978-3-642-29420-4_3, Barthe_2012}, where one is interested in measuring the \emph{sensitivity} of a program, \textit{i.e.} its capacity to amplify changes in its inputs, and in the study of coinductive models of computation \cite{DESHARNAIS2004323, VANBREUGEL2005115, 10.1007/978-3-662-44584-6_4,10.1007/3-540-48224-5_35}.
 %
 %A similar concern is found in fields like differential privacy \cite{10.1145/1932681.1863568, 10.1007/978-3-642-29420-4_3, Barthe_2012}, where one looks for means to measure the \emph{sensitivity} of a program, that is, of how much a change in the input will affect changes in the output.
 
@@ -34,13 +34,35 @@ This idea has motivated much literature on program (pseudo)metrics \cite{ARNOLD1
 % In this paper we propose a framework to reason about program differences in a contextual way using some kind 
 % 
 %  
-   
- A fundamental aspect to take into account when reasoning about program similarity is that this notion is highly \emph{contextual}. For instance, replacing a program $\lambda x.\sin(x)$ computing the sine function  by the identity function $\lambda x.x$ 
-will not product a considerable error \emph{if} $\lambda x.\sin(x)$
-operates in a context in which it is only applied to values close to $0$.
+
+Some recent literature \cite{chaudhuri, dallago:differential-stlc} has highlighted the importance of \emph{contextuality} to reason about program similarity: in several common situations one looks for ways to bound the error produced by a transformation of the form $\mathtt C[t] \leadsto \mathtt C[u]$, as a function of the similarity between $t$ and $u$ and of the sensitivity of the context $\mathtt C[\ ]$ itself.
+ %one looks for ways to measure the similarity between two programs in a \emph{contextual} way: one seeks a bound for the error of replacing a program $t$ by $u$ within a given context
+%
+%
+% between two programs $\mathtt C[t], \mathtt C[u]$, from a measure of the similarity between $t$ and $u$ and, possibly, of the sensitivity of the context $\mathtt C[\ ]$ itself.  
+%
+%
+%the program similarity
+%
+ %A fundamental aspect to take into account when reasoning about
+% The notion of program similarity that these frameworks  
+%  is that this notion is highly \emph{contextual}. 
+  For instance, the error produced by the replacement of $\lambda x.\sin(x)$ by the identity function $\lambda x.x$ 
+will be senstitive on whether
+$\lambda x.\sin(x)$
+operates within a context that applies it close to $0$.
+ Similar cases of contextuality occur in numerical methods like Gauss-Newton method, in which one replaces a 
+ computationally intensive function by its Taylor's expansion {around some given point}, and in {approximate computing} techniques like \emph{loop perforation} \cite{loopperf}, in which a compiler can be asked to skip a certain number of iterations of some piece of code.
+ 
+
 %, replacing $f$ will not produce a considerable error. However, this transformation would no longer be justified if $f$ were applied on values far from 0.
-Similarly, in numerical methods based on Taylor's polynomials (\textit{e.g.}. Gauss-Newton method), one replaces a 
- computationally intensive piece of program by one which approximates the former only \emph{around some given point}, and in {approximate computing} techniques like \emph{loop perforation} \cite{loopperf} a compiler can be asked to modify the execution of a loop provided this transformation does not exceed some error bound.
+%Similarly, 
+%   one 
+% 
+% 
+% modifies the execution of a loop iterating a given list of instructions and 
+% 
+%  within a larger program.
  
 \subparagraph*{The trade-off between program metrics and higher-order types}
 
@@ -55,7 +77,9 @@ Similarly, in numerical methods based on Taylor's polynomials (\textit{e.g.}. Ga
 \draw[<->]   (-5,0) -- (5,0);
 \draw[<->] (0,-3) -- (0,3); % node[above] {$f(x)$};
 
-   % \node at (0,0)[circle,fill,inner sep=1pt]{};
+   \node at (0.2,-0.2){\tiny$0$};
+      \node at (0,0){\tiny$\bullet$};
+
 %
 \draw[color=red, domain=-5:5, samples=40] plot (\x, {sin(\x r)} ) node[above] {\tiny$\sin(x)$};
 
@@ -105,29 +129,27 @@ Similarly, in numerical methods based on Taylor's polynomials (\textit{e.g.}. Ga
 \label{fig:sinid}
 \end{figure}
  
- In all cases above one looks for ways to measure the similarity between two programs \emph{in a given context} $\mathtt C[t], \mathtt C[u]$, from a measure of the similarity between $t$ and $u$ and, possibly, of the sensitivity of the context $\mathtt C[\ ]$ itself.  
   While this kind of contextual reasoning is made available in several recent frameworks \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017,chaudhuri, dallago:differential-stlc},  these approaches seem to suggest the existence of a trade-off between the possibility of accounting for 
 program differences using program metrics and that of accounting for  a fully higher-order language. Yet, in this paper we propose a framework which accommodates both aspects. 
 
 %
 % The question that motivates this paper is whether a notion of program difference of this kind can itself be seen as a metric over the programs of a programming language with higher-order types.  
 
+Suppose one starts from a language  containing a type $\mathsf{Real}$ for real numbers and on which one can measure errors using the standard metric. The difficult questions that immediately arises is then how to lift this metric to higher-order types.
 
 
 
-To be able to formalize the examples discussed above our choice was to start with a language containing a type $\mathsf{Real}$ for real numbers, and to measure errors on this type with the usual metric. Thus, the question we had to answer was how to lift this metric to higher-order types so to enable contextual reasoning.
-
-
-
-A standard solution from the literature on program semantics is to define the distance between two programs having a higher-order type $f,g:B\to A$ as the sup of the distances, computed in $A$, between $f(r)$ and $g(r)$, with $r$ ranging on $B$.
-This solution works well in models in which programs are interpreted as \emph{non-expansive} or \emph{Lipschitz-continuous} maps between metric spaces \cite{}. However, as is well-known, such models are not \emph{cartesian-closed}\footnote{In fact, cartesian closed categories of metric spaces and non-expansive functions \emph{do} exist \cite{}, but none of these categories contain real numbers with the standard metric.}, hence they do not account for 
- the simply-typed lambda-calculus, but only linear or sub-exponential variations of it (such as the system $\mathsf{Fuzz}$ \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017}).
+A standard solution from the literature on program semantics is to let the distance between two programs  $f,g:B\to A$ be defined as the sup of the distances, computed in $A$, between $f(r)$ and $g(r)$, with $r$ ranging on $B$.
+This solution works well in models in which programs are interpreted as \emph{non-expansive} or \emph{Lipschitz-continuous} maps between metric spaces \cite{Hofmann2014, Azevedo_de_Amorim_2017}. However, as is well-known, such models are not \emph{cartesian-closed}\footnote{In fact, cartesian closed categories of metric spaces and non-expansive functions \emph{do} exist \cite{Escardo1999, Stubbe2009}, but none of these categories contain real numbers with the standard metric.}, hence they do not account for 
+ the simply-typed lambda-calculus, but only for linear or sub-exponential variations of it (such as the system $\mathsf{Fuzz}$ \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017}).
  Also, it has been shown \cite{10.1109/LICS.2015.64} that in a probabilistic setting the non-linearity of higher-order programs has the effect of \emph{trivialising} metrics, that is, of forcing distances to be either 0 or 1, hence collapsing program distances onto usual notions of program equivalence.
-Moreover, even if one restricts to a sub-exponential language, the sup-distance seems inadequate to account for contextual transformations as the replacement of $\lambda x.\sin(x)$ by $\lambda x.x$,  as the sup-distance between such programs is infinite (see Fig. \ref{fig:sinid}). 
+
+
+Most importantly, even if one restricts to a sub-exponential language, the sup-distance seems inadequate to account for contextual transformations as the replacement of $\lambda x.\sin(x)$ by $\lambda x.x$ around 0,  as the sup-distance between such programs is infinite (see Fig. \ref{fig:sinid}). 
  
  
 On the other side of the coin, the approaches from \cite{chaudhuri, dallago:differential-stlc} are fully contextual and higher-order, but provide, at best, only weak approximations of a standard notion of metric.  
- However, from these approaches we will retain the idea  of taking program differences as being themselves some kind of programs, relating potential errors in input with errors in  output, and thus to separate programs in two different classes (with different typing structure): \emph{exact} programs, leading from well-defined inputs to well-defined outputs, and \emph{approximate} programs, leading from errors in the input into errors in the output.
+ Nonetheless, we will retain from these approaches  the idea  of describing program differences as being themselves some kind of programs, relating errors in input with errors in  output, and thus to separate programs in two different classes: \emph{exact} programs, leading from well-defined inputs to well-defined outputs, and \emph{approximate} programs, leading from errors in the input into errors in the output.
 %
 
 %
@@ -161,43 +183,134 @@ On the other side of the coin, the approaches from \cite{chaudhuri, dallago:diff
 
 
 In this paper we introduce a class of higher-order denotational models to reason about program similarity and approximate program transformations, that we call \emph{diameter space models}.
-
 In such models a higher-order type $A$ is interpreted by a 4-tuple $(\Lambda_A, \intervals{A}, \distances{A}, \diam_{A})$ called a \emph{diameter space}, where $\Lambda_A$ is a set of \emph{exact} values, $\intervals{A}\subset \mathcal P(|A|)$ is a complete lattice of \emph{approximate} values, $\distances{A}$ is a \emph{quantale}, and $\diam_{A}: \intervals{A}\to \distances{A}$ is a function, called \emph{diameter}, which provides a quantitative measure of approximate values.
 
 
-In any metric space the distance can be recovered from the diameter function by $d(x,y)=\mathsf{diam}([x,y])$ (where $[x,y]$ is the smallest interval containing $x$ and $y$). Similarly, in a diameter space the function $\diam_{A}$ induces a \emph{generalized partial metric} $d_{A}:|A|\times |A|\to \distances{A}$ by letting $d_{A}(x,y)=\diam_{A}(x\vee y)$ (where $x\vee y$ is the smallest approximate value containing $x$ and $y$). 
-
-
-Generalized partial metric spaces (henceforth GPMS) are a well-investigated class of metric spaces that has been widely applied in program semantics \cite{}. 
-Such spaces generalize standard metric spaces in two ways: they are \emph{generalized} in that distances need not be taken on the standard quantale $\mathbb R^{+\infty}$ of positive reals plus $\infty$, but over an arbitrary quantale, and they are \emph{partial} in that a point can have a self-distance $d(x,x)$ different from $0$ (which in turn leads to strengthen the usual triangular inequality as $d(x,y) + d(z,z)\leq d(x,z)+d(z,y)$).\footnote{The adjective ``partial'' comes from the fact that in partial metric semantics like \cite{} the  programs with a non-zero self-distance are those which are not total, in the sense of Scott domains. This will not be the case in our framework. 
-}   
-Observe that not only any standard metric space is a GPMS, but from from any partial metric $d$ one can retrieve a (generalized) metric $d'$ by letting $d'(x,y)=2d(x,y)-d(x,x)-d(y,y)$.
-
-It is not difficult to see that the need to consider the distance between two functional programs like $\lambda x.\sin(x)$ and $\lambda x.x$ as being itself some kind of function leads naturally towards GPMS. Firstly, this choice implies that such functional distances cannot be taken in $\mathbb R^{+\infty}$; instead, in our model 
-we let $\distances{\mathsf{Real}\to\mathsf{Real}}$ be the quantale of non-decreasing maps from $\intervals{\mathsf{Real}}$ to $\distances{\mathsf{Real}}=\mathbb R^{+\infty}$, and the distance of  $\lambda x.\sin(x)$ and $\lambda x.x$ is defined by 
-$$ d_{\mathsf{Real}\to\mathsf{Real}}(\lambda x.\sin(x),\lambda x.x): a \mapsto \mathsf{diam}(f(a)\vee g(a))$$
-that is, as the function that maps an approximate value on $\mathsf{Real}$ (\textit{i.e.} a closed interval $a$) onto the sup of the distances between $\sin(x)$ and $ y$, with $x,y$ ranging in $a$, that is, into the diameter of the interval $f(a)\vee g(a)$. 
-
-
-Second, with this definition, the \emph{self-distance} of $\lambda x.\sin(x)$ (resp. $\lambda x.x$)  is a function that associates each interval $a$ with a value $\leq 2$ (resp. with $\diam(a)$, see Fig: \ref{fig:sinid}), so it is not constantly 0. In fact, as this example suggests, the self-distances of functional programs behave as sort of derivatives, in particular, $ d_{\mathsf{Real}\to\mathsf{Real}}(f,f)$ is constantly 0 only if $f$ is constant. %, and moreover self-distances 
- %compose through a (lax) chain-rule.
-
-
-While the fact that replacing  $\lambda x.\sin(x)$ by $\lambda x.x$, when applied close to 0 yields a negligible change cannot be expressed in a metric semantics based on the sup-distance, in our framework this will be expressed by the fact that their distance, computed in an interval around $0$ with a small enough diameter, is very close to the \emph{self-distance} of $\lambda x.\sin(x)$ (see Fig. \ref{fig:sinid}). 
 
 
 
+The map $\diam_{A}$ takes its name from the fact that it  
+ generalize some properties of the diameter function of the standard metrics on real numbers, in particular, 
+the fact that the diameter is \emph{modular} over intersecting intervals (see Fig. \ref{fig:modular}).
+Moreover, like the standard metric on $\mathbb R$ can be recovered from the diameter by $d(x,y)=\mathsf{diam}([x,y])$, the function $\diam_{A}$ induces a \emph{generalized partial metric} $d_{A}:|A|\times |A|\to \distances{A}$ by letting $d_{A}(x,y)=\diam_{A}(x\vee y)$. 
+
+
+Generalized partial metric spaces (henceforth GPMS) are a well-investigated class of metric spaces that has been widely applied in program semantics \cite{bkmp:partial-metrics, Bukatin1997, doi:10.1111/j.1749-6632.1994.tb44144.x, Schellekens2004, Samet:2013aa, Stubbe2018, HE201999}. 
+Such spaces generalize standard metric spaces in that distances
+need not be real numbers, but can be functions or any other type of object that leaves in a suitable \emph{quantale} \cite{Hofmann2014}, and \emph{self-distances} $d(x,x)$ need not be $0$ (which in turn leads to strengthen the usual triangular inequality as $d(x,y) + d(z,z)\leq d(x,z)+d(z,y)$).
+%\footnote{The adjective ``partial'' comes from the fact that in partial metric semantics like \cite{} the  programs with a non-zero self-distance are those which are not total, in the sense of Scott domains. This will not be the case in our framework. 
+%}   
+%Observe that not only any standard metric space is a GPMS, but from from any partial metric $d$ one can retrieve a (generalized) metric $d'$ by letting $d'(x,y)=2d(x,y)-d(x,x)-d(y,y)$.
+
+
+\begin{figure}
+\adjustbox{center}{
+\begin{tikzpicture}
+
+
+\draw[|<->|, orange] (-2,0) to node[above] {$a$} (2,0);
+\draw[|<->|, blue] (1,0) to node[above]  {$b$} (4,0);
+\draw[violet] (1,0) to (2,0);
+
+\draw[|<->|, dashed] (-2,0.8) to node[above] {\tiny$\delta(a\cup b)$} (4,0.8);
+\draw[|<->|, dashed] (1,0.5) to node[below] {\tiny$\delta(a\cap b)$} (2,0.5);
+\draw[|<->|, dashed] (-2,-0.5) to node[below] {\tiny$\delta(a)$} (2,-0.5);
+\draw[|<->|, dashed] (1,-0.8) to node[below] {\tiny$\delta(b)$} (4,-0.8);
+
+
+
+\end{tikzpicture}}
+\caption{\small The diameter function is \emph{modular} over intersecting real intervals: 
+$\mathsf{diam}(a\cup  b)+\mathsf{diam}(a\cap b)=\mathsf{diam}(a)+\mathsf{diam}(b)$ for all $a,b\in [\R]$ such that $a\cap b\neq \emptyset$.
+This property is at the heart of our generalization of diameters.}
+\label{fig:modular}
+\end{figure}
+
+
+%
+%
+%In this paper we show that the standard metric on real numbers can be lifted to higher-order types in a novel way, yielding a metric semantics of the simply typed lambda-calculus in which types are interpreted as quantale-valued partial metric spaces. Noticeably, the distances between objects of higher-types are elements of functionals, thus non-numerical, quantales,. This on the one hand allows us to faithfully model arbitrary functions, thus deviating from classic metric semantics, and on the other enables contextual reasoning. 
+%
+%%The partial metrics induced by diameter spaces 
+%% generalize some properties of the standard metric on real numbers: the fact that the distance between two points $x,y$ coincides with the diameter of the smallest \emph{interval} containing them, 
+%%as well as the fact that the diameter is a \emph{quasi-modular} function (i.e. it satisfies $\mathsf{diam}(a\cup b)+\mathsf{diam}(a\cap b)= \mathsf{diam}(a)+\mathsf{diam}(b)$, for all intersecting intervals $a,b$, see Fig. \ref{fig:modular}).
+%%
+%While diameter spaces generalize the standard metric of real numbers, unlike the latter, they scale well from reals to real-valued functions. In particular, 
+%we show how to construct a diameter space over the set of programs of type $\mathsf{Real}\to \mathsf{Real}$. This space induces then a partial metric on such programs in which  
+%
+%, in which approximate values are sets of programs $t$ induced by some $\mathsf{Real}$-indexed family of intervals $I$, i.e. such that for all real $r$, $t(r)\in I(r)$. In this way, any two (exact) programs $t,u: \mathsf{Real}\to \mathsf{Real}$ generate a smallest approximate program $t\vee u$ (namely, the set of those $v$ such that, for all $r$, $v(r)$ is in the interval generated by $t(r)\vee u(r)$), and the induced distance between $t$ and $u$ is the map (living in a suitable quantale) that associates a 
+%
+%%
+%%%In any metric space the distance can be recovered from the diameter function\footnote{We recall that in any metric space $(X,d)$ one can define a map $\mathsf{diam}: \mathcal P(X)\to \mathbb R^{+\infty}$ by $\mathsf{diam}(a)=\sup\{d(x,y)\mid x,y\in a\}$.} by $d(x,y)=\mathsf{diam}(\{x,y\})$. Similarly, 
+%%%NO! QUI PARLA DI COME GENERALIZZI A R->R PROPRIETA DI R.
+%%The choice to consider the distance between two functional programs like $\lambda x.\sin(x)$ and $\lambda x.x$ as being itself some kind of function leads naturally towards GPMS. Firstly, because it  implies that distances cannot be real numbers. Instead,
+%In our model, we define  
+
+\subparagraph*{A new way to measure distances on $\mathsf{Real}\to\mathsf{Real}$}
+In our approach we exploit both generalizations above to lift the metric from reals to real-valued functions: in our model, 
+the distance between  two programs $t,u:\mathsf{Real}\to \mathsf{Real}$ is itself a function (living in a suitable quantale)  associating a closed interval $a$ with the diameter of the smallest interval containing \emph{both} $t(a)$ and $u(a)$. 
+Hence, with this definition,  the distance of $t$ \emph{from itself} needs not be 0, and yields a way to measure the sensitivity of $t$, since it associates each interval $a$ with the size of the interval $t(a)$ spanned by $t$ on $a$. For instance, the self-distance of $\lambda x.\sin(x)$ associates any interval $a$ with a value $\leq 2$ (the diameter of $\sin(a)$).
+
+
+% Observe that this implies that, unless $t$ is constant, its distance from itself cannot be constantly 0.
+%By contrast, the distance  between $t$ and $u$ yields a way to measure the sensitivity of the smallest approximation of \emph{both} $t$ and $u$. 
+
+%This new metric 
+
+
+The use of partial metrics with functional distances yields a rich and expressive framework to reason about  
+contextual transformations. For instance, we can express the closeness of $\lambda x.\sin(x)$ and $\lambda x.x$ around 0 by the fact that their distance, applied to a small interval $[-\epsilon,\epsilon]$ of 0, is very close to the {self-distance} of
+$\lambda x.\sin(x)$ on the same interval (as illustrated in Fig. \ref{fig:sinid2}). Moreover, we also show how the triangular inequality of partial metrics yields a way to infer new bounds from previously established ones.
+
+%. In other words, the interval spanned by both the sine and the identity function on $ [-\epsilon,\epsilon]$ almost coincides with the one spanned by 
+%$\lambda x.\sin(x)$ alone 
+%
+% values which are close to those obtained by  $\lambda x.\sin(x)$ alone.
+
+%
+%
+% two functions around 0 as the fact that 
+%
+%, when applied to a small interval of 0, will provide values which are close to those provided by the 
+%
+%meaning that the 
+%
+%
+%
+%describes the fact that these two programs are very similar around 0, since  the fact that the interval spanned by \emph{both} the sine and the identity function, when applied to a small interval of 0, almost coincides with the interval spanned by the sine function alone (see Fig. \ref{fig:sinid}).
+%
+%
+%Observe that with this definition the distance of $\lambda x.\sin(x)$ from itself cannot be constantly 0. In fact, in our model, 
+% self-distances of functional programs will play a role similar to derivatives, in particular, 
+% 
+% $ d_{\mathsf{Real}\to\mathsf{Real}}(f,f)$ is constantly 0 only if $f$ is constant. %, 
+%
+%
+%
+%This notion of distance is 
+%with contextuality
+%
+%This definition implies then that the \emph{self-distance} of $\lambda x.\sin(x)$ (resp. $\lambda x.x$)  is not constantly 0; instead, it associates each interval $a$ with a value $\leq 2$ (resp. with $\diam(a)$, see Fig: \ref{fig:sinid}). Indeed, as this example suggests, the self-distances of functional programs behave as sort of derivatives, in particular, $ d_{\mathsf{Real}\to\mathsf{Real}}(f,f)$ is constantly 0 only if $f$ is constant. %, and moreover self-distances 
+% %compose through a (lax) chain-rule.
+%
+%This notion of functional distance 
+%While the fact that replacing  $\lambda x.\sin(x)$ by $\lambda x.x$, when applied close to 0 yields a negligible change cannot be expressed in a metric semantics based on the sup-distance, in our framework this will be expressed by the fact that their distance, computed in an interval around $0$ with a small enough diameter, is very close to the \emph{self-distance} of $\lambda x.\sin(x)$ (see Fig. \ref{fig:sinid}). 
+%
+%
 
 
 
 
-\subparagraph*{Contributions}
-The main two technical contributions of this paper are the following. First, we show that the construction just sketched actually permits to scale the standard  metric for $\mathsf{Real}$ to higher-order types, yielding a partial metric model of a simply typed $\lambda$-calculus with a type of real numbers.
-Second, we show that diameter space models can be constructed for potentially any higher-order programming language with a reasonable denotational semantics, by defining, for \emph{any} cartesian closed category $\mathbb C$, a cartesian \emph{lax-}closed category $\dsp(\mathbb C)$, in which exact morphisms coincide with the morphisms of $\mathbb C$. The ``lax'' preservation of cartesian closure reflects the fact that, by composing approximations in a higher-order setting, also their error rates compose (typically, approximating non $\beta$-normal $\lambda$-terms will lead to higher error-rates than approximating their $\beta$-normal forms). 
+
+%The main two technical contributions of this paper are the following. First, we show that the construction just sketched actually permits to scale the standard  metric for $\mathsf{Real}$ to higher-order types, yielding a partial metric model of a simply typed $\lambda$-calculus with a type of real numbers.
+%
+\subparagraph*{From cartesian closed categories to diameter spaces}
+While our starting example was very concrete, the construction of diameter spaces can be 
+done starting from any higher-order programming language with a reasonable denotational semantics. In fact, for \emph{any} cartesian closed category $\mathbb C$, we can construct a cartesian \emph{lax-}closed category $\dsp(\mathbb C)$, whose morphisms can be seen as approximate versions  of the morphisms of $\mathbb C$. The ``lax'' preservation of cartesian closure reflects the fact that, by composing approximations in a higher-order setting, also their error rates compose (typically, approximating non $\beta$-normal $\lambda$-terms will lead to higher error-rates than approximating their $\beta$-normal forms). 
 
 
 
-The generality of our construction shows in particular that our partial metric semantics requires no restrictions (\textit{e.g.} Lipschitz-continuity) on morphisms, and adapts well to the model one starts with. We consider as examples the category $\dsp(\set)$  (which contains a partial metric on the set \emph{all}  set-theoretic functions from $\mathbb R$ to $\mathbb R$) and the categories $\dsp(\eff)$ (where $\eff$ is the \emph{effective topos} \cite{hyland:effective-topos}) and $\dsp(\scott)$, which show that our approach scales well to a more computability-minded setting.
+The generality of our construction shows in particular that our partial metric semantics requires no restrictions (\textit{e.g.} Lipschitz-continuity) on morphisms, and adapts well to the model one starts with: for instance, in the category $\dsp(\set)$ we obtain a partial metric on the set \emph{all}  set-theoretic functions from $\mathbb R$ to $\mathbb R$, while the partial metrics in $\dsp(\eff)$ (where $\eff$ is the \emph{effective topos} \cite{hyland:effective-topos}) and $\dsp(\scott)$ show that our approach scales well to a more computability-minded setting.
 
 
 %The step from $\mathbb C$ to $\mathsf{Diam}(\mathbb C)$ preserves the cartesian closed structure in a \emph{lax} way: this reflects the fact that,
