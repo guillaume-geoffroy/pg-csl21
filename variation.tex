@@ -61,34 +61,34 @@ For all $A$, as a subset of $\mathcal{P}(\Lambda_A)$, $\intervals{A}$ is closed 
 One can check that $\tointerval{t} = \tointerval{u}$ if and only if $t\oeq_{A} u$.
 
 Monotone functions from approximate values to approximate values represent \emph{approximate programs}. They behave like a model of simply-typed $\lambda$-calculus in a weak sense, namely: \begin{itemize}
-\item for all monotone functions $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B \to C}$ and $(x_1, \ldots, x_n) \mapsto b[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, we can define a monotone function $(x_1, \ldots, x_n) \mapsto (c[x_1, \ldots, x_n]~ b[x_1, \ldots, x_n]) = \sup\{\tointerval{vu} \mid v \in c[x_1, \ldots, x_n], u \in b[x_1, \ldots, x_n]\} : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$,
-\item for all monotone functions $(x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$ and all $i \leq n$, we can define a monotone function $(x_j)_{j \neq i} \mapsto (\lambda x_i.~ c[x_1, \ldots, x_n]) = \{ v \in \Lambda_{A_i \to C} \mid \forall t_i \in \Lambda_{A_i},~ v t_i \in c[x_1, \ldots, \tointerval{t_i}, \ldots, x_n] \} : \prod_{j \neq i} \intervals{A_j} \to \intervals{A_i \to C}$,
+\item for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B \to C}$ and $(\alpha_1, \ldots, \alpha_n) \mapsto b[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, we can define a monotone function $(\alpha_1, \ldots, \alpha_n) \mapsto (c[\alpha_1, \ldots, \alpha_n]~ b[\alpha_1, \ldots, \alpha_n]) = \sup\{\tointerval{vu} \mid v \in c[\alpha_1, \ldots, \alpha_n], u \in b[\alpha_1, \ldots, \alpha_n]\} : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$,
+\item for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$ and all $i \leq n$, we can define a monotone function $(\alpha_j)_{j \neq i} \mapsto (\lambda \alpha_i.~ c[\alpha_1, \ldots, \alpha_n]) = \{ v \in \Lambda_{A_i \to C} \mid \forall t_i \in \Lambda_{A_i},~ v t_i \in c[\alpha_1, \ldots, \tointerval{t_i}, \ldots, \alpha_n] \} : \prod_{j \neq i} \intervals{A_j} \to \intervals{A_i \to C}$,
 \end{itemize}
 and these two constructions are weakly compatible with $\beta$-reduction and $\eta$-expansion:
 
-\begin{proposition} \label{prop:intervals-weak-model-lambda} For all monotone functions $(x_1, \ldots, x_n, y) \mapsto c[x_1, \ldots, x_n, y] : \intervals{A_1} \times \ldots \times \intervals {A_n} \times  \intervals {B} \to \intervals {C}$ and $(x_1, \ldots, x_n) \mapsto b[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, $$\begin{array}{ll} & (x_1, \ldots, x_n) \mapsto (\lambda y.~  c[x_1, \ldots, x_n, y])~ b[x_1, \ldots, x_n] \\ \leq & (x_1, \ldots, x_n) \mapsto c[x_1, \ldots, x_n, b[x_1, \ldots, x_n]]\text{,}\end{array}$$
-and for all monotone functions $(x_1, \ldots, x_n) \mapsto d[x_1, \ldots, x_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to  \intervals {B \to C}$,
-$$\begin{array}{ll} & (x_1, \ldots, x_n) \mapsto \lambda y.~  d[x_1, \ldots, x_n]~ y \\ \geq & (x_1, \ldots, x_n) \mapsto d[x_1, \ldots, x_n]\text{,}\end{array}$$
+\begin{proposition} \label{prop:intervals-weak-model-lambda} For all monotone functions $(\alpha_1, \ldots, \alpha_n, \beta) \mapsto c[\alpha_1, \ldots, \alpha_n, \beta] : \intervals{A_1} \times \ldots \times \intervals {A_n} \times  \intervals {B} \to \intervals {C}$ and $(\alpha_1, \ldots, \alpha_n) \mapsto b[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, $$\begin{array}{ll} & (\alpha_1, \ldots, \alpha_n) \mapsto (\lambda \beta.~  c[\alpha_1, \ldots, \alpha_n, \beta])~ b[\alpha_1, \ldots, \alpha_n] \\ \leq & (\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n, b[\alpha_1, \ldots, \alpha_n]]\text{,}\end{array}$$
+and for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto d[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to  \intervals {B \to C}$,
+$$\begin{array}{ll} & (\alpha_1, \ldots, \alpha_n) \mapsto \lambda \beta.~  d[\alpha_1, \ldots, \alpha_n]~ \beta \\ \geq & (\alpha_1, \ldots, \alpha_n) \mapsto d[\alpha_1, \ldots, \alpha_n]\text{,}\end{array}$$
 where functions are ordered by pointwise inclusion.  In other words, on approximate programs, $\beta$-reduction and $\eta$-expansion \emph{discard} information, and conversely $\beta$-expansion and $\eta$-reduction \emph{recover} some information.
 \end{proposition}
 
 \begin{proof} Without loss of generality, we can assume $n=0$.
 
-Let $v \in \lambda y.~ c[y]$ and $u \in b$. By definition, $tu \in c[\tointerval{u}]$, so $\tointerval{tu} \subseteq c[\tointerval{u}] \subseteq c[b]$. Therefore, $(\lambda y.~ c[y])~ b \subseteq b$.
+Let $v \in \lambda \beta.~ c[\beta]$ and $u \in b$. By definition, $tu \in c[\tointerval{u}]$, so $\tointerval{tu} \subseteq c[\tointerval{u}] \subseteq c[b]$. Therefore, $(\lambda \beta.~ c[\beta])~ b \subseteq b$.
 
-Let $v \in d$. For all $u \in \Lambda_B$, by definition, $vu \in d\tointerval{u}$. Therefore, $v \in \lambda y.~ d~ y$.
+Let $v \in d$. For all $u \in \Lambda_B$, by definition, $vu \in d\tointerval{u}$. Therefore, $v \in \lambda \beta.~ d~ \beta$.
 \end{proof}
 
 This rule is important because it means that if we compute an approximation of a program from approximations of its parts and then simplify the resulting approximate program using $\beta$-reduction and $\eta$-expansion, what we obtain is still a valid approximation of the original program.
 
-In addition, we can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $x_{1}:A_{1},\dots,x_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. 
+In addition, we can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $\alpha_{1}:A_{1},\dots,\alpha_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. 
 
 \begin{remark} \label{remark:push-exp-stlc}
 The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of the $\lambda$-calculus, in particular:
 \begin{itemize}
-\item $\partial (x_{i})(a_{1},\dots, a_{n})=a_{i}$,
+\item $\partial (\alpha_{i})(a_{1},\dots, a_{n})=a_{i}$,
 \item $\partial (tu)(a_{1},\dots, a_{n}) \subseteq \partial (t)(a_{1},\dots, a_{n}) ~ \partial (u)(a_{1},\dots, a_{n})$,
-\item $\partial (\lambda y. t)(a_{1},\dots, a_{n}) \subseteq \lambda y.~ \partial (t)(y, a_{1},\dots, a_{n})$.
+\item $\partial (\lambda \beta. t)(a_{1},\dots, a_{n}) \subseteq \lambda \beta.~ \partial (t)(\beta, a_{1},\dots, a_{n})$.
 \end{itemize}
 \end{remark}
 
