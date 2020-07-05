@@ -3,15 +3,13 @@
 To illustrate our construction, we start from a relatively concrete example: we consider a simply-typed lambda calculus with a base type and primitives for real numbers, and we follow the plan outlined in the introduction, which yields for each simple type a notion of approximate value, approximate function, diameter and distance between programs. Most definitions are straightforward and intuitive: the interesting, not immediately obvious point is that our construction does yield a \emph{partial metric} on each type.
 
 \emph{Simple types} are defined as follows: $\mathsf{Real}$ is a simple type; if $A$ and $B$ are simple types, then $A \to B$ and $A \times B$ are simple types.
-
 For all $n>0$, we fix a set $\mathcal{F}_n$ of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We consider the usual Curry-style simply-typed $\lambda$-calculus over the types defined above (the left and right projection are denoted by $\pi_L:A\times B \to A$ and  $\pi_R:A\times B \to B$ respectively, and the constructor for pairs by $\left\langle-,-\right\rangle$), enriched with the following constants: for all $r \in \mathbb{R}$, a constant $r:\mathsf{Real}$; for all $n>0$ and all $f\in\mathcal{F}_n$, a constant $f:\mathsf{Real}\to\ldots\to\mathsf{Real}\to\mathsf{Real}$. We call this calculus $\STLC$, and its terms are simply called \emph{terms}. We write $t[x_1 := u_1, \ldots, x_n := u_n]$ to denote the \emph{simultaneous} substitution of $u_1, \ldots, u_n$ for $x_1, \ldots, x_n$ in $t$. For all types $A$, we denote by $\Lambda_A$ the set of closed terms of type $A$. The relation of $\beta$-reduction is enriched with the following rule, extended to all contexts: for all $n>0$, $f\in\mathcal{F}_n$, and $r_1,\ldots,r_n\in\mathbb{R}$, $f r_1 \ldots r_n \to_\beta s$, where $s = f(r_1, \ldots, r_n)$. By standard arguments, this calculus has the properties of subject reduction, confluence and strong normalisation.
 
-
-Given two closed terms $t,u$ of type $A$,  we say that $t$ and $u$ are \emph{observationally equivalent} and write $t \oeq_A u$ if for all terms $C$ such that $x:A \vdash C : \mathsf{Real}$ is derivable, $C[x:=t]$ is $\beta$-equivalent to $C[x:=u]$ (which amounts to saying that they both $\beta$-reduce to the same real number).  It is clear that observational equivalence is a congruence and that two $\beta$-equivalent terms are always observationally equivalent. The notion of distance we define in the next paragraph will be a generalisation of this notion of equivalence.
-
+In addition to the usual notion of $\beta$-equivalence between terms of $\STLC$, we will exploit also a stronger equivalence: given two closed terms $t,u$ of type $A$,  we say that $t$ and $u$ are \emph{observationally equivalent} and write $t \oeq_A u$ if for all terms $C$ such that $x:A \vdash C : \mathsf{Real}$ is derivable, $C[x:=t]$ is $\beta$-equivalent to $C[x:=u]$ (which amounts to saying that they both $\beta$-reduce to the same real number).  It is clear that observational equivalence is a congruence and that two $\beta$-equivalent terms are always observationally equivalent. The notion of distance we define in the next paragraph will be a generalisation of this notion of equivalence.
 
 
-\subsection{Approximate values and approximate programs}
+
+\subsection{Approximate Values and Approximate Programs}
 
 The first step of our construction for $\STLC$ is to associate to each simple type $A$ a set $\intervals{A}$ whose elements are certain sets of programs of type $A$ that we call \emph{approximate values of type $A$}. 
 A closed term $t\in \Lambda_{A}$ represents a program with return type $A$ and no parameters, so an approximate value can be thought as a specification of a program with return type $A$ and no parameters \emph{up to} a certain degree of error or approximation.
@@ -23,13 +21,13 @@ For each simple type $A$, the set of approximate values $\intervals{A}\subseteq 
 \item $\intervals{A \to B} = \{ \{ t \in \Lambda_{A \to B} \mid \forall u \in \Lambda_{A},~ tu \in I(u) \} \mid I : \Lambda_A \to \intervals{B} \}$.
 \end{itemize}
 
-The approximate values of type $\mathsf{Real}$ essentially coincide with the compact intervals of $\mathbb R$, plus the empty set and $\mathbb{R}$ itself. An approximate value in $\intervals{A\times B}$ is a ``rectangle'' $a \times b$, with $a\in \intervals{A}$ and $b \in \intervals{B}$, while an approximate value in $\intervals{A\to B}$ is uniquely determined by a function 
+The approximate values of type $\mathsf{Real}$ are sets of closed programs of type $\mathsf{Real}$ which essentially coincide with the compact intervals of $\mathbb R$, plus the empty set and $\mathbb{R}$ itself. An approximate value in $\intervals{A\times B}$ is a ``rectangle'' $a \times b$, with $a\in \intervals{A}$ and $b \in \intervals{B}$, while an approximate value in $\intervals{A\to B}$ is uniquely determined by a function 
 $I$ from closed terms $u\in \Lambda_{ A}$ to approximate values $I(u)\in \intervals{B}$.
 
 For example, any two terms $t,u\in \Lambda_{\mathsf{Real}}$ with normal forms $q, r\in \mathbb{R}$ induce an approximate value $[t,u]_{\mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}}\mid  v\to_{\beta}^{*} s \land (q\leq s\leq r \vee q\geq s\geq r)\}$ of type $\mathsf{Real}$. Similarly, any two terms $t,u\in \Lambda_{\mathsf{Real}\to \mathsf{Real}}$ induce an approximate value
 $[t,u]_{\mathsf{Real}\to \mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}\to\mathsf{Real}}\mid  
 \forall r \in \Lambda_{\mathsf{Real}} \ vr\in [ tr, ur]_{\mathsf{Real}} 
-\}$. With $t= \lambda x.\sin(x)+1$ and $u=\lambda x.\cos(x)-1$, 
+\}$. For instance, if $t= \lambda x.\sin(x)+1$ and $u=\lambda x.\cos(x)-1$, then 
 $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding to maps oscillating between $\sin (x)+1$ and $\cos(x)+1$ (\textit{e.g.} the program $\lambda x. \sin(x+1)$, as illustrated in Fig. \ref{fig:interval1}).
 
 \begin{figure}
@@ -60,7 +58,7 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding
 For all $A$, as a subset of $\mathcal{P}(\Lambda_A)$, $\intervals{A}$ is closed under arbitrary intersections and is therefore a complete lattice whose meet is given by intersection. In particular, for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$. 
 One can check that $\tointerval{t} = \tointerval{u}$ if and only if $t\oeq_{A} u$.
 
-Monotone functions from approximate values to approximate values represent \emph{approximate programs}. They behave like a model of simply-typed $\lambda$-calculus in a weak sense, namely: \begin{itemize}
+Monotone functions from approximate values to approximate values represent \emph{approximate programs}. They behave like a model of the simply-typed $\lambda$-calculus in a weak sense, namely: \begin{itemize}
 \item for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B \to C}$ and $(\alpha_1, \ldots, \alpha_n) \mapsto b[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, we can define a monotone function $(\alpha_1, \ldots, \alpha_n) \mapsto (c[\alpha_1, \ldots, \alpha_n]~ b[\alpha_1, \ldots, \alpha_n]) = \sup\{\tointerval{vu} \mid v \in c[\alpha_1, \ldots, \alpha_n], u \in b[\alpha_1, \ldots, \alpha_n]\} : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$,
 \item for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$ and all $i \leq n$, we can define a monotone function $(\alpha_j)_{j \neq i} \mapsto (\lambda \alpha_i.~ c[\alpha_1, \ldots, \alpha_n]) = \{ v \in \Lambda_{A_i \to C} \mid \forall t_i \in \Lambda_{A_i},~ v t_i \in c[\alpha_1, \ldots, \tointerval{t_i}, \ldots, \alpha_n] \} : \prod_{j \neq i} \intervals{A_j} \to \intervals{A_i \to C}$,
 \end{itemize}
@@ -73,15 +71,15 @@ where functions are ordered by pointwise inclusion.  In other words, on approxim
 \end{proposition}
 
 \begin{proof} Without loss of generality, we can assume $n=0$.
-
 Let $v \in \lambda \beta.~ c[\beta]$ and $u \in b$. By definition, $tu \in c[\tointerval{u}]$, so $\tointerval{tu} \subseteq c[\tointerval{u}] \subseteq c[b]$. Therefore, $(\lambda \beta.~ c[\beta])~ b \subseteq b$.
-
 Let $v \in d$. For all $u \in \Lambda_B$, by definition, $vu \in d\tointerval{u}$. Therefore, $v \in \lambda \beta.~ d~ \beta$.
 \end{proof}
 
-This rule is important because it means that if we compute an approximation of a program from approximations of its parts and then simplify the resulting approximate program using $\beta$-reduction and $\eta$-expansion, what we obtain is still a valid approximation of the original program.
+Beyond theoretical aspects (which will be made clearer in Section 5), 
+Proposition \ref{prop:intervals-weak-model-lambda} is also important in practice because it implies that if we compute an approximation of a program from approximations of its parts and then simplify the resulting approximate program using $\beta$-reduction and $\eta$-expansion, what we obtain is still a valid approximation of the original program.
 
-In addition, we can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $\alpha_{1}:A_{1},\dots,\alpha_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. 
+
+We can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $\alpha_{1}:A_{1},\dots,\alpha_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. 
 
 \begin{remark} \label{remark:push-exp-stlc}
 The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of the $\lambda$-calculus, in particular:
@@ -162,7 +160,7 @@ If $a$ is the interval $[-1,+1]$, then $\partial(t)(a)=[-1,1]$, and since $u[x:=
 
 
 
-\subsection{A partial metric on each type}
+\subsection{A Partial Metric on Each Type}
 \label{subsection:type-gpms}
 
 We will now show how to associate to each type $A$ of $\STLC$ a generalised partial metric space $(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$. The definition of this space will exploit in an essential way the sets of approximate values $\intervals{A}$.

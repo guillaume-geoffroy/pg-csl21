@@ -6,7 +6,7 @@ Partial metric spaces were  introduced in the early nineties as a variant of met
 \cite{bkmp:partial-metrics, Bukatin1997, doi:10.1111/j.1749-6632.1994.tb44144.x, Schellekens2004, Samet:2013aa, Stubbe2018, HE201999}, due to their compatibility with standard constructions from both domain theory (since their topology is $T_{0}$) and usual metric topology (\textit{e.g.} Cauchy sequences, completeness, Banach-fixed point theorem) \cite{bkmp:partial-metrics, doi:10.1111/j.1749-6632.1994.tb44144.x}.
 \emph{Generalized partial metric spaces}, \textit{i.e.} partial metric spaces whose metric takes values over an arbitrary quantale \cite{Hofmann2014}, are well-investigated too \cite{AGT2000,AGT7849}. 
 
-In this paper we will only be concerned with partial metrics taking values over a \emph{commutative integral} quantale, of which we recall the definition below.
+In this paper we will only be concerned with partial metrics taking values over a \emph{commutative integral} quantale \cite{Hofmann2014}, of which we recall the definition below.
 % (which is the only kind of quantale we will consider here): %, as we will use these concepts throughout this paper.
 
 \begin{definition} A \emph{commutative integral quantale} is a triple $(Q, \quantaleop, \quantaleleq)$ where:
@@ -32,7 +32,7 @@ We recall now the definition of a generalised partial metric space:
 \end{itemize}
 \end{definition}
 
-For all metric spaces $(X,d)$, $(X, ([0,\infty], +, \geq), d)$ is a generalised partial metric space: notice that the triangular inequality in this definition is the opposite of the usual one, which corresponds to the fact that the quantale ordering on $\mathbb{R}$ is the dual of the usual ordering. 
+For every metric space $(X,d)$, the structure $(X, ([0,\infty], +, \geq), d)$ is a generalised partial metric space: notice that the triangular inequality in this definition is the opposite of the usual one, which corresponds to the fact that the quantale ordering on $\mathbb{R}$ is the dual of the usual ordering. 
 Conversely, any GPMS $(X,Q,d)$ induces a (generalized) metric $d^{*}$ by letting 
 \begin{equation}\label{eq:pmettomet}
 d^{*}(x,y)=2d(x,y)-d(x,x)-d(y,y)
@@ -41,4 +41,4 @@ d^{*}(x,y)=2d(x,y)-d(x,x)-d(y,y)
 
 For a more telling and somewhat archetypal example, take any set $X$ and consider the set $X^{\leq \omega}$ of all sequences of elements of $X$ indexed by an ordinal less that or equal to $\omega$. For all such sequences $s,t$, let $d(s,t) = 2^{-n} \in [0,\infty]$, where $n$ is the length of the largest common prefix to $s$ and $t$: one can check that $(X^{\leq \omega}, [0,\infty], d)$ is indeed a generalised partial metric space -- in fact, if we interpret the prefixes of a sequence as pieces of partial information, then we have $d(s,s) = d(s,t)$ if and only if $t$ is a refinement of $s$ (\textit{i.e.} if it contains more information), and $d(s,s) = 0$ if and only if $s$ is total (\textit{i.e.} if it cannot be refined).
 
-One can check that for all partial metric spaces $(X, Q, d_X)$ and $(Y, R, d_Y)$, $(X \times Y, Q \times R, d_{X \times Y})$ is a generalised partial metric space, where $d_{X \times Y}((x_1, y_1), (x_2, y_2)) = (d_X(x_1, x_2), d_Y(y_1, y_2))$. However, in general, it is not clear how one should define a partial metric on a function space: Section \ref{subsection:type-gpms} will do this in a particular case.
+One can check that for all partial metric spaces $(X, Q, d_X)$ and $(Y, R, d_Y)$, $(X \times Y, Q \times R, d_{X \times Y})$ is a generalised partial metric space, where $d_{X \times Y}((x_1, y_1), (x_2, y_2)) = (d_X(x_1, x_2), d_Y(y_1, y_2))$. However, in general, it is not clear how one should define a partial metric on a function space. In  Section \ref{subsection:type-gpms} we introduce a construction to obtain partial metric spaces on function spaces by generalizing some properties of the standard diameter function on sets of real numbers.
