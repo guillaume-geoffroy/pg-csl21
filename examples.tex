@@ -31,8 +31,8 @@ $d_{\mathsf{Real}\to \mathsf{Real}}(t, \mathtt T^{n}\langle t,\mathtt 0 \rangle)
 Observe that if, instead, we used the $\sup$-distance $d_{\sup}(t,u)= \sup\{d_{\mathsf{Real}}(tr, ur)\mid r\in \Lambda_{\mathsf{Real}}\}$, then we could not reason as above since  
 $d_{\sup}(\lambda x.\sin(x), \mathtt T^{n} \langle \lambda x.\sin(x),0\rangle)=\infty$ (as illustrated in Fig. \ref{fig:sintaylor}).  
 
-We can use the higher-order structure of our semantics to push abstraction a bit further. For instance, we can define an approximate program 
-$c[y_{1},y_{2}]=\left( \partial (\mathtt T^{n})\langle y_{1}, \tointerval{0}\rangle\right) y_{2}: \intervals{\mathsf{Real}\to \mathsf{Real}}\to \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ which describes the sensitivity of the $n$-th Taylor expansions in 0. Given two programs $t$ and $u$ and a small interval $a$ of $0$, the real number $c[\partial(t)\vee \partial(u),a]$ measures how much the error of replacing the Taylor expansions of $t$ with the Taylor expansion of $u$ in $0$ diverges from the error produced by simply replacing  $t$ and $u$, when these are applied close to $0$. 
+%We can use the higher-order structure of our semantics to push abstraction a bit further. For instance, we can define an approximate program 
+%$c[y_{1},y_{2}]=\left( \partial (\mathtt T^{n})\langle y_{1}, \tointerval{0}\rangle\right) y_{2}: \intervals{\mathsf{Real}\to \mathsf{Real}}\to \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ which describes the sensitivity of the $n$-th Taylor expansions in 0. Given two programs $t$ and $u$ and a small interval $a$ of $0$, the real number $c[\partial(t)\vee \partial(u),a]$ measures how much the error of replacing the Taylor expansions of $t$ with the Taylor expansion of $u$ in $0$ diverges from the error produced by simply replacing  $t$ and $u$, when these are applied close to $0$. 
   
 \end{example}
 
@@ -288,7 +288,7 @@ $\partial(t)\partial(h)([ k \lfloor n\rfloor_{k}, n]_{\mathsf{Nat}}) \partial(f)
 
 \item[ii.] If $n$ is divisible by $k$, then for $i\leq n$, at the $i$-th iteration of $v_{n}$ the function $f$ is applied  to $\mathtt i$, while at the $i$-th iteration of $w_{n}$, $f$ is applied to $\lfloor i\rfloor_{k}$. Now, the error of replacing  $f\mathtt i$ by $ f\lfloor \mathtt j\rfloor_{k}$, with $\mathtt i,\mathtt j$ in some $a\in \intervals{\mathsf{Nat}}$, is accounted for by the approximate program $c[y]= \partial(f)(y-k  )$, where $y-k= y \vee \{u-\mathtt k\mid u \in y\}$.
 We deduce then that 
-$d_{A}(v_{n}, w_{n})$ is bounded by the diameter of $\partial(t)\partial(f)\tointerval{\mathtt n} (\lambda y.c[y])$.
+$d_{A}(v_{n}, w_{n})$ is bounded by the diameter of $\partial(t)\partial(h)\tointerval{\mathtt n} (\lambda y.c[y])$.
 
 \item[iii.] From the fact that $w_{n}=w_{(k\cdot \lfloor n\rfloor_{k})}$ and the triangular inequality of the partial metric $d_{A}$ we deduce  
 $d_{A}(v_{n}, w_{n})=
@@ -300,7 +300,13 @@ d_{A}(v_{(k\cdot \lfloor n\rfloor_{k})},v_{(k\cdot \lfloor n\rfloor_{k})} )$
 
 \end{itemize}
 
-From facts i.-iii. we immediately deduce an explicit bound for $d_{A}(v_{n},w_{n}    )$ as a function of $\partial(t), \partial(f)$ and $n$. 
+From facts i.-iii. we deduce an explicit bound for $d_{A}(v_{n},w_{n}    )$ in terms of $\partial(t), \partial(f)$ and $n$: \\
+\adjustbox{scale=0.9}{
+$d_{A}(v_{n},w_{n}    )\leq 
+ \diam_{A}(\partial(t)\partial(h)([ k \lfloor n\rfloor_{k}, n]_{\mathsf{Nat}}) \partial(f))+
+ \diam_{A}(\partial(t)\partial(h)\tointerval{\mathtt n} (\lambda y.\partial(f)(y- k))) -
+ \diam_{A}(\partial(t)\partial(h)\tointerval{\mathtt n} \partial(f)) 
+$.}
 
 \end{example}
 

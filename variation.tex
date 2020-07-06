@@ -1,6 +1,6 @@
 % !TEX root = CSL 2021.tex
 
-To illustrate our construction, we start from a relatively concrete example: we consider a simply-typed lambda calculus with a base type and primitives for real numbers, and we follow the plan outlined in the introduction, which yields for each simple type a notion of approximate value, approximate function, diameter and distance between programs. Most definitions are straightforward and intuitive: the interesting, not immediately obvious point is that our construction does yield a \emph{partial metric} on each type.
+To illustrate our construction, we start from a relatively concrete example: we consider a simply-typed lambda calculus with a base type $\mathsf{Real}$ and primitives for real numbers, and we follow the plan outlined in the introduction, which yields for each simple type a notion of approximate value, approximate function, diameter and distance between programs. Most definitions are straightforward and intuitive: the interesting, not immediately obvious point is that our construction does yield a \emph{partial metric} on each type.
 
 \emph{Simple types} are defined as follows: $\mathsf{Real}$ is a simple type; if $A$ and $B$ are simple types, then $A \to B$ and $A \times B$ are simple types.
 For all $n>0$, we fix a set $\mathcal{F}_n$ of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We consider the usual Curry-style simply-typed $\lambda$-calculus over the types defined above (the left and right projection are denoted by $\pi_L:A\times B \to A$ and  $\pi_R:A\times B \to B$ respectively, and the constructor for pairs by $\left\langle-,-\right\rangle$), enriched with the following constants: for all $r \in \mathbb{R}$, a constant $r:\mathsf{Real}$; for all $n>0$ and all $f\in\mathcal{F}_n$, a constant $f:\mathsf{Real}\to\ldots\to\mathsf{Real}\to\mathsf{Real}$. We call this calculus $\STLC$, and its terms are simply called \emph{terms}. We write $t[x_1 := u_1, \ldots, x_n := u_n]$ to denote the \emph{simultaneous} substitution of $u_1, \ldots, u_n$ for $x_1, \ldots, x_n$ in $t$. For all types $A$, we denote by $\Lambda_A$ the set of closed terms of type $A$. The relation of $\beta$-reduction is enriched with the following rule, extended to all contexts: for all $n>0$, $f\in\mathcal{F}_n$, and $r_1,\ldots,r_n\in\mathbb{R}$, $f r_1 \ldots r_n \to_\beta s$, where $s = f(r_1, \ldots, r_n)$. By standard arguments, this calculus has the properties of subject reduction, confluence and strong normalisation.
@@ -112,7 +112,8 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding
 \end{figure}
 
 
-For all $A$, as a subset of $\mathcal{P}(\Lambda_A)$, $\intervals{A}$ is closed under arbitrary intersections and is therefore a complete lattice whose meet is given by intersection. In particular, for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$. 
+For all $A$, the set $\intervals{A}$ is a a subset of $\mathcal{P}(\Lambda_A)$ closed under arbitrary intersections. We deduce that $\intervals{A}$ has arbitrary meets (given by intersections) and arbitrary joins
+$\bigvee_{i\in I}a_{i}= \bigcap \{ a\in \intervals{A}\mid \forall i\in I \ a_{i}\subseteq a\}$, and thus $\intervals{A}$ is a complete lattice. In particular, for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$. 
 One can check that $\tointerval{t} = \tointerval{u}$ if and only if $t\oeq_{A} u$.
 
 Monotone functions from approximate values to approximate values represent \emph{approximate programs}. They behave like a model of the simply-typed $\lambda$-calculus in a weak sense, namely: \begin{itemize}
@@ -172,15 +173,21 @@ If $a$ is the interval $[-1,+1]$, then $\partial(t)(a)=[-1,1]$, and since $u[x:=
 \subsection{A Partial Metric on Each Type}
 \label{subsection:type-gpms}
 
-We will now show how to associate to each type $A$ of $\STLC$ a generalised partial metric space $(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$. The definition of this space will exploit in an essential way the sets of approximate values $\intervals{A}$.
+So far, we have associated each type $A$ of $\STLC$ with a complete lattice $\intervals{A}\subseteq \mathcal P(\Lambda_{A})$ of approximate values of type $A$, and each typed program $t:A\to B$ with an approximate program $\partial(t)$ (in fact, a monotone function) from approximate values of type $A$ to approximate values of type $B$.
+We will now exploit this structure to define, for each type $A$ of $\STLC$, a generalised partial metric on the closed (exact) programs of type $A$. % space $(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$.
+
+% The definition of this space will exploit in an essential way the sets of approximate values $\intervals{A}$.
 
 
-For all simple types $A$, we define a commutative integral quantale $(\distances{A}, \quantaleleq_A, \quantaleop_A)$ of \emph{distances of type $A$}:
+The first step is to define, for every simple type $A$, a commutative integral quantale $(\distances{A}, \quantaleleq_A, \quantaleop_A)$ of \emph{distances of type $A$}:
 \begin{itemize}
 \item $(\distances{\mathsf{Real}}, \quantaleleq_\mathsf{Real}, \quantaleop_\mathsf{Real}) = ([0,\infty], \geq, +)$,
 \item $\distances{A \times B} = \distances{A} \times \distances{B}$,
-\item $\distances{A \to B} = \{ \text{monotonically decreasing functions from } \intervals{A} \text{ to } \distances{B} \}$.
+\item $\distances{A \to B} =\mathsf{Mon}(\distances{A}, \distances{B})$.
+% \{ \text{monotonically decreasing functions from } \intervals{A} \text{ to } \distances{B} \}$.
 \end{itemize}
+where, for two ordered sets $Q,R$, $\mathsf{Mon}(Q,R)$ indicates the set of monotonically decreasing functions from $Q$ to $R$.
+
 
 Observe that the quantale $\distances{A\to B}$ is a set of functions over the approximate values of $A$.
 For all simple types $A$, we now define a \emph{distance function} $d_A : \Lambda_A \times \Lambda_A \to \distances{A}$:
@@ -191,8 +198,8 @@ For all simple types $A$, we now define a \emph{distance function} $d_A : \Lambd
 \end{itemize}
 
 
+The maps $d_{A}$ are clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). 
 
-This distance is clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space.
 
 \begin{figure}
 \adjustbox{center}{
@@ -218,6 +225,7 @@ This property is at the heart of our generalization of diameters.}
 \end{figure}
 
 
+Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space.
 To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$. The name ``diameter'' refers to the fact that $\diam_{A}$ generalizes a property of the standard diameter on the reals: like the latter is \emph{modular} over intersecting closed intervals (see Fig. \ref{fig:modular}), $\diam_{A}$ is \emph{super-modular} on intersecting approximate values, as we show in Proposition \ref{prop:submodular} below. 
  %-- or rather, using the quantale ordering convention, supermodular. 
  
@@ -245,7 +253,8 @@ One can check that $(a \wedge b)_L = a_L \wedge b_L$, $(a \wedge b)_R = a_R \wed
 Let $f,g \in \intervals{A \to B}$ and $a \in \intervals{A}$. For all $h \in \intervals{A \to B}$, let $ha = \sup\{\tointerval{vt} \mid v \in h, t \in a\}$. One can check that $(f \wedge g)a \subseteq (f a) \wedge (g a)$ and $(f \vee g)a = (f a) \vee (g a)$. As a result, $(\diam(f \wedge g)\quantaleop \diam(f \vee g))(a) \quantalegeq \diam((fa) \wedge (ga)) \quantaleop \diam((fa) \vee (ga)) \quantalegeq \diam(fa) \quantaleop \diam(ga) = (\diam(f)\quantaleop\diam(g))(a)$.
 \end{proof}
 
-
+It is well-known  \cite{6845021} that any 
+function $\delta: L\to \mathbb R^{+\infty}$ on a lattice $L$ that is monotone and \emph{submodular}  (\emph{i.e.}~ satisfying $\delta(a\cup b)+ \delta(a\cap b) \leq \delta(a)+\delta(b)$ - recall that the order on $\mathbb R^{+\infty}$, taken as a quantale, is opposite to the usual order) induces a pseudo-metric $d: L\times L \to \mathbb R^{+\infty}$ by letting $d(a,b)=2\delta(a\vee b)-\delta(a)-\delta(b)$. In fact, one can decompose this construction: first, one defines a partial pseudometric $p$ on $L$ by $p(a,b) = \diam(a \vee b)$, and then $d$ is just the distance given by equation \eqref{eq:pmettomet}: $d(a,b) = p^*(a,b) = 2p(a,b)-p(a,a)-p(b,b)$. We can use this way of reasoning to establish that the maps $d_{A}$ are indeed partial metrics:
 
 \begin{corollary} \label{corollary:stlc-metric} For all simple types $A$, $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space, that is to say:
 \begin{enumerate}
@@ -263,16 +272,16 @@ One can check (by induction on types) that the restriction of $\diam_A$ to the i
 The triangular inequality is an immediate consequence of the quasi-supermodularity of $\diam_A$: $d(t,v) \quantaleop d(u,u) = \diam(\tointerval{t} \vee \tointerval{v}) \quantaleop \diam(\tointerval{u}) \quantalegeq \diam((\tointerval{t} \vee \tointerval{u}) \vee (\tointerval{u} \vee \tointerval{v})) \quantaleop \diam((\tointerval{t} \vee \tointerval{u}) \wedge (\tointerval{u} \vee \tointerval{v})) \quantalegeq \diam(\tointerval{t} \vee  \tointerval{u}) \quantaleop \diam(\tointerval{u} \vee  \tointerval{v}) = d(t,u) \quantaleop d(u,v)$.
 \end{proof}
 
-
-\begin{remark}
-Corollary \ref{corollary:stlc-metric} is a slight refinement of the well-known fact \cite{6845021} that any 
-function $\delta: L\to \mathbb R^{+\infty}$ on a lattice $L$ that is monotone and \emph{submodular}  (\emph{i.e.}~ satisfying $\delta(a\cup b)+ \delta(a\cap b) \leq \delta(a)+\delta(b)$ - recall that the order on $\mathbb R^{+\infty}$, taken as a quantale, is opposite to the usual order) induces a pseudo-metric $d: L\times L \to \mathbb R^{+\infty}$ by letting $d(a,b)=2\delta(a\vee b)-\delta(a)-\delta(b)$. In fact, one can decompose this construction: first, one defines a partial pseudometric $p$ on $L$ by $p(a,b) = \diam(a \vee b)$, and then $d$ is just the distance given by equation \eqref{eq:pmettomet}: $d(a,b) = p^*(a,b) = 2p(a,b)-p(a,a)-p(b,b)$.
-
- 
-
-\end{remark}
-
-
+%
+%\begin{remark}
+%Corollary \ref{corollary:stlc-metric} is a slight refinement of the well-known fact \cite{6845021} that any 
+%function $\delta: L\to \mathbb R^{+\infty}$ on a lattice $L$ that is monotone and \emph{submodular}  (\emph{i.e.}~ satisfying $\delta(a\cup b)+ \delta(a\cap b) \leq \delta(a)+\delta(b)$ - recall that the order on $\mathbb R^{+\infty}$, taken as a quantale, is opposite to the usual order) induces a pseudo-metric $d: L\times L \to \mathbb R^{+\infty}$ by letting $d(a,b)=2\delta(a\vee b)-\delta(a)-\delta(b)$. In fact, one can decompose this construction: first, one defines a partial pseudometric $p$ on $L$ by $p(a,b) = \diam(a \vee b)$, and then $d$ is just the distance given by equation \eqref{eq:pmettomet}: $d(a,b) = p^*(a,b) = 2p(a,b)-p(a,a)-p(b,b)$.
+%
+% 
+%
+%\end{remark}
+%
+%
 
 
 
