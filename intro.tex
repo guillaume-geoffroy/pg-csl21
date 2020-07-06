@@ -141,10 +141,10 @@ Suppose to start from a language  containing a type $\mathsf{Real}$ for real num
 
 
 
-A standard solution is to take the sup-distance, that is, to let, for $f,g:\mathsf{Real}\to \mathsf{Real}$, $d(f,g)=\sup\{d(f(r),g(r))\mid r\in \mathsf{Real}\}$. This solution works well in models in which programs are interpreted as \emph{non-expansive} or \emph{Lipschitz-continuous} maps \cite{Hofmann2014, Azevedo_de_Amorim_2017}. However, as is well-known, such models are not \emph{cartesian-closed}\footnote{In fact, cartesian closed categories of metric spaces and non-expansive functions \emph{do} exist \cite{Escardo1999, Stubbe2009}, but, to our knowledge, none of these categories contains the real numbers with the standard metric.}, so they do not account for 
+A standard solution is to take the sup-distance, that is, to let, for $f,g:\mathsf{Real}\to \mathsf{Real}$, $d(f,g)=\sup\{d(f(r),g(r))\mid r\in \mathsf{Real}\}$. This solution works well in models in which programs are interpreted as \emph{non-expansive} or \emph{Lipschitz-continuous} maps \cite{Hofmann2014, Azevedo_de_Amorim_2017}. However such models are not \emph{cartesian-closed}\footnote{In fact, cartesian closed categories of metric spaces and non-expansive functions \emph{do} exist \cite{Escardo1999, Stubbe2009}, but, to our knowledge, none of these categories contains the real numbers with the standard metric.}, so they do not account for 
  the simply-typed lambda-calculus in its full generality, but only for linear or sub-exponential variations of it (such as $\mathsf{Fuzz}$ \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017}).
  Also, it has been shown \cite{10.1109/LICS.2015.64} that in a probabilistic setting the non-linearity of higher-order programs has the effect of \emph{trivialising} metrics, that is, of forcing distances to be either 0 or 1, hence collapsing program distances onto usual notions of program equivalence.
-Most importantly, even if one restricts to a sub-exponential language, the sup-distance seems inadequate to account for contextual transformations as the replacement of $\lambda x.\sin(x)$ by $\lambda x.x$ around 0,  as the sup-distance between such programs is infinite (see Fig. \ref{fig:sinid}). 
+Most importantly, even if one restricts to a sub-exponential language, the sup-distance is inadequate to account for contextual transformations as the replacement of $\lambda x.\sin(x)$ by $\lambda x.x$ around 0,  as the sup-distance between such programs is infinite (see Fig. \ref{fig:sinid}). 
  
  
 On the other side of the coin, other approaches like \cite{chaudhuri, dallago:differential-stlc} are fully contextual and higher-order, but provide, at best, only weak approximations of a standard notion of metric.  
@@ -189,9 +189,7 @@ In such models a higher-order type $A$ is interpreted as a 4-tuple $(|A|, \inter
 
 
 The maps $\diam_{A}$ take their name from the fact that they  
- generalize some properties of the diameter function of the standard metrics on real numbers, in particular, 
-the fact that the diameter is \emph{modular} over intersecting intervals (see Fig. \ref{fig:modular}).
-Moreover, just like the standard metric on $\mathbb R$ can be recovered from the diameter by $d(x,y)=\mathsf{diam}([x,y])$, the function $\diam_{A}$ induces a \emph{generalized partial metric} $d_{A}:|A|\times |A|\to \distances{A}$ by letting $d_{A}(x,y)=\diam_{A}(x\vee y)$. 
+ generalize some properties of the diameter function of the standard metrics on real numbers. Moreover, just like the standard metric on $\mathbb R$ can be recovered from the diameter by $d(x,y)=\mathsf{diam}([x,y])$, the function $\diam_{A}$ induces a \emph{generalized partial metric} $d_{A}:|A|\times |A|\to \distances{A}$ by letting $d_{A}(x,y)=\diam_{A}(x\vee y)$. 
 
 
 Generalized partial metric spaces (henceforth GPMS) are a well-investigated class of metric spaces that has been widely applied in program semantics \cite{bkmp:partial-metrics, Bukatin1997, doi:10.1111/j.1749-6632.1994.tb44144.x, Schellekens2004, Samet:2013aa, Stubbe2018, HE201999}. 
@@ -202,28 +200,6 @@ need not be real numbers, but can be functions or any other type of object that 
 %Observe that not only any standard metric space is a GPMS, but from from any partial metric $d$ one can retrieve a (generalized) metric $d'$ by letting $d'(x,y)=2d(x,y)-d(x,x)-d(y,y)$.
 
 
-\begin{figure}
-\adjustbox{center}{
-\begin{tikzpicture}
-
-
-\draw[|<->|, orange] (-2,0) to node[above] {$a$} (2,0);
-\draw[|<->|, blue] (1,0) to node[above]  {$b$} (4,0);
-\draw[violet] (1,0) to (2,0);
-
-\draw[|<->|, dashed] (-2,0.8) to node[above] {\tiny$\delta(a\cup b)$} (4,0.8);
-\draw[|<->|, dashed] (1,0.5) to node[below] {\tiny$\delta(a\cap b)$} (2,0.5);
-\draw[|<->|, dashed] (-2,-0.5) to node[below] {\tiny$\delta(a)$} (2,-0.5);
-\draw[|<->|, dashed] (1,-0.8) to node[below] {\tiny$\delta(b)$} (4,-0.8);
-
-
-
-\end{tikzpicture}}
-\caption{\small The diameter function is \emph{modular} over intersecting real intervals: 
-$\mathsf{diam}(a\cup  b)+\mathsf{diam}(a\cap b)=\mathsf{diam}(a)+\mathsf{diam}(b)$ for all $a,b\in [\R]$ such that $a\cap b\neq \emptyset$.
-This property is at the heart of our generalization of diameters.}
-\label{fig:modular}
-\end{figure}
 
 
 %
@@ -306,7 +282,11 @@ $\lambda x.\sin(x)$ on the same interval (as illustrated in Fig. \ref{fig:sinid2
 %The main two technical contributions of this paper are the following. First, we show that the construction just sketched actually permits to scale the standard  metric for $\mathsf{Real}$ to higher-order types, yielding a partial metric model of a simply typed $\lambda$-calculus with a type of real numbers.
 %
 \subparagraph*{Diameter Space over a Cartesian Closed Category}
-While our construction was though to account for rather concrete examples of transformations (e.g. the sine/identity transformation or loop perforation), diameter spaces can be constructed starting from any higher-order programming language with a reasonable denotational semantics. In fact, for \emph{any} cartesian closed category $\mathbb C$, we can construct a cartesian \emph{lax-}closed category $\dsp(\mathbb C)$, whose morphisms can be seen as approximate versions  of the morphisms of $\mathbb C$. The ``lax'' preservation of the cartesian closed structure reflects the fact that, by composing approximations in a higher-order setting, also their error rates compose (typically, approximating non $\beta$-normal $\lambda$-terms will lead to higher error-rates than approximating their $\beta$-normal forms). 
+
+
+
+
+Our construction was primarily though to account for transformations in higher-order languages designed for real analysis computation (like \emph{e.g.} $\mathsf{Real\ PCF}$ \cite{Edalat:2000aa}). However, diameter spaces can be constructed starting from any higher-order programming language with a reasonable denotational semantics. In fact, for \emph{any} cartesian closed category $\mathbb C$, we can construct a cartesian \emph{lax-}closed category $\dsp(\mathbb C)$, whose morphisms can be seen as approximate versions  of the morphisms of $\mathbb C$. The ``lax'' preservation of the cartesian closed structure reflects the fact that, by composing approximations in a higher-order setting, also their error rates compose (typically, approximating non $\beta$-normal $\lambda$-terms will lead to higher error-rates than approximating their $\beta$-normal forms). 
 
 
 

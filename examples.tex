@@ -1,14 +1,25 @@
 % !TEX root = CSL 2021.tex
 
 
-In the previous section we showed how to associate each simple type $A$ with a  partial metric $d_{A}$ over the closed terms of type $A$. We now illustrate through a few basic examples how the higher-order and metric features of this semantics can be used to formalize contextual reasoning about program differences.
+In the previous section we showed how to associate each simple type $A$ with a  partial metric $d_{A}$ over the closed terms of type $A$. 
+We  now illustrate through a few basic examples how the higher-order and metric features of this semantics can be used to formalize contextual reasoning about program differences.
+To make our examples more realistic, we will consider some natural extensions of $\STLC$.
+
+It is not difficult to see that all constructions from Section 3 scale well to any extension of $\STLC$ obtained by adding new base types. For example, we can add to our language a type $\mathsf{Nat}$ for natural numbers, indicating for each $n\in \mathbb N$, the corresponding normal forms of $\mathsf{Nat}$ as $\mathtt n$. A natural choice is to let   
+$\intervals{\mathsf{Nat}}=\{ \{ t \mid \exists n\in a \ t\leadsto \mathtt n\}\mid a \text{ finite subset of }\mathbb N \text{ or }a=\mathbb N\}$, $\distances{\mathsf{Nat}}=\mathbb R^{+\infty}$ and $d_{\mathsf{Nat}}(t,u)=| n-m|$, where $t\to^{*}_{\beta}\mathtt n$ and $u\to^{*}_{\beta}\mathtt m$. 
+
+Moreover, the constructions scale well also to extensions of $\STLC$ obtained by adding new program constructors, as soon as these do not compromise the normal form property (since the fact that closed programs of type $\mathsf{Real}$ have a normal form plays an important role in defining the set $\intervals{\mathsf{Real}}$).  
+For instance, if we suppose that all programs of type $\mathsf{Real}\to\mathsf{Real}$ in $\STLC$ are either 
+differentiable or integrable (see Remark \ref{rem:continuous}), we can consider extension of $\STLC$ with explicit differential or integral operators, as is done for example in $\mathsf{Real\ PCF}$ \cite{Di-Gianantonio:2013aa, Edalat:2000aa}.
+
+
 
 
 
 
 \begin{example}[Taylor approximation]
 
-Suppose that for all $n$, we can define a term $\mathtt T^{n}: ((\mathsf{Real}\to \mathsf{Real})\times \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathtt T^{n}\langle f, r\rangle$ computes the $n$-th truncated Taylor expansion of $f$ at $r$. 
+We make the assumption that all programs of type $\mathsf{Real}\to\mathsf{Real}$ in $\STLC$ are differentiable and that for all $n$, we can define a term $\mathtt T^{n}: ((\mathsf{Real}\to \mathsf{Real})\times \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathtt T^{n}\langle f, r\rangle$ computes the $n$-th truncated Taylor expansion of $f$ at $r$. 
 Then, given a term $t: \mathsf{Real}\to \mathsf{Real}$, the distance 
 $d_{\mathsf{Real}\to\mathsf{Real}}(t, \mathtt T^{n}\langle t,\mathtt 0 \rangle)$ is the map associating an interval $a$ with the diameter of $t(a)\vee (\mathtt T^{n}\langle t,\mathtt 0 \rangle)(a)$. 
 The difference between this value and the self-distance of $t$ will approximate 0 when $a$ is a small interval of $0$, and will tend to diverge when $a$ contains points which are far enough from 0. 
@@ -26,9 +37,9 @@ $c[y_{1},y_{2}]=\left( \partial (\mathtt T^{n})\langle y_{1}, \tointerval{0}\ran
 \end{example}
 
 \begin{figure}
-\begin{subfigure}{0.5\textwidth}
-\parbox[h][3.5cm][c]{\textwidth}{
-\adjustbox{center}{$
+\begin{subfigure}{0.58\textwidth}
+\parbox[h][3cm][c]{\textwidth}{
+\adjustbox{center, scale=0.9}{$
 \begin{tikzpicture}[domain=-5:5, scale=0.5]
 %\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
 \draw[<->]   (-5,0) -- (5,0);
@@ -46,9 +57,9 @@ $c[y_{1},y_{2}]=\left( \partial (\mathtt T^{n})\langle y_{1}, \tointerval{0}\ran
 \caption{\small The $\sup$-distance between $\sin(x)$ and its Taylor expansion $\mathtt T^{3}\langle\sin(x),0\rangle$ diverges.}
 \label{fig:sintaylor}
 \end{subfigure} \ \ \ 
-\begin{subfigure}{0.45\textwidth}
-\parbox[h][3.5cm][c]{\textwidth}{
-\adjustbox{scale=0.6}{$
+\begin{subfigure}{0.4\textwidth}
+\parbox[h][3cm][c]{\textwidth}{
+\adjustbox{scale=0.45}{$\ \qquad\qquad
 \begin{tikzpicture}
 \begin{axis}[
     xticklabels={ , , },yticklabels={ , , },
@@ -126,7 +137,7 @@ $}
 %\end{axis}
 %\end{tikzpicture}$}
 }
-\caption{\small Integral $vs$ Riemann sum. \\ \   }
+\caption{\small Definite integral $vs$ Riemann sums. \\ \   }
 \label{fig:riemann}
 \end{subfigure}
 \caption{Computing bounds on distances: examples.}
@@ -134,7 +145,7 @@ $}
 
 
 \begin{example}[Integral approximation]
-A second natural application of metric reasoning is to numerical integration. Suppose that all functions in $\mathcal F_{n}$ are integrable and suppose we have at our disposal a program $\lambda fx.\mathsf I_{[0,x]}(f): (\mathsf{Real}\to \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathsf I_{[0,r]}(t)$ computes (a precise enough approximation of) the definite integral $\int_{0}^{|r|}tx \ dx$.
+We now assume that all functions in $\mathcal F_{n}$ are integrable and that we have (see \cite{Edalat:2000aa}) at our disposal a program $\lambda fx.\mathsf I_{[0,x]}(f): (\mathsf{Real}\to \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathsf I_{[0,r]}(t)$ computes (a precise enough approximation of) the definite integral $\int_{0}^{|r|}tx \ dx$.
 In many contexts we might prefer to replace the expensive computation of $\mathsf I_{[0,r]}(t)$ by the (more economical but less precise) computation of a finite Riemann sum $\mathsf R^{n}_{[0,r]}(t)=  \sum_{i=1}^{n}(tx_{i})\cdot |r|/n$, where 
  $x_{i}=  i\cdot |r|/n$ (see Fig. \ref{fig:riemann}).  
 
@@ -154,18 +165,15 @@ $d_{\mathsf{Real}} ( \mathsf{R}^{n}_{[0,r]}(t), \mathsf R^{n}_{[0,r]}(u))\leq
 d_{\mathsf{Real}\to\mathsf{Real}}(t, u)([0,r]) \cdot n \cdot |r|=\eta_{t,u}(r)\cdot n \cdot |r|$.
 Then, using the triangular inequality of the standard metric on $\mathsf{Real}$ we deduce
 \begin{align*}
-& d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}(t), \mathsf R^{n}_{[0,r]}(u)) \\ 
-& \leq
-d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}(t), \mathsf R^{n}_{[0,r]}(t)) +
+ d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}(t), \mathsf R^{n}_{[0,r]}(u)) \leq
+d_{\mathsf{Real}} ( \mathsf{I}_{[0,r]}(t), \mathsf R^{n}_{[0,r]}(t))  & +
 d_{\mathsf{Real}} ( \mathsf{R}_{[0,r]}(t),\mathsf R^{n}_{[0,r]}(u)) \\
-& \leq 
-\varepsilon_{t}(r)
+& \leq \epsilon_{t}(r)
 + 
 \eta_{t,u}(r)\cdot 
  n\cdot |r|
  \end{align*}
- 
-Using the partial metric on $\mathsf{Real}\to \mathsf{Real}$, we can also derive a bound expressing how much the error above is \emph{sensitive to changes of $r$}. 
+ Using the partial metric on $\mathsf{Real}\to \mathsf{Real}$, we can also derive a bound expressing how much the error above is \emph{sensitive to changes of $r$}. 
 First, using standard analytic techniques (under suitable assumptions for $t$ and its derivatives) one can find a program $v:\mathsf{Real}\to\mathsf{Real}$ such that $vr \to^{*}_{\beta}\epsilon_{t}(r)$. 
 Then, using the triangular inequality of the partial metric on $\mathsf{Real}\to \mathsf{Real}$ we deduce, for all interval $a$, the following bound:
 \begin{align*}
@@ -252,15 +260,13 @@ d_{\mathsf{Real}\to \mathsf{Real}}(v,v)(a)
 
 
 \begin{example}[Loop perforation]
-By adapting an example from \cite{chaudhuri}, we discuss a simplified example of the transformation that replaces a program $t$ which performs $n$-iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. 
+By adapting an example from \cite{chaudhuri}, we discuss a simplified example of the transformation that replaces a program $t$ which performs $n$-iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. We work in the extension of $\STLC$ with a type $\mathsf{Nat}$.
 
 
-We suppose that our language includes a type $\mathsf{Nat}$ for natural numbers, where we indicate for each $n\in \mathbb N$, the corresponding normal forms of $\mathsf{Nat}$ as $\mathtt n$. A natural choice is to let   
-$\intervals{\mathsf{Nat}}=\{ \{ t \mid \exists n\in a \ t\leadsto \mathtt n\}\mid a \text{ finite subset of }\mathbb N \text{ or }a=\mathbb N\}$, $\distances{\mathsf{Nat}}=\mathbb R^{+\infty}$ and $d_{\mathsf{Nat}}(t,u)=| n-m|$, where $t\to^{*}_{\beta}\mathtt n$ and $u\to^{*}_{\beta}\mathtt m$. 
 
 
 %Let $\mathsf{Nat}$ be a suitable type representing natural numbers in $\STLC$ and s
-Suppose now  $t: (A\times A\to A) \to \mathsf{Nat}\to (A\to A)\to A$, for $n\geq 1$, is a term such that $th\mathtt n f$ 
+Suppose  $t: (A\times A\to A) \to \mathsf{Nat}\to (A\to A)\to A$, for $n\geq 1$, is a term such that $th\mathtt n f$ 
 computes the $n$-times iteration of $h$ as follows: $th \mathtt 0f= h\langle f\mathtt 0, f\mathtt 0\rangle$ and $th(\mathtt{n+1})f=h\langle th\mathtt n f, f\mathtt{n+1}\rangle$. 
 Let $\mathsf{Perf}^{k}(t)$, the $k$-th perforation of $t$, be the program   
 $(\mathsf{Perf}^{k}(t))h\mathtt nf= t(\lambda x. (h^{(k)}x)) \mathtt{\lfloor n\rfloor_{k}} (\lambda x. f(x* \mathtt k)$, where $\lfloor n\rfloor_{k}$ indicates the least $m\leq n$ such that $m$ is divisible by $k$, and $x*\mathtt k$ is the multiplication of $x$ by $k$. 

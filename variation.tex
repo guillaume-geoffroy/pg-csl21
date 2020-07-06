@@ -5,6 +5,13 @@ To illustrate our construction, we start from a relatively concrete example: we 
 \emph{Simple types} are defined as follows: $\mathsf{Real}$ is a simple type; if $A$ and $B$ are simple types, then $A \to B$ and $A \times B$ are simple types.
 For all $n>0$, we fix a set $\mathcal{F}_n$ of functions from $\mathbb{R}^n$ to $\mathbb{R}$. We consider the usual Curry-style simply-typed $\lambda$-calculus over the types defined above (the left and right projection are denoted by $\pi_L:A\times B \to A$ and  $\pi_R:A\times B \to B$ respectively, and the constructor for pairs by $\left\langle-,-\right\rangle$), enriched with the following constants: for all $r \in \mathbb{R}$, a constant $r:\mathsf{Real}$; for all $n>0$ and all $f\in\mathcal{F}_n$, a constant $f:\mathsf{Real}\to\ldots\to\mathsf{Real}\to\mathsf{Real}$. We call this calculus $\STLC$, and its terms are simply called \emph{terms}. We write $t[x_1 := u_1, \ldots, x_n := u_n]$ to denote the \emph{simultaneous} substitution of $u_1, \ldots, u_n$ for $x_1, \ldots, x_n$ in $t$. For all types $A$, we denote by $\Lambda_A$ the set of closed terms of type $A$. The relation of $\beta$-reduction is enriched with the following rule, extended to all contexts: for all $n>0$, $f\in\mathcal{F}_n$, and $r_1,\ldots,r_n\in\mathbb{R}$, $f r_1 \ldots r_n \to_\beta s$, where $s = f(r_1, \ldots, r_n)$. By standard arguments, this calculus has the properties of subject reduction, confluence and strong normalisation.
 
+\begin{remark}\label{rem:continuous}
+The class of real-valued functions which can be computed in $\STLC$ depends on the choice we make for $\mathcal F_{n}$. With suitable choices (see for instance \cite{TaylorReal, Di-Gianantonio:2013aa,Edalat:2000aa}) one can obtain that all programs of type $\mathsf{Real}\to \mathsf{Real}$ compute \emph{continuous} functions\footnote{Note that for this to be possible, $\mathcal F_{n}$ cannot contain the identity function over $\mathsf{Real}$.}, that all such programs are \emph{integrable} over closed intervals, or that all such programs are \emph{continuously differentiable}.
+
+
+
+\end{remark}
+
 In addition to the usual notion of $\beta$-equivalence between terms of $\STLC$, we will exploit also a stronger equivalence: given two closed terms $t,u$ of type $A$,  we say that $t$ and $u$ are \emph{observationally equivalent} and write $t \oeq_A u$ if for all terms $C$ such that $x:A \vdash C : \mathsf{Real}$ is derivable, $C[x:=t]$ is $\beta$-equivalent to $C[x:=u]$ (which amounts to saying that they both $\beta$-reduce to the same real number).  It is clear that observational equivalence is a congruence and that two $\beta$-equivalent terms are always observationally equivalent. The notion of distance we define in the next paragraph will be a generalisation of this notion of equivalence.
 
 
@@ -31,7 +38,7 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}= \{v\in \Lambda_{\mathsf{Real}\to\mathsf
 $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding to maps oscillating between $\sin (x)+1$ and $\cos(x)+1$ (\textit{e.g.} the program $\lambda x. \sin(x+1)$, as illustrated in Fig. \ref{fig:interval1}).
 
 \begin{figure}
-%\begin{subfigure}{0.42\textwidth}
+\begin{subfigure}{0.42\textwidth}
 \parbox[h][3cm][c]{\textwidth}{
 \adjustbox{center}{$
 \begin{tikzpicture}[domain=-5:5, scale=0.5]
@@ -51,50 +58,10 @@ $[t,u]_{\mathsf{Real}\to \mathsf{Real}}$ contains all closed terms corresponding
 }
 \caption{$\lambda x.\sin(x+1)$ is in $[\lambda x.\sin(x)+1, \lambda x.\cos(x)+1]_{\mathsf{Real}\to\mathsf{Real}}$.}
 \label{fig:interval1}
-%\end{subfigure} \ \ \ 
-\end{figure}
-
-
-For all $A$, as a subset of $\mathcal{P}(\Lambda_A)$, $\intervals{A}$ is closed under arbitrary intersections and is therefore a complete lattice whose meet is given by intersection. In particular, for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$. 
-One can check that $\tointerval{t} = \tointerval{u}$ if and only if $t\oeq_{A} u$.
-
-Monotone functions from approximate values to approximate values represent \emph{approximate programs}. They behave like a model of the simply-typed $\lambda$-calculus in a weak sense, namely: \begin{itemize}
-\item for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B \to C}$ and $(\alpha_1, \ldots, \alpha_n) \mapsto b[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, we can define a monotone function $(\alpha_1, \ldots, \alpha_n) \mapsto (c[\alpha_1, \ldots, \alpha_n]~ b[\alpha_1, \ldots, \alpha_n]) = \sup\{\tointerval{vu} \mid v \in c[\alpha_1, \ldots, \alpha_n], u \in b[\alpha_1, \ldots, \alpha_n]\} : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$,
-\item for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$ and all $i \leq n$, we can define a monotone function $(\alpha_j)_{j \neq i} \mapsto (\lambda \alpha_i.~ c[\alpha_1, \ldots, \alpha_n]) = \{ v \in \Lambda_{A_i \to C} \mid \forall t_i \in \Lambda_{A_i},~ v t_i \in c[\alpha_1, \ldots, \tointerval{t_i}, \ldots, \alpha_n] \} : \prod_{j \neq i} \intervals{A_j} \to \intervals{A_i \to C}$,
-\end{itemize}
-and these two constructions are weakly compatible with $\beta$-reduction and $\eta$-expansion:
-
-\begin{proposition} \label{prop:intervals-weak-model-lambda} For all monotone functions $(\alpha_1, \ldots, \alpha_n, \beta) \mapsto c[\alpha_1, \ldots, \alpha_n, \beta] : \intervals{A_1} \times \ldots \times \intervals {A_n} \times  \intervals {B} \to \intervals {C}$ and $(\alpha_1, \ldots, \alpha_n) \mapsto b[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, $$\begin{array}{ll} & (\alpha_1, \ldots, \alpha_n) \mapsto (\lambda \beta.~  c[\alpha_1, \ldots, \alpha_n, \beta])~ b[\alpha_1, \ldots, \alpha_n] \\ \leq & (\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n, b[\alpha_1, \ldots, \alpha_n]]\text{,}\end{array}$$
-and for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto d[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to  \intervals {B \to C}$,
-$$\begin{array}{ll} & (\alpha_1, \ldots, \alpha_n) \mapsto \lambda \beta.~  d[\alpha_1, \ldots, \alpha_n]~ \beta \\ \geq & (\alpha_1, \ldots, \alpha_n) \mapsto d[\alpha_1, \ldots, \alpha_n]\text{,}\end{array}$$
-where functions are ordered by pointwise inclusion.  In other words, on approximate programs, $\beta$-reduction and $\eta$-expansion \emph{discard} information, and conversely $\beta$-expansion and $\eta$-reduction \emph{recover} some information.
-\end{proposition}
-
-\begin{proof} Without loss of generality, we can assume $n=0$.
-Let $v \in \lambda \beta.~ c[\beta]$ and $u \in b$. By definition, $tu \in c[\tointerval{u}]$, so $\tointerval{tu} \subseteq c[\tointerval{u}] \subseteq c[b]$. Therefore, $(\lambda \beta.~ c[\beta])~ b \subseteq b$.
-Let $v \in d$. For all $u \in \Lambda_B$, by definition, $vu \in d\tointerval{u}$. Therefore, $v \in \lambda \beta.~ d~ \beta$.
-\end{proof}
-
-Beyond theoretical aspects (which will be made clearer in Section 5), 
-Proposition \ref{prop:intervals-weak-model-lambda} is also important in practice because it implies that if we compute an approximation of a program from approximations of its parts and then simplify the resulting approximate program using $\beta$-reduction and $\eta$-expansion, what we obtain is still a valid approximation of the original program.
-
-
-We can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $\alpha_{1}:A_{1},\dots,\alpha_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. 
-
-\begin{remark} \label{remark:push-exp-stlc}
-The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of the $\lambda$-calculus, in particular:
-\begin{itemize}
-\item $\partial (\alpha_{i})(a_{1},\dots, a_{n})=a_{i}$,
-\item $\partial (tu)(a_{1},\dots, a_{n}) \subseteq \partial (t)(a_{1},\dots, a_{n}) ~ \partial (u)(a_{1},\dots, a_{n})$,
-\item $\partial (\lambda \beta. t)(a_{1},\dots, a_{n}) \subseteq \lambda \beta.~ \partial (t)(\beta, a_{1},\dots, a_{n})$.
-\end{itemize}
-\end{remark}
-
-This map $\partial(t)$ can be taken as a measure of the \emph{sensitivity} of $t$, as it maps an interval $a$, that is a quantifiably uncertain input, to a quantifiably uncertain output $\partial(t)(a)$. 
-For instance, if we take the term $t[x]= \sin(x)+1$ above, then $\partial(t): \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ sends the interval $[-\pi,\pi]_{\mathsf{Real}}$ into $[0,2]_{\mathsf{Real}}$.
-
-\begin{figure}
-%\begin{subfigure}{0.52\textwidth}
+\end{subfigure} \ \ \ 
+%\end{figure}
+%\begin{figure}
+\begin{subfigure}{0.52\textwidth}
 \parbox[h][3cm][c]{\textwidth}{
 \adjustbox{center}{$
 \begin{tikzpicture}[domain=-4:4, scale=0.65]
@@ -140,8 +107,50 @@ For instance, if we take the term $t[x]= \sin(x)+1$ above, then $\partial(t): \i
 }
 \caption{$\varepsilon=(\partial(u)\circ \partial(t))([-1,1])$ is bigger than $\delta=\partial(u\circ t)([-1,1])=[r,r]$.}
 \label{fig:interval2}
-%\end{subfigure}
+\end{subfigure}
+\caption{Examples of functional approximate values and of approximate programs. }
 \end{figure}
+
+
+For all $A$, as a subset of $\mathcal{P}(\Lambda_A)$, $\intervals{A}$ is closed under arbitrary intersections and is therefore a complete lattice whose meet is given by intersection. In particular, for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$. 
+One can check that $\tointerval{t} = \tointerval{u}$ if and only if $t\oeq_{A} u$.
+
+Monotone functions from approximate values to approximate values represent \emph{approximate programs}. They behave like a model of the simply-typed $\lambda$-calculus in a weak sense, namely: \begin{itemize}
+\item for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B \to C}$ and $(\alpha_1, \ldots, \alpha_n) \mapsto b[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, we can define a monotone function $(\alpha_1, \ldots, \alpha_n) \mapsto (c[\alpha_1, \ldots, \alpha_n]~ b[\alpha_1, \ldots, \alpha_n]) = \sup\{\tointerval{vu} \mid v \in c[\alpha_1, \ldots, \alpha_n], u \in b[\alpha_1, \ldots, \alpha_n]\} : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$,
+\item for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {C}$ and all $i \leq n$, we can define a monotone function $(\alpha_j)_{j \neq i} \mapsto (\lambda \alpha_i.~ c[\alpha_1, \ldots, \alpha_n]) = \{ v \in \Lambda_{A_i \to C} \mid \forall t_i \in \Lambda_{A_i},~ v t_i \in c[\alpha_1, \ldots, \tointerval{t_i}, \ldots, \alpha_n] \} : \prod_{j \neq i} \intervals{A_j} \to \intervals{A_i \to C}$,
+\end{itemize}
+and these two constructions are weakly compatible with $\beta$-reduction and $\eta$-expansion:
+
+\begin{proposition} \label{prop:intervals-weak-model-lambda} For all monotone functions $(\alpha_1, \ldots, \alpha_n, \beta) \mapsto c[\alpha_1, \ldots, \alpha_n, \beta] : \intervals{A_1} \times \ldots \times \intervals {A_n} \times  \intervals {B} \to \intervals {C}$ and $(\alpha_1, \ldots, \alpha_n) \mapsto b[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to \intervals {B}$, $$\begin{array}{ll} & (\alpha_1, \ldots, \alpha_n) \mapsto (\lambda \beta.~  c[\alpha_1, \ldots, \alpha_n, \beta])~ b[\alpha_1, \ldots, \alpha_n] \\ \leq & (\alpha_1, \ldots, \alpha_n) \mapsto c[\alpha_1, \ldots, \alpha_n, b[\alpha_1, \ldots, \alpha_n]]\text{,}\end{array}$$
+and for all monotone functions $(\alpha_1, \ldots, \alpha_n) \mapsto d[\alpha_1, \ldots, \alpha_n] : \intervals{A_1} \times \ldots \times \intervals {A_n} \to  \intervals {B \to C}$,
+$$\begin{array}{ll} & (\alpha_1, \ldots, \alpha_n) \mapsto \lambda \beta.~  d[\alpha_1, \ldots, \alpha_n]~ \beta \\ \geq & (\alpha_1, \ldots, \alpha_n) \mapsto d[\alpha_1, \ldots, \alpha_n]\text{,}\end{array}$$
+where functions are ordered by pointwise inclusion.  In other words, on approximate programs, $\beta$-reduction and $\eta$-expansion \emph{discard} information, and conversely $\beta$-expansion and $\eta$-reduction \emph{recover} some information.
+\end{proposition}
+
+\begin{proof} Without loss of generality, we can assume $n=0$.
+Let $v \in \lambda \beta.~ c[\beta]$ and $u \in b$. By definition, $tu \in c[\tointerval{u}]$, so $\tointerval{tu} \subseteq c[\tointerval{u}] \subseteq c[b]$. Therefore, $(\lambda \beta.~ c[\beta])~ b \subseteq b$.
+Let $v \in d$. For all $u \in \Lambda_B$, by definition, $vu \in d\tointerval{u}$. Therefore, $v \in \lambda \beta.~ d~ \beta$.
+\end{proof}
+
+Beyond theoretical aspects (which will be made clearer in Section 5), 
+Proposition \ref{prop:intervals-weak-model-lambda} is also important in practice because it implies that if we compute an approximation of a program from approximations of its parts and then simplify the resulting approximate program using $\beta$-reduction and $\eta$-expansion, what we obtain is still a valid approximation of the original program.
+
+
+We can define a weak embedding from terms into approximate programs, by mapping each term to its tightest approximation: for all terms $t$ such that $\alpha_{1}:A_{1},\dots,\alpha_{n}:A_{n}\vdash t:B$, we define a monotone function $\partial(t):\intervals{A_{1}}\times \dots \times \intervals{A_{n}} \to \intervals{B}$ by $\partial(t)(a_1, \ldots, a_n) = \sup \{ \tointerval{t u_1 \ldots u_n} \mid u_1 \in \intervals{A_1}, \ldots, u_n \in \intervals{A_n} \}$. 
+
+\begin{remark} \label{remark:push-exp-stlc}
+The map $\partial$ is constant on classes of observational equivalence, and one can check that it is is weakly compatible with the constructions of the $\lambda$-calculus, in particular:
+\begin{itemize}
+\item $\partial (\alpha_{i})(a_{1},\dots, a_{n})=a_{i}$,
+\item $\partial (tu)(a_{1},\dots, a_{n}) \subseteq \partial (t)(a_{1},\dots, a_{n}) ~ \partial (u)(a_{1},\dots, a_{n})$,
+\item $\partial (\lambda \beta. t)(a_{1},\dots, a_{n}) \subseteq \lambda \beta.~ \partial (t)(\beta, a_{1},\dots, a_{n})$.
+\end{itemize}
+\end{remark}
+
+This map $\partial(t)$ can be taken as a measure of the \emph{sensitivity} of $t$, as it maps an interval $a$, that is a quantifiably uncertain input, to a quantifiably uncertain output $\partial(t)(a)$. 
+For instance, if we take the term $t[x]= \sin(x)+1$ above, then $\partial(t): \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ sends the interval $[-\pi,\pi]_{\mathsf{Real}}$ into $[0,2]_{\mathsf{Real}}$.
+
+
 
 \begin{remark} \label{remark:oplax-functor-stlc}
 When composing two maps $\partial(t)$ and $\partial(u)$, we might obtain a worse approximation than by computing $\partial(t[u/x])$ directly.
@@ -185,22 +194,45 @@ For all simple types $A$, we now define a \emph{distance function} $d_A : \Lambd
 
 This distance is clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalised partial metric space.
 
+\begin{figure}
+\adjustbox{center}{
+\begin{tikzpicture}
 
-To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$. As pointed out in the introduction, 
-the name ``diameter'' refers to the fact that, as the standard diameter on the reals, the function $\diam_{A}$ is (almost) modular on intersecting approximate values, as we show in Proposition \ref{prop:submodular} below. 
+
+\draw[|<->|, orange] (-2,0) to node[above] {$a$} (2,0);
+\draw[|<->|, blue] (1,0) to node[above]  {$b$} (4,0);
+\draw[violet] (1,0) to (2,0);
+
+\draw[|<->|, dashed] (-2,0.8) to node[above] {\tiny$\delta(a\cup b)$} (4,0.8);
+\draw[|<->|, dashed] (1,0.5) to node[below] {\tiny$\delta(a\cap b)$} (2,0.5);
+\draw[|<->|, dashed] (-2,-0.5) to node[below] {\tiny$\delta(a)$} (2,-0.5);
+\draw[|<->|, dashed] (1,-0.8) to node[below] {\tiny$\delta(b)$} (4,-0.8);
+
+
+
+\end{tikzpicture}}
+\caption{\small The diameter function is \emph{modular} over intersecting real intervals: 
+$\mathsf{diam}(a\cup  b)+\mathsf{diam}(a\cap b)=\mathsf{diam}(a)+\mathsf{diam}(b)$ for all $a,b\in [\R]$ such that $a\cap b\neq \emptyset$.
+This property is at the heart of our generalization of diameters.}
+\label{fig:modular}
+\end{figure}
+
+
+To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$. The name ``diameter'' refers to the fact that $\diam_{A}$ generalizes a property of the standard diameter on the reals: like the latter is \emph{modular} over intersecting closed intervals (see Fig. \ref{fig:modular}), $\diam_{A}$ is \emph{super-modular} on intersecting approximate values, as we show in Proposition \ref{prop:submodular} below. 
  %-- or rather, using the quantale ordering convention, supermodular. 
  
  
  First, one can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
-\begin{itemize}
-\item $\diam_\mathsf{Real}(a) = \sup\{s-r \mid s,r \in \mathbb{R} \text{ such that } s,r \in a\}$,
-\item $\diam_\mathsf{A \times B}(p) = \left(\diam_A\left(\sup\left\{\tointerval{\pi_L t} \mid t \in p\right\}\right), \diam_B\left(\sup\left\{\tointerval{\pi_R t} \mid t \in p\right\}\right)\right)$,
-\item $\diam_\mathsf{A \to B}(b) = a \mapsto \diam_B\left(\sup\left\{\tointerval{vt} \mid t\in a, v \in b\right\}\right).$
-\end{itemize}
+\begin{align*}
+\diam_\mathsf{Real}(a)  & = \sup\{s-r \mid s,r \in \mathbb{R} \text{ such that } s,r \in a\} \\ 
+\diam_\mathsf{A \times B}(p) & = \left(\diam_A\left(\sup\left\{\tointerval{\pi_L t} \mid t \in p\right\}\right),\diam_B\left(\sup\left\{\tointerval{\pi_R t} \mid t \in p\right\}\right)\right) \\
+\diam_\mathsf{A \to B}(b) & = a \mapsto \diam_B\left(\sup\left\{\tointerval{vt} \mid t\in a, v \in b\right\}\right)
+\end{align*}
 
-With that, we can prove that the diameter function $\diam_{A}$ is super-modular over intersecting approximate values: 
+This leads then to the following:
+%With that, we can prove that the diameter function $\diam_{A}$ is super-modular over intersecting approximate values: 
 %``quasi-supermodularity'':
-\begin{proposition}\label{prop:submodular} For all simple types $A$ and all $a,b \in \intervals{A}$ such that $a \wedge b \neq \emptyset$, $\diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)$.
+\begin{proposition}[$\diam_{A}$ is super-modular]\label{prop:submodular} For all simple types $A$ and all $a,b \in \intervals{A}$ such that $a \wedge b \neq \emptyset$, $\diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)$.
 \end{proposition}
 \begin{proof}
 We proceed by induction on types.
