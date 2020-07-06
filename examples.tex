@@ -14,22 +14,77 @@ differentiable or integrable (see Remark \ref{rem:continuous}), we can consider 
 
 
 
+We start with a classical example from approximate computing that we adapt from \cite{chaudhuri}. 
 
+\begin{example}[Loop perforation]
+We work in the extension of $\STLC$ with a type $\mathsf{Nat}$.
+We discuss a transformation that replaces a program $t$ which performs $n$-iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. 
+
+%Let $\mathsf{Nat}$ be a suitable type representing natural numbers in $\STLC$ and s
+Suppose  $t: (A\times A\to A) \to \mathsf{Nat}\to (A\to A)\to A$, for $n\geq 1$, is a term such that $th\mathtt n f$ 
+computes the $n$-times iteration of $h$ as follows: $th \mathtt 0f= h\langle f\mathtt 0, f\mathtt 0\rangle$ and $th(\mathtt{n+1})f=h\langle th\mathtt n f, f\mathtt{n+1}\rangle$. 
+Let $\mathsf{Perf}^{k}(t)$, the $k$-th perforation of $t$, be the program   
+$(\mathsf{Perf}^{k}(t))h\mathtt nf= t(\lambda x. (h^{(k)}x)) \mathtt{\lfloor n\rfloor_{k}} (\lambda x. f(x* \mathtt k)$, where $\lfloor n\rfloor_{k}$ indicates the least $m\leq n$ such that $m$ is divisible by $k$, and $x*\mathtt k$ is the multiplication of $x$ by $k$. 
+
+
+
+
+
+To compute the distance 
+$d_{A}(v_{n},w_{n}    )$ between  $v_{n}=th\mathtt n f $ and its perforation $w_{n}=\mathsf{Perf}^{k}(t)h\mathtt nf$  we can reason as follows: 
+\begin{itemize}
+
+\item[i.] $v_{n}$ performs $n$-iterations while $w_{n}$ performs $k\lfloor n\rfloor_{k}  \leq n$ iterations, and we can compute  
+$d_{A}(v_{n}, v_{(k \lfloor n\rfloor_{k})})$ as the diameter of 
+$\partial(t)\partial(h)([ k \lfloor n\rfloor_{k}, n]_{\mathsf{Nat}}) \partial(f)$.
+
+
+
+
+\item[ii.] If $n$ is divisible by $k$, then for $i\leq n$, at the $i$-th iteration of $v_{n}$ the function $f$ is applied  to $\mathtt i$, while at the $i$-th iteration of $w_{n}$, $f$ is applied to $\lfloor i\rfloor_{k}$. Now, the error of replacing  $f\mathtt i$ by $ f\lfloor \mathtt j\rfloor_{k}$, with $\mathtt i,\mathtt j$ in some $a\in \intervals{\mathsf{Nat}}$, is accounted for by the approximate program $c[y]= \partial(f)(y-k  )$, where $y-k= y \vee \{u-\mathtt k\mid u \in y\}$.
+We deduce then that 
+$d_{A}(v_{n}, w_{n})$ is bounded by the diameter of $\partial(t)\partial(h)\tointerval{\mathtt n} (\lambda y.c[y])$.
+
+\item[iii.] From the fact that $w_{n}=w_{(k\cdot \lfloor n\rfloor_{k})}$ and the triangular inequality of the partial metric $d_{A}$ we deduce  
+$d_{A}(v_{n}, w_{n})=
+d_{A}(v_{n},w_{(k\cdot \lfloor n\rfloor_{k})}) \leq
+d_{A}(v_{n}, v_{(k\cdot \lfloor n\rfloor_{k})})+
+d_{A}(v_{(k\cdot \lfloor n\rfloor_{k})}, w_{(k\cdot \lfloor n\rfloor_{k})})-
+d_{A}(v_{(k\cdot \lfloor n\rfloor_{k})},v_{(k\cdot \lfloor n\rfloor_{k})} )$
+
+
+\end{itemize}
+
+From facts i.-iii. we deduce an explicit bound for $d_{A}(v_{n},w_{n}    )$ in terms of $\partial(t), \partial(f)$ and $n$: \\
+\adjustbox{scale=0.9}{
+$d_{A}(v_{n},w_{n}    )\leq 
+ \diam_{A}(\partial(t)\partial(h)([ k \lfloor n\rfloor_{k}, n]_{\mathsf{Nat}}) \partial(f))+
+ \diam_{A}(\partial(t)\partial(h)\tointerval{\mathtt n} (\lambda y.\partial(f)(y- k))) -
+ \diam_{A}(\partial(t)\partial(h)\tointerval{\mathtt n} \partial(f)) 
+$.}
+
+\end{example}
+
+We now show how the partial metric semantics can be used to reason about 
+basic approximation techniques from numerical analysis.  
 
 
 \begin{example}[Taylor approximation]
 
-We make the assumption that all programs of type $\mathsf{Real}\to\mathsf{Real}$ in $\STLC$ are differentiable and that for all $n$, we can define a term $\mathtt T^{n}: ((\mathsf{Real}\to \mathsf{Real})\times \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that $\mathtt T^{n}\langle f, r\rangle$ computes the $n$-th truncated Taylor expansion of $f$ at $r$. 
-Then, given a term $t: \mathsf{Real}\to \mathsf{Real}$, the distance 
-$d_{\mathsf{Real}\to\mathsf{Real}}(t, \mathtt T^{n}\langle t,\mathtt 0 \rangle)$ is the map associating an interval $a$ with the diameter of $t(a)\vee (\mathtt T^{n}\langle t,\mathtt 0 \rangle)(a)$. 
-The difference between this value and the self-distance of $t$ will approximate 0 when $a$ is a small interval of $0$, and will tend to diverge when $a$ contains points which are far enough from 0. 
+We make the assumption that all programs of type $\mathsf{Real}\to\mathsf{Real}$ in $\STLC$ are differentiable and that for all $n$, program $t:\mathsf{Real}\to\mathsf{Real}$ and real number $r$, we can define a term 
+%$\mathtt T^{n}: ((\mathsf{Real}\to \mathsf{Real})\times \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that 
+$\mathtt T^{n}( t, r):\mathsf{Real}\to\mathsf{Real}$ computing the $n$-th truncated Taylor expansion of $t$ at $r$. 
+%Then, given a term $t: \mathsf{Real}\to \mathsf{Real}$, 
+The distance 
+$d_{\mathsf{Real}\to\mathsf{Real}}(t, \mathtt T^{n}( t,\mathtt 0 ))$ is the map associating an interval $a$ with the diameter of the smallest interval containing the image of $a$ under both $t$ and $\mathtt T^{n}( t,\mathtt 0 )$. 
+Thus, the difference between this value and the self-distance of $t$ will approximate 0 when $a$ is a small interval of $0$, and will tend to diverge when $a$ contains points which are far enough from 0. 
 
 %between $t$ and its Taylor expansion within a context  $\mathsf C[\ ]= [\ ] r$ which applies them to some value $r$, can be computed as a function of the interval $[0,r]$.   
 For example, if $t$ is the function $t=\lambda x.\sin(x)$, and $a$ is an interval of $0$, then using standard analytic reasoning we can compute a bound
-$d_{\mathsf{Real}\to \mathsf{Real}}(t, \mathtt T^{n}\langle t,\mathtt 0 \rangle)(a  )\leq \frac{\diam_{\mathsf{Real}}(a)^{n+1}}{(n+1)!} $, which tends to $0$ as the diameter of $a$ tends to $0$.
+$d_{\mathsf{Real}\to \mathsf{Real}}(t, \mathtt T^{n}( t,\mathtt 0 ))(a  )\leq \frac{\diam_{\mathsf{Real}}(a)^{n+1}}{(n+1)!} $, which tends to $0$ as the diameter of $a$ tends to $0$.
 
-Observe that if, instead, we used the $\sup$-distance $d_{\sup}(t,u)= \sup\{d_{\mathsf{Real}}(tr, ur)\mid r\in \Lambda_{\mathsf{Real}}\}$, then we could not reason as above since  
-$d_{\sup}(\lambda x.\sin(x), \mathtt T^{n} \langle \lambda x.\sin(x),0\rangle)=\infty$ (as illustrated in Fig. \ref{fig:sintaylor}).  
+Observe that if, instead, we used the $\sup$-distance $d_{\sup}(t,u)= \sup\{d_{\mathsf{Real}}(tr, ur)\mid r\in \Lambda_{\mathsf{Real}}\}$, then we could not reason as above, since  
+$d_{\sup}(\lambda x.\sin(x), \mathtt T^{n} ( \lambda x.\sin(x),0))=\infty$ (as illustrated in Fig. \ref{fig:sintaylor}).  
 
 %We can use the higher-order structure of our semantics to push abstraction a bit further. For instance, we can define an approximate program 
 %$c[y_{1},y_{2}]=\left( \partial (\mathtt T^{n})\langle y_{1}, \tointerval{0}\rangle\right) y_{2}: \intervals{\mathsf{Real}\to \mathsf{Real}}\to \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ which describes the sensitivity of the $n$-th Taylor expansions in 0. Given two programs $t$ and $u$ and a small interval $a$ of $0$, the real number $c[\partial(t)\vee \partial(u),a]$ measures how much the error of replacing the Taylor expansions of $t$ with the Taylor expansion of $u$ in $0$ diverges from the error produced by simply replacing  $t$ and $u$, when these are applied close to $0$. 
@@ -257,58 +312,6 @@ d_{\mathsf{Real}\to \mathsf{Real}}(v,v)(a)
 
 %As in the previous example, we could not use the distance between $f$ and $g$ in a relevant way if this were the $\sup$-distance, since, although close on $[r,s]$, $f$ and $g$ might get arbitrarily far from each other over all reals. 
 
-
-
-\begin{example}[Loop perforation]
-By adapting an example from \cite{chaudhuri}, we discuss a simplified example of the transformation that replaces a program $t$ which performs $n$-iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. We work in the extension of $\STLC$ with a type $\mathsf{Nat}$.
-
-
-
-
-%Let $\mathsf{Nat}$ be a suitable type representing natural numbers in $\STLC$ and s
-Suppose  $t: (A\times A\to A) \to \mathsf{Nat}\to (A\to A)\to A$, for $n\geq 1$, is a term such that $th\mathtt n f$ 
-computes the $n$-times iteration of $h$ as follows: $th \mathtt 0f= h\langle f\mathtt 0, f\mathtt 0\rangle$ and $th(\mathtt{n+1})f=h\langle th\mathtt n f, f\mathtt{n+1}\rangle$. 
-Let $\mathsf{Perf}^{k}(t)$, the $k$-th perforation of $t$, be the program   
-$(\mathsf{Perf}^{k}(t))h\mathtt nf= t(\lambda x. (h^{(k)}x)) \mathtt{\lfloor n\rfloor_{k}} (\lambda x. f(x* \mathtt k)$, where $\lfloor n\rfloor_{k}$ indicates the least $m\leq n$ such that $m$ is divisible by $k$, and $x*\mathtt k$ is the multiplication of $x$ by $k$. 
-
-
-
-
-
-To compute the distance 
-$d_{A}(v_{n},w_{n}    )$ between  $v_{n}=th\mathtt n f $ and its perforation $w_{n}=\mathsf{Perf}^{k}(t)h\mathtt nf$  we can reason as follows: 
-\begin{itemize}
-
-\item[i.] $v_{n}$ performs $n$-iterations while $w_{n}$ performs $k\lfloor n\rfloor_{k}  \leq n$ iterations, and we can compute  
-$d_{A}(v_{n}, v_{(k \lfloor n\rfloor_{k})})$ as the diameter of 
-$\partial(t)\partial(h)([ k \lfloor n\rfloor_{k}, n]_{\mathsf{Nat}}) \partial(f)$.
-
-
-
-
-\item[ii.] If $n$ is divisible by $k$, then for $i\leq n$, at the $i$-th iteration of $v_{n}$ the function $f$ is applied  to $\mathtt i$, while at the $i$-th iteration of $w_{n}$, $f$ is applied to $\lfloor i\rfloor_{k}$. Now, the error of replacing  $f\mathtt i$ by $ f\lfloor \mathtt j\rfloor_{k}$, with $\mathtt i,\mathtt j$ in some $a\in \intervals{\mathsf{Nat}}$, is accounted for by the approximate program $c[y]= \partial(f)(y-k  )$, where $y-k= y \vee \{u-\mathtt k\mid u \in y\}$.
-We deduce then that 
-$d_{A}(v_{n}, w_{n})$ is bounded by the diameter of $\partial(t)\partial(h)\tointerval{\mathtt n} (\lambda y.c[y])$.
-
-\item[iii.] From the fact that $w_{n}=w_{(k\cdot \lfloor n\rfloor_{k})}$ and the triangular inequality of the partial metric $d_{A}$ we deduce  
-$d_{A}(v_{n}, w_{n})=
-d_{A}(v_{n},w_{(k\cdot \lfloor n\rfloor_{k})}) \leq
-d_{A}(v_{n}, v_{(k\cdot \lfloor n\rfloor_{k})})+
-d_{A}(v_{(k\cdot \lfloor n\rfloor_{k})}, w_{(k\cdot \lfloor n\rfloor_{k})})-
-d_{A}(v_{(k\cdot \lfloor n\rfloor_{k})},v_{(k\cdot \lfloor n\rfloor_{k})} )$
-
-
-\end{itemize}
-
-From facts i.-iii. we deduce an explicit bound for $d_{A}(v_{n},w_{n}    )$ in terms of $\partial(t), \partial(f)$ and $n$: \\
-\adjustbox{scale=0.9}{
-$d_{A}(v_{n},w_{n}    )\leq 
- \diam_{A}(\partial(t)\partial(h)([ k \lfloor n\rfloor_{k}, n]_{\mathsf{Nat}}) \partial(f))+
- \diam_{A}(\partial(t)\partial(h)\tointerval{\mathtt n} (\lambda y.\partial(f)(y- k))) -
- \diam_{A}(\partial(t)\partial(h)\tointerval{\mathtt n} \partial(f)) 
-$.}
-
-\end{example}
 
 %
 % $\partial(t)   \partial(h) \tointerval{\mathtt n} (\lambda x.\partial (f)(x-k))$.
