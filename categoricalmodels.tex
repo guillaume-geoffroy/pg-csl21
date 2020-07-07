@@ -2,7 +2,7 @@
 The examples from the last section relied on the fact that our partial metric semantics scales well to extensions of $\STLC$ with new base types and new program constructors. In this section we justify this fact in more general terms. In fact, we show that the constructions from Section \ref{section:stlc} can be reproduced starting from any model of the simply-typed $\lambda$-calculus. 
 
 
-First, we need a suitable notion of model of the simply-typed $\lambda$-calculus to start with. Traditionally, one uses \emph{cartesian closed categories}: cartesian categories where, for all objects $A$, the functor $A \times -$ has a right adjoint (the \emph{exponential} functor). However, since many usual examples are in fact \emph{poset-enriched} categories (\textit{e.g.} Scott domains and continuous functions, coherent spaces and stable functions), and since any (locally small) category can be poset-enriched by using equality as the ordering, we will consider instead \emph{cartesian closed poset-enriched categories}. To give a counterpart to Proposition \ref{prop:intervals-weak-model-lambda}, we also need a notion of ``weak'' model of the simply-typed $\lambda$-calculus: since poset-enriched categories are a particular case of $2$-categories (with a unique $2$-arrow from $\alpha$ to $\beta$ if and only if $\alpha \leq \beta$), we follow Hilken \cite{hilken:2-lambda} and consider cartesian categories where, for all objects $A$, the functor $A \times -$ has a lax right adjoint (the \emph{lax-exponential} functor).
+First, we need a suitable notion of model of the simply-typed $\lambda$-calculus to start with. Traditionally, one uses \emph{cartesian closed categories}: cartesian categories where, for all objects $A$, the functor $A \times -$ has a right adjoint (the \emph{exponential} functor). However, since many usual examples are in fact \emph{poset-enriched} categories (\textit{e.g.} Scott domains and continuous functions, coherent spaces and stable functions), and since any (locally small) category can be poset-enriched by using equality as the ordering, we will consider instead \emph{cartesian closed poset-enriched categories}. To give a counterpart to Proposition \ref{prop:intervals-weak-model-lambda}, we also need a notion of ``weak'' model of the simply-typed $\lambda$-calculus: since poset-enriched categories are a particular case of $2$-categories (with a unique $2$-arrow from $f$ to $g$ if and only if $f \leq g$), we follow Hilken \cite{hilken:2-lambda} and consider cartesian categories where, for all objects $A$, the functor $A \times -$ has a lax right adjoint (the \emph{lax-exponential} functor).
 
 Products and exponentials, when they exist, are necessarily unique up to unique isomorphism: thus, traditionally, a cartesian closed category is defined as a category in which all finite products and exponentials exist, rather than a category \emph{equipped} with products and exponentials (\textit{i.e.} it is a category with a given \emph{property}, rather than a category with additional \emph{structure}). However, this is not the case for lax-exponentials, so for consistency we will adopt the ``structure'' picture in both cases. Adapting Hilken's definitions \cite{hilken:2-lambda} to the simpler case of poset-enriched categories, we obtain:
 
@@ -14,13 +14,13 @@ Products and exponentials, when they exist, are necessarily unique up to unique 
 \end{definition}
 
 One can check that this definition makes $\exp$ a functor (respectively, a lax-functor) from $\operatorname{Ob}(\mathbb{C}^{\operatorname{op}} \times \mathbb{C})$ to $\operatorname{Ob}(\mathbb{C})$ (with
-$\exp(\alpha,\beta)$ defined as $\lam(\beta\circ\ev(\id)\circ(\id\times\alpha))$). In addition, this definition implies that $\ev$ and $\lam$ are natural, in the sense that $\ev(\exp(\alpha,\beta)\circ f\circ\gamma) = \beta\circ\ev(f)\circ(\gamma\times\alpha)$ and $\exp(\alpha,\beta)\circ\lam(g)\circ\gamma = \lam(\beta\circ g\circ(\gamma\times\alpha))$ (respectively, lax-natural \cite{hilken:2-lambda}, in the sense that $\ev(\exp(\alpha,\beta)\circ f\circ\gamma) \leq \beta\circ\ev(f)\circ(\gamma\times\alpha)$ and $\exp(\alpha,\beta)\circ\lam(g)\circ\gamma \leq \lam(\beta\circ g\circ(\gamma\times\alpha))$).
+$\exp(f,g)$ defined as $\lam(g\circ\ev(\id)\circ(\id\times f))$). In addition, this definition implies that $\ev$ and $\lam$ are natural, in the sense that $\ev(\exp(\alpha,\beta)\circ f\circ\gamma) = \beta\circ\ev(f)\circ(\gamma\times\alpha)$ and $\exp(\alpha,\beta)\circ\lam(g)\circ\gamma = \lam(\beta\circ g\circ(\gamma\times\alpha))$ (respectively, lax-natural \cite{hilken:2-lambda}, in the sense that $\ev(\exp(\alpha,\beta)\circ f\circ\gamma) \leq \beta\circ\ev(f)\circ(\gamma\times\alpha)$ and $\exp(\alpha,\beta)\circ\lam(g)\circ\gamma \leq \lam(\beta\circ g\circ(\gamma\times\alpha))$).
 
 For the rest of this section, we fix a cartesian poset-enriched category $(\mathbb{C}, \times, 1)$ (we denote by $\langle-,-\rangle$ the pairing transformation and by $\pi_L$ and $\pi_R$ the projections) and an exponential $(\exp, \ev, \lam)$ on $\mathbb{C}$. The morphisms of this category represent \emph{exact programs}, so they play the role of the terms from Section \ref{section:stlc}.
 
 \begin{definition} A \emph{$\mathbb{C}$-diameter space} $A$ is the data of \begin{itemize}
 \item an object $\bs{A}$ of $\mathbb{C}$. The poset $\mathbb{C}(1,\bs{A})$ will be denoted by $\Lambda_A$;
-\item a set $\intervals{A}$ downwards-closed subsets of $\Lambda_A$ that is closed under arbitrary intersections. In particular, $\intervals{A}$ is a complete lattice whose meet is given by intersection, and for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$;
+\item a set $\intervals{A}$ of downwards-closed subsets of $\Lambda_A$ that is closed under arbitrary intersections. In particular, $\intervals{A}$ is a complete lattice whose meet is given by intersection, and for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$;
 \item a commutative integral quantale $(\distances{A}, \quantaleop, \quantaleleq)$;
 \item a monotonically decreasing function $\diam_A : \intervals{A} \to \distances{A}$ such that $$\forall a,b \in \intervals{A} \text{ s.t. } a \wedge b \neq \emptyset,~ \diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)\text{,}$$
 and such that for all $t,u \in \Lambda_A$, if $\diam_A(\tointerval{t}) = \diam_A(\tointerval{t} \vee \tointerval{u})$, then $\tointerval{t} = \tointerval{t} \vee \tointerval{u}$.
@@ -35,16 +35,16 @@ Following Section \ref{section:stlc}, for all $\mathbb{C}$-diameter spaces $A$ a
 \item $\distances{A \times B} = \distances{A} \times \distances{B}$,
 \item $\diam_{A \times B}(c) = (\diam_A(\{ \pi_L \circ t \mid t \in c \}), \diam_B(\{ \pi_R \circ t \mid t \in c \}))$,
 \item $\intervals{\exp(A, B)} = \{ \{ t \in \mathbb{C}(1, \exp(\bs{A}, \bs{B})) \mid \forall u \in \Lambda_{A},~ \ev(t) \circ u \in I(u) \} \mid I : \Lambda_A \to \intervals{B} \}$,
-\item $\distances{\exp(A, B)} = \{ \text{monotonically decreasing functions from } \intervals{A} \text{ to } \distances{B} \}$,
+\item $\distances{\exp(A, B)} = \operatorname{Decr}(\intervals{A}, \distances{B})$,
 \item $\diam_\mathsf{\exp(A, B)}(c) = a \mapsto \diam_B\left(\sup\left\{\tointerval{\ev(v) \circ t} \mid t\in a, v \in c\right\}\right).$
 \end{itemize}
 
-We need a counterpart to Proposition \ref{prop:intervals-weak-model-lambda}. As explained above, we obtain this by organising the $\mathbb{C}$-diameter spaces as a cartesian poset-enriched category with a lax-exponential. First, we need to define a notion of morphisms between two $\mathbb{C}$-diameter spaces $A$ and $B$ (which represent \emph{approximate programs}). By analogy with Section \ref{section:stlc}, these will be monotone functions from $\intervals{A}$ to $\intervals{B}$; however, in order to actually obtain a cartesian category (which was not an issue in Section \ref{section:stlc}), we will need to add an extra condition:
+We need a counterpart to Proposition \ref{prop:intervals-weak-model-lambda}. As explained above, we obtain this by organizing the $\mathbb{C}$-diameter spaces as a cartesian poset-enriched category with a lax-exponential. First, we need to define a notion of morphisms between two $\mathbb{C}$-diameter spaces $A$ and $B$ (which represent \emph{approximate programs}). By analogy with Section \ref{section:stlc}, these will be monotone functions from $\intervals{A}$ to $\intervals{B}$; however, in order to actually obtain a cartesian category (which was not an issue in Section \ref{section:stlc}), we will need to add an extra condition:
 
 \begin{definition}
 We denote by $\dsp(\mathbb{C})$ the poset-enriched category defined as follows: \begin{itemize}
 \item the objects of $\dsp(\mathbb{C})$ are the $\mathbb{C}$-diameter spaces,
-\item for all $\mathbb{C}$-diameter spaces $A$ and $B$, $\dsp(\mathbb{C})(A,B)$ is the set of all monotone functions $\varphi : \intervals{A} \to \intervals{B}$ such that there exists $u \in \mathbb{C}(\bs{A},\bs{B})$ such that for all $t \in \Lambda_A$, $u \circ t \in \varphi\left(\tointerval{t}\right)$ (ordered by pointwise inclusion).
+\item for all $\mathbb{C}$-diameter spaces $A$ and $B$, $\dsp(\mathbb{C})(A,B)$ is the set of all monotone functions $\varphi : \intervals{A} \to \intervals{B}$ such that there exists $f \in \mathbb{C}(\bs{A},\bs{B})$ such that for all $t \in \Lambda_A$, $f \circ t \in \varphi\left(\tointerval{t}\right)$ (ordered by pointwise inclusion).
 \end{itemize}
 \end{definition}
 
@@ -65,24 +65,24 @@ Let $p = a \times b \in \intervals{A \times B}$. For all $v \in \lam(\psi)(a)$ a
  Let $a \in \intervals{A}$ and $v \in \varphi(a)$. For all $u \in \Lambda_B$,  by definition, $\ev(v) \circ u \in \lambda(\varphi)(a \times \tointerval{u})$, so $v \in \lam(\ev(\varphi))(a)$.
 \end{proof}
  
-As in Section \ref{section:stlc}, we can find a kind of weak embedding from $\mathbb{C}$, to $\dsp(\mathbb{C})$. Namely, for all $\mathbb{C}$-diameter spaces $A$ and $B$, we define a monotone map $\partial : \mathbb{C}(\bs{A}, \bs{B}) \to \dsp\allowbreak(\mathbb{C})(A, B)$ by $\partial(\beta)(a) = \sup \{ \tointerval{\beta \circ t} \mid t \in a \}$. The following compatibility result is immediate and offers a counterpart to Remark \ref{remark:oplax-functor-stlc}:
+As in Section \ref{section:stlc}, we can find a kind of weak embedding from $\mathbb{C}$ to $\dsp(\mathbb{C})$. Namely, for all $\mathbb{C}$-diameter spaces $A$ and $B$, we define a monotone map $\partial : \mathbb{C}(\bs{A}, \bs{B}) \to \dsp\allowbreak(\mathbb{C})(A, B)$ by $\partial(f)(a) = \sup \{ \tointerval{f \circ t} \mid t \in a \}$. The following compatibility result is immediate and offers a counterpart to Remark \ref{remark:oplax-functor-stlc}:
 
-\begin{proposition} For all $\mathbb{C}$-diameter spaces $A, B, C$, all $\beta \in \mathbb{C}(A, B)$ and all $\gamma \in \mathbb{C}(B, C)$, $\partial(\gamma \circ \beta) \leq \partial(\gamma) \circ \partial(\beta)$. In addition, $\partial(\operatorname{id}_{\bs{A}}) = \operatorname{id}_A$.
+\begin{proposition} For all $\mathbb{C}$-diameter spaces $A, B, C$, all $f \in \mathbb{C}(A, B)$ and all $g \in \mathbb{C}(B, C)$, $\partial(g \circ f) \leq \partial(g) \circ \partial(f)$. In addition, $\partial(\operatorname{id}_{\bs{A}}) = \operatorname{id}_A$.
 \end{proposition}
  
 One way to reformulate this result is that $\partial$ induces an oplax-functor from the category with the same objects as $\dsp(\mathbb{C})$ and the same morphisms as $\mathbb{C}$, to $\dsp(\mathbb{C})$.
 
-One can check that $\partial$ preserves products, in the sense that $\partial (\langle \alpha, \beta \rangle) = \langle\partial(\alpha), \partial(\beta)\rangle$, $\partial(\pi_L) = \pi_L$ and $\partial(\pi_R) = \pi_R$. In addition $\partial$ is weakly compatible with the exponential, which corresponds to Remark \ref{remark:push-exp-stlc}:
+One can check that $\partial$ preserves products, in the sense that $\partial (\langle f, g \rangle) = \langle\partial(f), \partial(g)\rangle$, $\partial(\pi_L) = \pi_L$ and $\partial(\pi_R) = \pi_R$. In addition $\partial$ is weakly compatible with the exponential, which corresponds to Remark \ref{remark:push-exp-stlc}:
 
 \begin{proposition} Let $A, B, C$ be $\mathbb{C}$-diameter spaces, \begin{itemize}
-\item for all $\varphi \in \mathbb{C}(\bs{A}, \exp(\bs{B}, \bs{C}))$, $\partial(\ev(\varphi)) \leq \ev(\partial(\varphi))$,
-\item for all $\psi \in \mathbb{C}(\bs{A}\times\bs{B}, \bs{C})$, $\partial(\lam(\psi)) \leq \lam(\partial(\psi))$.
+\item for all $f \in \mathbb{C}(\bs{A}, \exp(\bs{B}, \bs{C}))$, $\partial(\ev(f)) \leq \ev(\partial(f))$,
+\item for all $g \in \mathbb{C}(\bs{A}\times\bs{B}, \bs{C})$, $\partial(\lam(g)) \leq \lam(\partial(g))$.
 \end{itemize}
 \end{proposition}
 
 Finally, following Section \ref{section:stlc}, for all $\mathbb{C}$-diameter spaces $A$ and all  $t,u \in \Lambda_A$, we write $t \oeq_A u$ if $\tointerval{t} = \tointerval{u}$. In addition, we define a function $d_A : \Lambda_A \times \Lambda_A \to \distances{A}$ by $d_A(t,u) = \diam_A(\tointerval{t} \vee \tointerval{u})$. Then the same arguments as in Corollary \ref{corollary:stlc-metric} show that:
 
-\begin{proposition} For all $\mathbb{C}$-diameter spaces $A$, \emph{$(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$ is a generalised partial metric space}.
+\begin{proposition} For all $\mathbb{C}$-diameter spaces $A$, \emph{$(\Lambda_{A}/\oeq_{A}, \distances{A}, d_{A})$ is a generalized partial metric space}.
 \end{proposition}
 
 One can check that what is described in Section \ref{section:stlc} is indeed an instance of this construction. Here are a couple more examples:
