@@ -128,7 +128,7 @@ $\delta_{2}=\max\{d(g(x), f(y));~ y\in [x-\varepsilon, x+\varepsilon]\}$.}
 \subparagraph*{Related work}
 
 
-A primary source of inspiration for our approach was the recent work on  \emph{differential logical relations} \cite{dallago:differential-stlc}. This is a semantic framework for higher-order languages in which a type is interpreted as a set $X$ endowed with a kind of metric structure expressed by a ternary relation $\rho \subseteq X\times Q\times X$, where $Q$ is an arbitrary quantale. To our knowledge, this is the first place were the idea of varying the quantales in which distances are measured is introduced as a key ingredient to obtain a cartesian closed category.
+A primary source of inspiration for our approach was the recent work on  \emph{differential logical relations} \cite{dallago:differential-stlc}. This is a semantical framework for higher-order languages in which a type is interpreted as a set $X$ endowed with a kind of metric structure expressed by a ternary relation $\rho \subseteq X\times Q\times X$, where $Q$ is an arbitrary quantale. To our knowledge, this is the first place were the idea of varying the quantales in which distances are measured is introduced as a key ingredient to obtain a cartesian closed category.
 
 While the relation $\rho$ of a GMS induces a distance function $d_{\rho}(x,y)=\sup\{\varepsilon\mid \rho(x,\varepsilon,y)\}$, this function is not a (partial) metric. We can show this fact with a simple example: in this model the distance between two programs 
  $f,g:\mathsf{Real}\to \mathsf{Real}$ is taken in the quantale of functions from $\R\times \R_{+}^{\infty}$ to $\R_{+}^{\infty}$: intuitively, 
@@ -137,7 +137,7 @@ While the relation $\rho$ of a GMS induces a distance function $d_{\rho}(x,y)=\s
 
 
 
-\cite{chaudhuri} presents a more syntactic approach to approximate program transformations through a System F-based type system with a type of real numbers and an explicit distinction between exact and approximate programs.
+Westbrook and Chaudury \cite{chaudhuri} have introduced a more syntactic approach to approximate program transformations through a System F-based type system with a type of real numbers and an explicit distinction between exact and approximate programs.
 %, and provides typing rules to formalize contextual reasoning about program differences. 
 %The latter are taken as functions relating errors in input and errors in output, but the viewpoint of program metric is not considered.
 Most examples of contextual reasoning from \cite{chaudhuri} can be  reformulated in our framework (as the case of loop perforation discussed in Section 4). 
@@ -152,7 +152,7 @@ probabilistic computation \cite{10.1109/LICS.2015.64, 10.1007/978-3-662-54434-1_
 To the second class belong approaches like \cite{Escardo1999} which recovers the Scott model of PCF through a ultrametric semantics, and most models based on partial metric spaces \cite{Bukatin1997,doi:10.1111/j.1749-6632.1994.tb44144.x}, which rely on a correspondence between continuous Scott domains and the $T_{0}$ topology of partial metrics.
 
 From a more mathematical viewpoint, 
-\cite{Stubbe2009} discusses a characterization of exponentiable GPMS, showing in particular that no such category can be both cartesian closed categories and contain the standard metric on $\mathbb R$. This result seems to add further evidence of the necessity of considering metrics over varying quantales in order to model higher-order languages. 
+\cite{Stubbe2009} discusses a characterization of exponentiable GPMS, showing in particular that no such category can both be cartesian closed and contain the standard metric on $\mathbb R$. This result seems to add further evidence of the necessity of considering metrics over varying quantales in order to model higher-order languages. 
 Finally, the elegant categorical approach to GPMS based on \emph{quantaloid-enriched categories} from \cite{Stubbe2018} seems to provide the relevant structure to develop explicit typing rules for our approximate programs.
 
 %
@@ -199,12 +199,12 @@ Finally, the elegant categorical approach to GPMS based on \emph{quantaloid-enri
 %. More importantly, we take, as morphisms between them, approximate functions, that is, function over closed intervals, rather than (Lipschitz-) continuous or non-expansive functions over points, as in usual categories of metric spaces.
 
 The approach we presented lends itself to further extensions and generalizations.
-First, we would like to investigate the interpretation of more type constructions than those of $\STLC$ (e.g. coproducts, recursive types, effects). Moreover, we would like to explore the possibility of exploiting the structure of the category $\dsp(\mathbb C)$ to construct new and more refined notions of approximations.
-For example (we work in $\dsp(\set))$ for simplicity), 
+First, we would like to investigate the interpretation of more type constructions than those of $\STLC$ (\textit{e.g.} coproducts, recursive types, effects). Moreover, we would like to explore the possibility of exploiting the structure of the category $\dsp(\mathbb C)$ to construct new and more refined notions of approximations.
+For example (we work in $\dsp(\set)$ for simplicity), 
 starting from the ``standard'' set of approximate values $\mathcal I$ on $\mathbb{R}^{X\times X}$ (with elements of $\mathcal I$ being  families of compact intervals $U_{x,x'}\subseteq \mathbb R$ indexed by elements of $X$ and $X'$), one can define a new family  $\Delta^{*}\mathcal I$  of approximate values for  $\mathbb R^{X}$ by ``pulling back'' the exact map 
 $\Delta:
-\mathbb R^{X} \to \mathbb R^{X\times X}$ defined by $\Delta f(x,x')=f(x')-f(x)$. 
-The new approximate values correspond then to sets of functions $f\in \mathbb R^{X}$ with a controlled variation, that is, such that $f(x')-f(x)$ is bounded by some family of intervals $U_{x,x'} \in \mathcal I$.
+\mathbb R^{X} \to \mathbb R^{X\times X}$ defined by $\Delta f(x,x')=f(x')-f(x)$, \textit{i.e.} letting $\Delta^{*}\mathcal I = \{ \Delta^{-1}(a) \mid a \in \mathcal I\}$. 
+The new approximate values then correspond to sets of functions $f\in \mathbb R^{X}$ with a controlled variation, that is, such that $f(x')-f(x)$ is bounded by some family of intervals $U_{x,x'} \in \mathcal I$.
 
 
 
@@ -217,7 +217,7 @@ The new approximate values correspond then to sets of functions $f\in \mathbb R^
 
 
 Another interesting research direction concerns probabilistic extensions of $\STLC$. 
-Probabilistic metrics \cite{1029849,KOZEN1981328, 10.1109/LICS.2015.64, 10.1007/978-3-662-54434-1_13} have been the object of much research in recent years, due to the relevance of metric reasoning in some areas of computer science in which probabilistic computation plays a key role (e.g. in cryptography \cite{GOLDWASSER1984270} and machine learning \cite{krause08robust}).
+Probabilistic metrics \cite{1029849,KOZEN1981328, 10.1109/LICS.2015.64, 10.1007/978-3-662-54434-1_13} have been the object of much research in recent years, due to the relevance of metric reasoning in some areas of computer science in which probabilistic computation plays a key role (\textit{e.g.} in cryptography \cite{GOLDWASSER1984270} and machine learning \cite{krause08robust}).
 A convenient starting point seems to be the recent generalization of {probabilistic (generalized) metric spaces} to the partial metric case \cite{HE201999}.
 
 
