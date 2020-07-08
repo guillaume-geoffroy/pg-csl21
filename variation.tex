@@ -12,7 +12,7 @@ The class of real-valued functions which can be computed in $\STLC$ depends on t
 
 \end{remark}
 
-In addition to the usual notion of $\beta$-equivalence between terms of $\STLC$, we will exploit also a stronger equivalence: given two closed terms $t,u$ of type $A$,  we say that $t$ and $u$ are \emph{observationally equivalent} and write $t \oeq_A u$ if for all terms $C$ such that $x:A \vdash C : \mathsf{Real}$ is derivable, $C[x:=t]$ is $\beta$-equivalent to $C[x:=u]$ (which amounts to saying that they both $\beta$-reduce to the same real number).  It is clear that observational equivalence is a congruence and that two $\beta$-equivalent terms are always observationally equivalent. The notion of distance we define in the next paragraph will be a generalization of this notion of equivalence.
+In addition to the usual notion of $\beta$-equivalence between terms of $\STLC$, we will exploit also a stronger equivalence: given two closed terms $t,u$ of type $A$,  we say that $t$ and $u$ are \emph{observationally equivalent} and write $t \oeq_A u$ if for all terms $C$ such that $x:A \vdash C : \mathsf{Real}$ is derivable, $C[x:=t]$ is $\beta$-equivalent to $C[x:=u]$ (which amounts to saying that they both $\beta$-reduce to the same real number).  It is clear that observational equivalence is a congruence and that two $\beta$-equivalent terms are always observationally equivalent. %The notion of distance we define in the next paragraph will be a generalization of this notion of equivalence.
 
 
 
@@ -133,7 +133,7 @@ Let $v \in \lambda \beta.~ c[\beta]$ and $u \in b$. By definition, $tu \in c[\to
 Let $v \in d$. For all $u \in \Lambda_B$, by definition, $vu \in d\tointerval{u}$. Therefore, $v \in \lambda \beta.~ d~ \beta$.
 \end{proof}
 
-Beyond theoretical aspects (which will be made clearer in Section 5), 
+Beyond theoretical aspects (which will be made clearer in Section 5)
 Proposition \ref{prop:intervals-weak-model-lambda} is also important in practice because it implies that if we compute an approximation of a program from approximations of its parts and then simplify the resulting approximate program using $\beta$-reduction and $\eta$-expansion, what we obtain is still a valid approximation of the original program.
 
 
@@ -187,9 +187,8 @@ The first step is to define, for every simple type $A$, a commutative integral q
 % \{ \text{monotonically decreasing functions from } \intervals{A} \text{ to } \distances{B} \}$.
 \end{itemize}
 where, for two ordered sets $Q,R$, $\operatorname{Decr}(Q,R)$ denotes the set of monotonically decreasing functions from $Q$ to $R$.
-
-
 Observe that the quantale $\distances{A\to B}$ is a set of functions over the approximate values of $A$.
+
 For all simple types $A$, we now define a \emph{distance function} $d_A : \Lambda_A \times \Lambda_A \to \distances{A}$:
 \begin{itemize}
 \item $d_\mathsf{Real}(t,u) = \left\vert r-s \right\vert$, where $r,s$ are the unique elements of $\mathbb{R}$ such that $t \to_\beta^* r$ and $u \to_\beta^* s$,
@@ -231,12 +230,13 @@ To this end, we define for all simple types $A$ a monotonically decreasing \emph
  
  
  First, one can check that for all $t,u \in \Lambda_A$, $\diam_A\left(\tointerval{t} \vee \tointerval{u}\right) = d_A(t,u)$, and that:
-\begin{align*}
-\diam_\mathsf{Real}(a)  & = \sup\{s-r \mid s,r \in \mathbb{R} \text{ such that } s,r \in a\} \\ 
-\diam_\mathsf{A \times B}(p) & = \left(\diam_A\left(\sup\left\{\tointerval{\pi_L t} \mid t \in p\right\}\right),\diam_B\left(\sup\left\{\tointerval{\pi_R t} \mid t \in p\right\}\right)\right) \\
-\diam_\mathsf{A \to B}(b) & = a \mapsto \diam_B\left(\sup\left\{\tointerval{vt} \mid t\in a, v \in b\right\}\right)
-\end{align*}
-
+ \begin{itemize}
+\item
+$\diam_\mathsf{Real}(a)   = \sup\{s-r \mid s,r \in \mathbb{R} \text{ such that } s,r \in a\}$,
+\item 
+$\diam_\mathsf{A \times B}(p)  = \left(\diam_A\left(\sup\left\{\tointerval{\pi_L t} \mid t \in p\right\}\right)\diam_B\left(\sup\left\{\tointerval{\pi_R t} \mid t \in p\right\}\right)\right)$,
+\item$ \diam_\mathsf{A \to B}(b)  = a \mapsto \diam_B\left(\sup\left\{\tointerval{vt} \mid t\in a, v \in b\right\}\right)$.
+\end{itemize}
 This leads then to the following:
 %With that, we can prove that the diameter function $\diam_{A}$ is super-modular over intersecting approximate values: 
 %``quasi-supermodularity'':

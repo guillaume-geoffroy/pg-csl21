@@ -37,7 +37,7 @@ This idea has motivated much literature on program (pseudo)metrics \cite{ARNOLD1
 % 
 %  
 
-Some recent literature \cite{chaudhuri, dallago:differential-stlc} has highlighted the importance of \emph{contextuality} to reason about program similarity: many common situations  require to measure the error produced by a transformation of the form $\mathtt C[t] \leadsto \mathtt C[u]$, which replaces a program $t$ by $u$ \emph{within a context} $\mathtt C[\ ]$, from a measure of the mismatch between $t$ and $u$ and of the sensitivity of the context $\mathtt C[\ ]$ itself.
+Some recent literature \cite{chaudhuri, dallago:differential-stlc} has highlighted the importance of \emph{contextuality} to reason about program similarity: many common situations  require to measure the error produced by a transformation of the form $\mathtt C[t] \leadsto \mathtt C[u]$, which replaces a program $t$ by $u$ \emph{within a context} $\mathtt C[\ ]$, as a function of the mismatch between $t$ and $u$ and of the sensitivity of the context $\mathtt C[\ ]$ itself.
  %one looks for ways to measure the similarity between two programs in a \emph{contextual} way: one seeks a bound for the error of replacing a program $t$ by $u$ within a given context
 %
 %
@@ -49,13 +49,13 @@ Some recent literature \cite{chaudhuri, dallago:differential-stlc} has highlight
  %A fundamental aspect to take into account when reasoning about
 % The notion of program similarity that these frameworks  
 %  is that this notion is highly \emph{contextual}. 
-  For instance, the replacement of the program $\lambda x.\sin(x)$ by the identity function $\lambda x.x$
-  produces an error whose measure depends on whether
-$\lambda x.\sin(x)$
-occurs in a context in which it is applied to values close to $0$.
- Similar cases of contextual reasoning can be found  in many areas of computer science. For instance, 
- in numerical analysis (\emph{e.g.}~the Gauss-Newton method) in which a 
- computationally intensive function is replaced by its Taylor's expansion {around some given point}, or in {approximate computing} techniques like \emph{loop perforation} \cite{loopperf}, in which a compiler can be asked to skip a certain number of iterations.% provided this won't exceed some error bound.
+  For instance, the error produced by replacing the program $\lambda x.\sin(x)$ by the identity function $\lambda x.x$
+  in a given context  $\mathtt C$ will 
+  be highly sensitive to how close to $0$  
+  these functions are applied in $\mathtt C$.
+ Similar cases of contextual reasoning can be found  in many areas of computer science: for example 
+ in techniques from numerical analysis (\emph{e.g.}~the Gauss-Newton method), in which a 
+ computationally intensive function is replaced by its Taylor's expansion {around some given point}, or in {approximate computing} techniques like \emph{loop perforation} \cite{loopperf}, in which a compiler can be asked to skip a certain number of iterations of a loop inside a program.% provided this won't exceed some error bound.
  
 
 %, replacing $f$ will not produce a considerable error. However, this transformation would no longer be justified if $f$ were applied on values far from 0.
@@ -67,7 +67,7 @@ occurs in a context in which it is applied to values close to $0$.
 % 
 %  within a larger program.
  
-\subparagraph*{The problem of coupling program metrics and higher-order types}
+\subparagraph*{The Problem of Coupling Program Metrics with Higher-Order Types}
 
 
 
@@ -132,12 +132,12 @@ occurs in a context in which it is applied to values close to $0$.
 \label{fig:sinid}
 \end{figure}
  
-  While several frameworks  have been developed for contextual reasoning \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017,chaudhuri, dallago:differential-stlc},  these approaches seem to suggest that lifting an account of program
-differences in terms of program metrics to a fully higher-order language still constitutes a major challenge. 
+While several frameworks  for contextual reasoning have been developed in recent years \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017,chaudhuri, dallago:differential-stlc}, these approaches suggest that describing program similarity for a fully higher-order language in terms of program metrics still constitutes a major challenge. 
 %Yet, in this paper we propose a framework which accommodates both aspects.
 %
 % The question that motivates this paper is whether a notion of program difference of this kind can itself be seen as a metric over the programs of a programming language with higher-order types.  
-Suppose to start from a language  containing a type $\mathsf{Real}$ for real numbers on which errors are measured with the standard metric. It is not clear, then, how to lift this metric to higher-order types, \emph{e.g.}~to $\mathsf{Real}\to \mathsf{Real}$, so that distances are measured in a contextual way.
+In particular, when considering higher-order languages with a type $\mathsf{Real}$ for real numbers, it is not clear how to \emph{lift} the standard metric on $\mathsf{Real}$  
+ to higher-order types, \emph{e.g.}~to $\mathsf{Real}\to \mathsf{Real}$, so that the distances between higher-order programs are measured in a contextual way.
 
 
 
@@ -181,20 +181,52 @@ On the other side of the coin, other approaches like \cite{chaudhuri, dallago:di
 
 
 
-In this paper we introduce a class of higher-order denotational models, that we call \emph{diameter space models}, to reason about program similarity and approximate program transformations.
-In such models a higher-order type $A$ is interpreted as a 4-tuple $(|A|, \intervals{A}, \distances{A}, \diam_{A})$ called a \emph{diameter space}, where $|A|$ is a set of \emph{exact} values, $\intervals{A}\subset \mathcal P(|A|)$ is a complete lattice of \emph{approximate} values, $\distances{A}$ is a \emph{quantale}, and $\diam_{A}: \intervals{A}\to \distances{A}$ is a function, called \emph{diameter}, which provides a quantitative measure of approximate values.
+In this paper we introduce a new semantic framework to reason about program similarity and approximate program transformations based on 
+a class of higher-order denotational models that we call \emph{diameter space models}. Compared to existing higher-order frameworks, the main novelty of these models is that program similarities are measured by associating each simple type with 
+ a \emph{generalized partial metric space}, yielding a lifting of the standard metric on $\mathsf{Real}$ to higher-order types.
 
-
-
-
-
-The maps $\diam_{A}$ take their name from the fact that they  
- generalize some properties of the diameter function of the standard metrics on real numbers. Moreover, just like the standard metric on $\mathbb R$ can be recovered from the diameter by $d(x,y)=\mathsf{diam}([x,y])$, the function $\diam_{A}$ induces a \emph{generalized partial metric} $d_{A}:|A|\times |A|\to \distances{A}$ by letting $d_{A}(x,y)=\diam_{A}(x\vee y)$. 
-
-
-Generalized partial metric spaces (henceforth GPMS) are a well-investigated class of metric spaces that has been widely applied in program semantics \cite{bkmp:partial-metrics, Bukatin1997, doi:10.1111/j.1749-6632.1994.tb44144.x, Schellekens2004, Samet:2013aa, Stubbe2018, HE201999}. 
+Generalized partial metric spaces are a well-investigated class of metric spaces that has been widely applied in program semantics \cite{bkmp:partial-metrics, Bukatin1997, doi:10.1111/j.1749-6632.1994.tb44144.x, Schellekens2004, Samet:2013aa, Stubbe2018, HE201999}. 
 Such spaces generalize standard metric spaces in that distances
-need not be real numbers, but can be functions or any other type of object that leaves in a suitable \emph{quantale} \cite{Hofmann2014}, and \emph{self-distances} $d(x,x)$ need not be $0$ (which in turn leads to strengthen the usual triangular inequality as $d(x,y) + d(z,z)\leq d(x,z)+d(z,y)$).
+need not be real numbers, but can be functions or any other type of object that leaves in a suitable \emph{quantale} \cite{Hofmann2014}, and \emph{self-distances} $d(x,x)$ need not be $0$ (which leads to a stronger triangular inequality: $d(x,y) + d(z,z)\leq d(x,z)+d(z,y)$).
+
+
+
+%
+%  any diameter space yields a \emph{generalized partial metric} over its exact values.
+%
+%based on the definition, on each type, of a \emph{generalized partial metric} lifting the standard semantics of $\mathsf{Real}$ to higher-order types.
+%
+
+
+In our models a higher-order type $A$ is interpreted as a 4-tuple $(|A|, \intervals{A}, \distances{A}, \diam_{A})$ called a \emph{diameter space}, where $|A|$ is a set of \emph{exact} values, $\intervals{A}\subset \mathcal P(|A|)$ is a complete lattice of \emph{approximate} values, $\distances{A}$ is a {quantale}, and $\diam_{A}: \intervals{A}\to \distances{A}$ is a function, called \emph{diameter}, which provides a quantitative measure of approximate values.
+The map $\diam_{A}$ generalizes some properties of the diameter function of the standard metric on real numbers. In particular, just like the distance between two real numbers can be described as the diameter of the smallest interval containing them, the map $\diam_{A}$ yields a generalized partial metric  $d_{A}:|A|\times |A|\to \distances{A}$ in which the distance between two exact values of $A$ is measured as the diameter of the smallest approximate value containing them, i.e.  $d_{A}(x,y)=\diam_{A}(x\vee y)$. 
+
+
+
+%
+%$d_{\mathbb R}$ can be recovered from the diameter by $d_{\mathbb R}(x,y)=\mathsf{diam}([x,y])$, $\diam_{A}$
+%
+%
+%
+%Compared to other existing higher-order frameworks, the main novelty of these models is that any diameter space yields a \emph{generalized partial metric} over its exact values.
+% % (which in turn leads to strengthen the usual triangular inequality as $d(x,y) + d(z,z)\leq d(x,z)+d(z,y)$).
+%
+%
+%In any diameter space $(|A|, \intervals{A}, \distances{A}, \diam_{A})$, 
+%the distance between two exact values $x,y\in |A|$ can be computed by measuring, through $\diam_{A}$, the size of the smallest approximate value which contains both. In other words, we obtain 
+% a {generalized partial metric} $d_{A}:|A|\times |A|\to \distances{A}$ on $|A|$ by letting $d_{A}(x,y)=\diam_{A}(x\vee y)$. 
+%In this way, we recover the standard metric on real numbers 
+%lift the standard metric of 
+
+
+%
+%which
+% generalize some properties of the diameter function of the standard metrics on real numbers, 
+% yield a 
+% 
+% . In particular, just like $d_{\mathbb R}$ can be recovered from the diameter by $d_{\mathbb R}(x,y)=\mathsf{diam}([x,y])$,
+
+
 %\footnote{The adjective ``partial'' comes from the fact that in partial metric semantics like \cite{} the  programs with a non-zero self-distance are those which are not total, in the sense of Scott domains. This will not be the case in our framework. 
 %}   
 %Observe that not only any standard metric space is a GPMS, but from from any partial metric $d$ one can retrieve a (generalized) metric $d'$ by letting $d'(x,y)=2d(x,y)-d(x,x)-d(y,y)$.
@@ -224,9 +256,9 @@ need not be real numbers, but can be functions or any other type of object that 
 \subparagraph*{New Ways of Measuring Distances between Programs of Functional Type}
 % measure distances on $\mathsf{Real}\to\mathsf{Real}$}
 
-In our model, 
-the distance between  two programs $f,g:\mathsf{Real}\to \mathsf{Real}$ lives in the functional quantale of monotone maps from \emph{approximate values} of $\mathsf{Real}$ (\emph{i.e.} closed intervals) to positive reals. This function associates a closed interval $a$ with the diameter of the smallest interval containing \emph{both} $f(a)$ and $g(a)$. 
-Observe that, with this definition,  the distance of $f$ \emph{from itself} needs not be (constantly) 0. Rather, it  provides a measure of the sensitivity of $f$, since it associates each interval $a$ with the size of the interval $f(a)$ spanned by $f$ on $a$. %For instance, the self-distance of $\lambda x.\sin(x)$ associates any interval $a$ with a value $\leq 2$ (the diameter of $\sin(a)$).
+In our model, while the distance between two real numbers is measured with the standard metrics (and thus lives in the quantale $[0,\infty]$), the distance between  two programs $f,g:\mathsf{Real}\to \mathsf{Real}$ lives in the functional quantale of monotone maps from \emph{approximate values} of $\mathsf{Real}$ (\emph{i.e.} closed intervals) to positive reals. This function associates a closed interval $a$ with the diameter of the smallest interval containing \emph{both} $f(a)$ and $g(a)$. 
+Note that, with this definition, 
+ the distance of $f$ \emph{from itself}, which needs not be (constantly) 0,  provides a measure of the sensitivity of $f$, since it associates each interval $a$ with the size of the interval $f(a)$ spanned by $f$ on $a$. %For instance, the self-distance of $\lambda x.\sin(x)$ associates any interval $a$ with a value $\leq 2$ (the diameter of $\sin(a)$).
 
 
 % Observe that this implies that, unless $t$ is constant, its distance from itself cannot be constantly 0.
@@ -237,7 +269,7 @@ Observe that, with this definition,  the distance of $f$ \emph{from itself} need
 
 The use of partial metrics with functional distances yields a rich and expressive framework to reason about  
 contextual transformations. For instance, we can express the closeness of $\lambda x.\sin(x)$ and $\lambda x.x$ around 0 by the fact that their distance, applied to a small interval $[-\epsilon,\epsilon]$ of 0, is very close to the {self-distance} of
-$\lambda x.\sin(x)$ on the same interval (as illustrated in Fig. \ref{fig:sinid2}). Moreover, we also show how the triangular inequality of partial metrics can be used to infer new bounds from previously established ones in a compositional way.
+$\lambda x.\sin(x)$ on the same interval (as illustrated in Fig. \ref{fig:sinid2}). Moreover, the {triangular inequality} of partial metrics  can be used to infer new bounds from previously established ones in a compositional way.
 
 %. In other words, the interval spanned by both the sine and the identity function on $ [-\epsilon,\epsilon]$ almost coincides with the one spanned by 
 %$\lambda x.\sin(x)$ alone 
@@ -286,11 +318,11 @@ $\lambda x.\sin(x)$ on the same interval (as illustrated in Fig. \ref{fig:sinid2
 
 
 
-Our construction was primarily though to account for transformations in higher-order languages designed for real analysis computation (like \emph{e.g.} $\mathsf{Real\ PCF}$ \cite{Edalat:2000aa}). However, diameter spaces can be constructed starting from any higher-order programming language with a reasonable denotational semantics. In fact, for \emph{any} cartesian closed category $\mathbb C$, we can construct a cartesian \emph{lax-}closed category $\dsp(\mathbb C)$, whose morphisms can be seen as approximate versions  of the morphisms of $\mathbb C$. The ``lax'' preservation of the cartesian closed structure reflects the fact that, by composing approximations in a higher-order setting, also their error rates compose (typically, approximating non $\beta$-normal $\lambda$-terms will lead to higher error-rates than approximating their $\beta$-normal forms). 
+Our approach was primarily thought to account for transformations in higher-order languages designed for real analysis computation (like \emph{e.g.} $\mathsf{Real\ PCF}$ \cite{Edalat:2000aa}). However, diameter spaces can be constructed starting from any higher-order programming language with a reasonable denotational semantics. In fact, for \emph{any} cartesian closed category $\mathbb C$, we can construct a cartesian \emph{lax-}closed category $\dsp(\mathbb C)$, whose morphisms can be seen as approximate versions  of the morphisms of $\mathbb C$. The ``lax'' preservation of the cartesian closed structure reflects the fact that, by composing approximations in a higher-order setting, also their error rates compose (typically, approximating non $\beta$-normal $\lambda$-terms will lead to higher error-rates than approximating their $\beta$-normal forms). 
 
 
 
-The generality of our construction shows in particular that our partial metric semantics requires no restrictions (\textit{e.g.} Lipschitz-continuity) on morphisms, and adapts well to the model one starts with: for instance, in the category $\dsp(\set)$ we obtain a partial metric on the set of \emph{all}  set-theoretic functions from $\mathbb R$ to $\mathbb R$, while the models $\dsp(\eff)$ (where $\eff$ is the \emph{effective topos} \cite{hyland:effective-topos}) and $\dsp(\scott)$ show that our approach scales well to a more computability-minded setting.
+The generality of our construction shows in particular that our partial metric semantics requires no restrictions (\textit{e.g.} Lipschitz-continuity) on morphisms, and adapts well to the model one starts with: for instance, the category $\dsp(\set)$ contains a partial metric on the set of \emph{all}  set-theoretic functions from $\mathbb R$ to $\mathbb R$, while the categories $\dsp(\eff)$ (where $\eff$ is the \emph{effective topos} \cite{hyland:effective-topos}) and $\dsp(\scott)$ show that our approach scales well to a more computability-minded setting.
 
 
 %The step from $\mathbb C$ to $\mathsf{Diam}(\mathbb C)$ preserves the cartesian closed structure in a \emph{lax} way: this reflects the fact that,

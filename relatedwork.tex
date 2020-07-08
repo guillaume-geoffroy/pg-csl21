@@ -125,10 +125,10 @@ $\delta_{2}=\max\{d(g(x), f(y));~ y\in [x-\varepsilon, x+\varepsilon]\}$.}
 \caption{Differential logical relations do not yield partial metrics.}
 \end{figure}
 
-\subparagraph*{Related work}
+\subparagraph*{Related Work}
 
 
-A primary source of inspiration for our approach was the recent work on  \emph{differential logical relations} \cite{dallago:differential-stlc}. This is a semantical framework for higher-order languages in which a type is interpreted as a set $X$ endowed with a kind of metric structure expressed by a ternary relation $\rho \subseteq X\times Q\times X$, where $Q$ is an arbitrary quantale. To our knowledge, this is the first place were the idea of varying the quantales in which distances are measured is introduced as a key ingredient to obtain a cartesian closed category.
+A primary source of inspiration for our approach was the recent work by Dal Lago, Gavazzo and Yoshimizu on  \emph{differential logical relations} \cite{dallago:differential-stlc}. This is a semantical framework for higher-order languages in which a type is interpreted as a set $X$ endowed with a kind of metric structure expressed by a ternary relation $\rho \subseteq X\times Q\times X$, where $Q$ is an arbitrary quantale. To our knowledge, this is the first place were the idea of varying the quantales in which distances are measured is introduced as a key ingredient to obtain a cartesian closed category.
 
 While the relation $\rho$ of a GMS induces a distance function $d_{\rho}(x,y)=\sup\{\varepsilon\mid \rho(x,\varepsilon,y)\}$, this function is not a (partial) metric. We can show this fact with a simple example: in this model the distance between two programs 
  $f,g:\mathsf{Real}\to \mathsf{Real}$ is taken in the quantale of functions from $\R\times \R_{+}^{\infty}$ to $\R_{+}^{\infty}$: intuitively, 
@@ -137,7 +137,7 @@ While the relation $\rho$ of a GMS induces a distance function $d_{\rho}(x,y)=\s
 
 
 
-Westbrook and Chaudury \cite{chaudhuri} have introduced a more syntactic approach to approximate program transformations through a System F-based type system with a type of real numbers and an explicit distinction between exact and approximate programs.
+Westbrook and Chauduri \cite{chaudhuri} have introduced a more syntactic approach to approximate program transformations through a System F-based type system with a type of real numbers and an explicit distinction between exact and approximate programs.
 %, and provides typing rules to formalize contextual reasoning about program differences. 
 %The latter are taken as functions relating errors in input and errors in output, but the viewpoint of program metric is not considered.
 Most examples of contextual reasoning from \cite{chaudhuri} can be  reformulated in our framework (as the case of loop perforation discussed in Section 4). 
@@ -152,7 +152,7 @@ probabilistic computation \cite{10.1109/LICS.2015.64, 10.1007/978-3-662-54434-1_
 To the second class belong approaches like \cite{Escardo1999} which recovers the Scott model of PCF through a ultrametric semantics, and most models based on partial metric spaces \cite{Bukatin1997,doi:10.1111/j.1749-6632.1994.tb44144.x}, which rely on a correspondence between continuous Scott domains and the $T_{0}$ topology of partial metrics.
 
 From a more mathematical viewpoint, 
-\cite{Stubbe2009} discusses a characterization of exponentiable GPMS, showing in particular that no such category can both be cartesian closed and contain the standard metric on $\mathbb R$. This result seems to add further evidence of the necessity of considering metrics over varying quantales in order to model higher-order languages. 
+\cite{Stubbe2009} discusses a characterization of exponentiable GPMS, showing that no such category can both be cartesian closed and contain the standard metric on $\mathbb R$. This result seems to add further evidence of the necessity of considering metrics over varying quantales in order to model higher-order languages. 
 Finally, the elegant categorical approach to GPMS based on \emph{quantaloid-enriched categories} from \cite{Stubbe2018} seems to provide the relevant structure to develop explicit typing rules for our approximate programs.
 
 %
@@ -174,7 +174,7 @@ Finally, the elegant categorical approach to GPMS based on \emph{quantaloid-enri
 
 
 
-\subparagraph*{Future work}
+\subparagraph*{Future Work}
 
 
 %

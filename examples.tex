@@ -3,12 +3,13 @@
 
 In the previous section we showed how to associate each simple type $A$ with a  partial metric $d_{A}$ over the closed terms of type $A$. 
 We  now illustrate through a few basic examples how the higher-order and metric features of this semantics can be used to formalize contextual reasoning about program differences.
+
+
 To make our examples more realistic, we will consider some natural extensions of $\STLC$.
+It is not difficult to see that all constructions from Section 3 still work if we add to $\STLC$ some new base types. For example, we can add to our language a type $\mathsf{Nat}$ for natural numbers, indicating for each $n\in \mathbb N$, the corresponding normal forms of $\mathsf{Nat}$ as $\mathtt n$. A natural choice is to let   
+$\intervals{\mathsf{Nat}}=\{ \{ t \mid \exists n\in a \ t\leadsto \mathtt n\}\mid a \text{ finite subset of }\mathbb N \text{ or }a=\mathbb N\}$, $\distances{\mathsf{Nat}}=[0,\infty]$ and $d_{\mathsf{Nat}}(t,u)=| n-m|$, where $t\to^{*}_{\beta}\mathtt n$ and $u\to^{*}_{\beta}\mathtt m$. 
 
-It is not difficult to see that all constructions from Section 3 scale well to any extension of $\STLC$ obtained by adding new base types. For example, we can add to our language a type $\mathsf{Nat}$ for natural numbers, indicating for each $n\in \mathbb N$, the corresponding normal forms of $\mathsf{Nat}$ as $\mathtt n$. A natural choice is to let   
-$\intervals{\mathsf{Nat}}=\{ \{ t \mid \exists n\in a \ t\leadsto \mathtt n\}\mid a \text{ finite subset of }\mathbb N \text{ or }a=\mathbb N\}$, $\distances{\mathsf{Nat}}=\mathbb R^{+\infty}$ and $d_{\mathsf{Nat}}(t,u)=| n-m|$, where $t\to^{*}_{\beta}\mathtt n$ and $u\to^{*}_{\beta}\mathtt m$. 
-
-Moreover, the constructions scale well also to extensions of $\STLC$ obtained by adding new program constructors, as soon as these do not compromise the normal form property (since the fact that closed programs of type $\mathsf{Real}$ have a normal form plays an important role in defining the set $\intervals{\mathsf{Real}}$).  
+Moreover, our constructions scale well also to extensions of $\STLC$ obtained by adding new program constructors, as soon as these do not compromise the existence and uniqueness of normal forms (since the fact that closed programs of type $\mathsf{Real}$ have a normal form plays an important role to define $\intervals{\mathsf{Real}}$).  
 For instance, if we suppose that all programs of type $\mathsf{Real}\to\mathsf{Real}$ in $\STLC$ are either 
 differentiable or integrable (see Remark \ref{rem:continuous}), we can consider extension of $\STLC$ with  differential or integral operators, as in $\mathsf{Real\ PCF}$ \cite{Di-Gianantonio:2013aa, Edalat:2000aa}.
 
@@ -18,7 +19,7 @@ We start with a classical example from approximate computing that we adapt from 
 
 \begin{example}[Loop perforation]
 We work in the extension of $\STLC$ with a type $\mathsf{Nat}$.
-We discuss a transformation that replaces a program $t$ which performs $n$-iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. 
+We discuss a transformation that replaces a program $t$ which performs $n$ iterations by a program which only performs the iterations $0,k,2k,3k,\dots$, each repeated $k$ times. 
 
 %Let $\mathsf{Nat}$ be a suitable type representing natural numbers in $\STLC$ and s
 Suppose  $t: (A\times A\to A) \to \mathsf{Nat}\to (A\to A)\to A$, for $n\geq 1$, is a term such that $th\mathtt n f$ 
@@ -71,20 +72,19 @@ basic approximation techniques from numerical analysis.
 
 \begin{example}[Taylor approximation]
 
-We make the assumption that all programs of type $\mathsf{Real}\to\mathsf{Real}$ in $\STLC$ are differentiable and that for all $n$, program $t:\mathsf{Real}\to\mathsf{Real}$ and real number $r$, we can define a term 
+We assume that all programs of type $\mathsf{Real}\to\mathsf{Real}$ in $\STLC$ are differentiable and that for all $n$, program $t:\mathsf{Real}\to\mathsf{Real}$ and real number $r$, we can define a term 
 %$\mathtt T^{n}: ((\mathsf{Real}\to \mathsf{Real})\times \mathsf{Real})\to \mathsf{Real}\to \mathsf{Real}$ such that 
-$\mathtt T^{n}( t, r):\mathsf{Real}\to\mathsf{Real}$ computing the $n$-th truncated Taylor expansion of $t$ at $r$. 
+$\mathtt T^{n}( t, r):\mathsf{Real}\to\mathsf{Real}$ computing the $n$-th truncated Taylor polynomial of $t$ at $r$. 
 %Then, given a term $t: \mathsf{Real}\to \mathsf{Real}$, 
 The distance 
 $d_{\mathsf{Real}\to\mathsf{Real}}(t, \mathtt T^{n}( t,\mathtt 0 ))$ is the map associating an interval $a$ with the diameter of the smallest interval containing the image of $a$ under both $t$ and $\mathtt T^{n}( t,\mathtt 0 )$. 
-Thus, the difference between this value and the self-distance of $t$ will approximate 0 when $a$ is a small interval of $0$, and will tend to diverge when $a$ contains points which are far enough from 0. 
+This value will approximately converge to the self-distance of $t$ when $a$ is a small interval of $0$, and will tend to diverge when $a$ contains points which are far enough from 0. 
 
 %between $t$ and its Taylor expansion within a context  $\mathsf C[\ ]= [\ ] r$ which applies them to some value $r$, can be computed as a function of the interval $[0,r]$.   
 For example, if $t$ is the function $t=\lambda x.\sin(x)$, and $a$ is an interval of $0$, then using standard analytic reasoning we can compute a bound
 $d_{\mathsf{Real}\to \mathsf{Real}}(t, \mathtt T^{n}( t,\mathtt 0 ))(a  )\leq \frac{\diam_{\mathsf{Real}}(a)^{n+1}}{(n+1)!} $, which tends to $0$ as the diameter of $a$ tends to $0$.
 
-Observe that if, instead, we used the $\sup$-distance $d_{\sup}(t,u)= \sup\{d_{\mathsf{Real}}(tr, ur)\mid r\in \Lambda_{\mathsf{Real}}\}$, then we could not reason as above, since  
-$d_{\sup}(\lambda x.\sin(x), \mathtt T^{n} ( \lambda x.\sin(x),0))=\infty$ (as illustrated in Fig. \ref{fig:sintaylor}).  
+Observe that if, instead, we used the $\sup$-distance $d_{\sup}(t,u)= \sup\{d_{\mathsf{Real}}(tr, ur)\mid r\in \Lambda_{\mathsf{Real}}\}$, then we could not reason as above, since  the $\sup$-distance between $\lambda x.\sin(x)$ and its  truncated Taylor polynomials is infinite (as illustrated in Fig. \ref{fig:sintaylor}).  
 
 %We can use the higher-order structure of our semantics to push abstraction a bit further. For instance, we can define an approximate program 
 %$c[y_{1},y_{2}]=\left( \partial (\mathtt T^{n})\langle y_{1}, \tointerval{0}\rangle\right) y_{2}: \intervals{\mathsf{Real}\to \mathsf{Real}}\to \intervals{\mathsf{Real}}\to \intervals{\mathsf{Real}}$ which describes the sensitivity of the $n$-th Taylor expansions in 0. Given two programs $t$ and $u$ and a small interval $a$ of $0$, the real number $c[\partial(t)\vee \partial(u),a]$ measures how much the error of replacing the Taylor expansions of $t$ with the Taylor expansion of $u$ in $0$ diverges from the error produced by simply replacing  $t$ and $u$, when these are applied close to $0$. 
@@ -229,7 +229,7 @@ d_{\mathsf{Real}} ( \mathsf{R}_{[0,r]}(t),\mathsf R^{n}_{[0,r]}(u)) \\
  n\cdot |r|
  \end{align*}
  Using the partial metric on $\mathsf{Real}\to \mathsf{Real}$, we can also derive a bound expressing how much the error above is \emph{sensitive to changes of $r$}. 
-First, using standard analytic techniques (under suitable assumptions for $t$ and its derivatives) one can find a program $v:\mathsf{Real}\to\mathsf{Real}$ such that $vr \to^{*}_{\beta}\epsilon_{t}(r)$. 
+First, using standard analytic techniques (under suitable assumptions for $t$ and its derivatives) one can find a program $v:\mathsf{Real}\to\mathsf{Real}$ such that $vr $ computes an upper bound for $\epsilon_{t}(r)$. 
 Then, using the triangular inequality of the partial metric on $\mathsf{Real}\to \mathsf{Real}$ we deduce, for all interval $a$, the following bound:
 \begin{align*}
 & d_{\mathsf{Real}\to\mathsf{Real}} (\lambda x. \mathsf{I}_{[0,x]}(t),\lambda x. \mathsf R^{n}_{[0,x]}(u))(a) \\
