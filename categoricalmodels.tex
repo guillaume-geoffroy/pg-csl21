@@ -27,6 +27,8 @@ and such that for all $t,u \in \Lambda_A$, if $\diam_A(\tointerval{t}) = \diam_A
 \end{itemize}
 \end{definition}
 
+The role of the condition $a \wedge b \neq \emptyset$ is illustrated by Fig. \ref{fig:modular}.
+
 \begin{example} If $\mathbb{C}$ is the category whose objects are the simple types from Section \ref{section:stlc} and whose morphisms are the (open) terms modulo $\beta$-equivalence, then for all simple types $A$, $(A, \intervals{A}, \distances{A}, \diam_A)$ defines a $\mathbb{C}$-diameter space.
 \end{example}
 
@@ -34,7 +36,7 @@ Following Section \ref{section:stlc}, for all $\mathbb{C}$-diameter spaces $A$ a
 \item $\intervals{A \times B} = \{ a \times b \mid a \in \intervals{A}, b \in \intervals{B} \} $, where $a \times b = \{ t \in \mathbb{C}(1, \bs{A} \times \bs{B}) \mid \pi_L \circ t \in a \text{ and } \pi_R \circ t \in b \}$,
 \item $\distances{A \times B} = \distances{A} \times \distances{B}$,
 \item $\diam_{A \times B}(c) = (\diam_A(\{ \pi_L \circ t \mid t \in c \}), \diam_B(\{ \pi_R \circ t \mid t \in c \}))$,
-\item $\intervals{\exp(A, B)} = \{ \{ t \in \mathbb{C}(1, \exp(\bs{A}, \bs{B})) \mid \forall u \in \Lambda_{A},~ \ev(t) \circ u \in I(u) \} \mid I : \Lambda_A \to \intervals{B} \}$,
+\item $\intervals{\exp(A, B)} = \{ \{ t \in \mathbb{C}(1, \exp(\bs{A}, \bs{B})) \mid \forall u \in \Lambda_{A},~ \ev(t) \circ u \in I(u) \} \mid I\in \operatorname{Poset}(\Lambda_A, \intervals{B}) \}$,
 \item $\distances{\exp(A, B)} = \operatorname{Decr}(\intervals{A}, \distances{B})$,
 \item $\diam_\mathsf{\exp(A, B)}(c) = a \mapsto \diam_B\left(\sup\left\{\tointerval{\ev(v) \circ t} \mid t\in a, v \in c\right\}\right).$
 \end{itemize}

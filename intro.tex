@@ -21,66 +21,6 @@ Recent literature \cite{chaudhuri, dallago:differential-stlc} has highlighted th
 
 \subparagraph*{The Problem of Coupling Program Metrics with Higher-Order Types}
 
-\begin{figure}
-\begin{subfigure}{0.48\textwidth}
-\parbox[h][3.5cm][c]{\textwidth}{
-\adjustbox{center}{$
-\begin{tikzpicture}[domain=-5:5, scale=0.5]
-%\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
-\draw[<->]   (-5,0) -- (5,0);
-\draw[<->] (0,-3) -- (0,3); % node[above] {$f(x)$};
-
-   \node at (0.2,-0.2){\tiny$0$};
-      \node at (0,0){\tiny$\bullet$};
-
-%
-\draw[color=red, domain=-5:5, samples=40] plot (\x, {sin(\x r)} ) node[above] {\tiny$\sin(x)$};
-
-\draw[color=blue, domain=-3:3, samples=40] plot (\x,{\x  } ) node[below] {\tiny$x$};
-
-
-\end{tikzpicture}$}
-}
-\caption{\small $\sin(x)$ and $x$ are very close around $0$, but their distance diverges at $\pm \infty$.}
-\label{fig:sinid1}
-\end{subfigure} \ \ \ 
-\begin{subfigure}{0.48\textwidth}
-\parbox[h][3.5cm][c]{\textwidth}{
-\adjustbox{center}{$
-\begin{tikzpicture}[domain=-2:2, scale=0.8]
-%\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
-\draw[<->]   (-2,0) -- (2,0);
-\draw[<->] (0,-2) -- (0,2); % node[above] {$f(x)$};
-
-
-\draw[|-|] (-1,0) -- (1,0);
-\node(r) at (-1,-0.3) {\tiny$-\varepsilon$};
-\node(r) at (1,-0.3) {\tiny$+\varepsilon$};
-   % \node at (0,0)[circle,fill,inner sep=1pt]{};
-%
-\draw[color=red, domain=-2:2, samples=40] plot (\x, {sin(\x r) } ) node[above] {\tiny$\sin(x)$};
-
-\draw[color=blue, domain=-2:2,samples=40] plot (\x,{\x  } ) node[below] {\tiny$x$};
-
-
-\draw[dotted] (-2,1) -- (2,1);
-\draw[dotted] (-2,-1) -- (2,-1);
-
-\draw[dotted] (-2,0.8) -- (2,0.8);
-\draw[dotted] (-2,-0.8) -- (2,-0.8);
-
-\draw[|<->|] (2.3,1) -- node[above right]{\tiny$\delta$} (2.3,-1);
-\draw[|<->|] (2.7,0.8) -- node[below right]{\tiny$\delta'$} (2.7,-0.8);
-
-
-\end{tikzpicture}$}
-}
-\caption{\small The self-distances $\delta,\delta'$ of $\sin(x)$ and $x$ in a small interval $[-\varepsilon,\varepsilon]$ of $0$ are very close.}
-\label{fig:sinid2}
-\end{subfigure}
-\caption{The sup-distance is inadequate for contextual transformations.}
-\label{fig:sinid}
-\end{figure}
  
 While several frameworks  for contextual reasoning have been developed in recent years \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017,chaudhuri, dallago:differential-stlc}, these approaches suggest that describing program similarity for a fully higher-order language in terms of program metrics still constitutes a major challenge. 
 
@@ -92,7 +32,7 @@ In particular, when considering higher-order languages with a type $\mathsf{Real
 A standard solution is to take the sup-distance, that is, to let, for $f,g:\mathsf{Real}\to \mathsf{Real}$, $d(f,g)=\sup\{d(f(r),g(r))\mid r\in \mathsf{Real}\}$. This solution works well in models in which programs are interpreted as \emph{non-expansive} or \emph{Lipschitz-continuous} maps \cite{Hofmann2014, Azevedo_de_Amorim_2017}. However such models are not \emph{cartesian-closed}\footnote{In fact, cartesian closed categories of metric spaces and non-expansive functions \emph{do} exist \cite{Escardo1999, Stubbe2009}, but, to our knowledge, none of these categories contains the real numbers with the standard metric.}, so they do not account for 
  the simply-typed lambda-calculus in its full generality, but only for linear or sub-exponential variations of it (such as $\mathsf{Fuzz}$ \cite{10.1145/1932681.1863568,Gaboardi_2013,Azevedo_de_Amorim_2017}).
  Also, it has been shown \cite{10.1109/LICS.2015.64} that in a probabilistic setting the non-linearity of higher-order programs has the effect of \emph{trivialising} metrics, that is, of forcing distances to be either $0$ or $1$, hence collapsing program distances onto usual notions of program equivalence.
-Most importantly, even if one restricts to a sub-exponential language, the sup-distance is inadequate to account for contextual transformations as the replacement of $\lambda x.\sin(x)$ by $\lambda x.x$ around $0$, as the sup-distance between these two programs is infinite (see Fig. \ref{fig:sinid}). 
+Most importantly, even if one restricts to a sub-exponential language, the sup-distance is inadequate to account for contextual transformations as the replacement of $\lambda x.\sin(x)$ by $\lambda x.x$ around $0$, as the sup-distance between these two programs is infinite (see Fig. \ref{fig:sinid2}). 
  
  
 On the other side of the coin, other approaches like \cite{chaudhuri, dallago:differential-stlc} are fully contextual and higher-order, but provide, at best, only weak approximations of a standard notion of metric.  
@@ -114,19 +54,8 @@ In our models a higher-order type $A$ is interpreted as a 4-tuple $(|A|, \interv
 The map $\diam_{A}$ generalizes some properties of the diameter function of the standard metric on real numbers. In particular, just like the distance between two real numbers can be described as the diameter of the smallest interval containing them, the map $\diam_{A}$ yields a generalized partial metric  $d_{A}:|A|\times |A|\to \distances{A}$ in which the distance between two exact values of $A$ is measured as the diameter of the smallest approximate value containing them, i.e.  $d_{A}(x,y)=\diam_{A}(x\vee y)$. 
 
 
-\subparagraph*{New Ways of Measuring Distances between Programs of Functional Type}
+\subparagraph*{Measuring Distances between Programs of Functional Type}
 % measure distances on $\mathsf{Real}\to\mathsf{Real}$}\varepsilon
-
-In our model, while the distance between two real numbers is measured with the standard metrics (and thus lives in the quantale $[0,\infty]$), the distance between  two programs $f,g:\mathsf{Real}\to \mathsf{Real}$ lives in the functional quantale of monotone maps from \emph{approximate values} of $\mathsf{Real}$ (\emph{i.e.} closed intervals) to positive reals. This function maps a closed interval $a$ to the diameter of the smallest interval containing \emph{both} $f(a)$ and $g(a)$. 
-Note that, with this definition, 
- the distance of $f$ \emph{from itself}, which needs not be (constantly) 0,  provides a measure of the sensitivity of $f$, since it associates each interval $a$ with the size of the interval $f(a)$ spanned by $f$ on $a$. 
- 
-
-The use of partial metrics with functional distances yields a rich and expressive framework to reason about  
-contextual transformations. For instance, we can express the closeness of $\lambda x.\sin(x)$ and $\lambda x.x$ around 0 by the fact that their distance, applied to a small interval $[-\varepsilon,\varepsilon]$ around 0, is very close to the {self-distance} of
-$\lambda x.\sin(x)$ on the same interval (as illustrated in Fig. \ref{fig:sinid2}). Moreover, the {triangular inequality} of partial metrics  can be used to infer new bounds from previously established ones in a compositional way.
-
-
 \begin{figure}
 \begin{subfigure}{0.45\textwidth}
 \parbox[h][4.6cm][c]{\textwidth}{
@@ -250,12 +179,126 @@ $\delta_{2}=\max\{d(g(x), f(y));~ y\in [x-\varepsilon, x+\varepsilon]\}$.}
 \caption{Differential logical relations do not yield partial metrics.}
 \end{figure}
 
-A primary source of inspiration for our approach was the recent work by Dal Lago, Gavazzo and Yoshimizu on  \emph{differential logical relations} \cite{dallago:differential-stlc}. This is a semantical framework for higher-order languages in which a type is interpreted as a set $X$ endowed with a kind of metric structure expressed by a ternary relation $\rho \subseteq X\times Q\times X$, where $Q$ is an arbitrary quantale. To our knowledge, this is the first place were the idea of varying the quantales in which distances are measured is introduced as a key ingredient to obtain a cartesian closed category.
+A primary source of inspiration for our approach is the recent work by Dal Lago, Gavazzo and Yoshimizu on  \emph{differential logical relations} \cite{dallago:differential-stlc}. This is a semantical framework for higher-order languages in which a type is interpreted as a set $X$ endowed with a kind of metric structure expressed by a ternary relation $\rho \subseteq X\times Q\times X$, where $Q$ is an arbitrary quantale. To our knowledge, this is the first place were the idea of varying the quantales in which distances are measured is introduced as a key ingredient to obtain a cartesian closed category.
 
-While the relation $\rho$ of a GMS induces a distance function $d_{\rho}(x,y)=\sup\{\varepsilon\mid \rho(x,\varepsilon,y)\}$, this function is not a (partial) metric. We can show this fact with a simple example: in this model the distance between two programs 
+However, although such a relation $\rho$ induces a distance function $d_{\rho}(x,y)=\sup\{\varepsilon\mid \rho(x,\varepsilon,y)\}$, this function is not a (partial) metric. We can show this fact with a simple example: in this model the distance between two programs 
  $f,g:\mathsf{Real}\to \mathsf{Real}$ is taken in the quantale of functions from $\R\times \R_{+}^{\infty}$ to $\R_{+}^{\infty}$: intuitively, 
   $d(f,g)$ associates a closed interval $[x-\varepsilon,x+\varepsilon]$ (corresponding to the pair $(x,\varepsilon)$) with the smallest distance $\delta$ such that $[ f(x)-\delta, f(x)+\delta]$ and $[g(x)-\delta,g(x)+\delta]$ both contain the images of $[x-\varepsilon, x+\varepsilon]$ through
  $g$ and $f$ respectively (see Fig. \ref{fig:graph1}). Then, as shown in Fig. \ref{fig:graph2}, by letting $\delta=d(g,g)(x,\varepsilon)$, we have that $d(g,g)$ sends the interval $I=[x-\varepsilon, x+\varepsilon]$ onto the interval $[g(x)-\delta, g(x)+\delta]$, which has diameter $2\delta$, while the image of $I$ has diameter $\delta$, making the triangular law of partial metrics fail. 
+
+By contrast, in our model, the distance between two programs $f,g:\mathsf{Real}\to \mathsf{Real}$ lives in the quantale of monotone maps from \emph{approximate values} of $\mathsf{Real}$ (\emph{i.e.} closed intervals) to positive reals. More precisely, this distance is the function that maps a closed interval $a$ to the diameter of the smallest interval containing \emph{both} $f(a)$ and $g(a)$. 
+This notion of distance does satisfy all the axioms of a partial metric, as illustrated in Fig. \ref{fig:graph2bis}. Observe that  we no longer depict the ``center'' of the interval $[x-\varepsilon, x+\varepsilon]$, and that the triangular inequality works because in summing $d(f,g)$ and $d(g,h)$ the self-distance $d(g,g)$ is  counted twice. 
+
+Note that the distance of $f$ \emph{from itself}, which needs not be (constantly) 0,  provides a measure of the sensitivity of $f$, since it associates each interval $a$ with the size of the interval $f(a)$ spanned by $f$ on $a$ (a similar feature is present in differential logical relations). 
+ 
+The use of partial metrics with functional distances yields a rich and expressive framework to reason about  
+contextual transformations. For instance, we can express the closeness of $\lambda x.\sin(x)$ and $\lambda x.x$ around 0 by the fact that their distance, applied to a small interval $[-\varepsilon,\varepsilon]$ around 0, is very close to the {self-distance} of
+$\lambda x.\sin(x)$ on the same interval (as illustrated in Fig. \ref{fig:sinid2}). Moreover, the {triangular inequality} of partial metrics  can be used to infer new bounds from previously established ones in a compositional way.
+
+
+\begin{figure}
+\begin{subfigure}{0.48\textwidth}
+\parbox[h][4cm][c]{\textwidth}{
+\adjustbox{center}{$
+\begin{tikzpicture}[domain=-2:2]
+%\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
+\draw[dashed, |<->|]   (-2,0) -- (2,0);
+%\draw[<->] (0,-0.4) -- (0,4); % node[above] {$f(x)$};
+
+   % \node at (0,0)[circle,fill,inner sep=1pt]{};
+%    \node at (-2,0)[circle,fill,inner sep=1pt]{};
+%    \node at (2,0)[circle,fill,inner sep=1pt]{};
+%\node(z) at (0.2,-0.2) {$x$};
+\node(-e) at (-2,-0.2) {$x-\varepsilon$};
+\node(e) at (2,-0.2) {$x+\varepsilon$};
+
+%
+%\node(f) at (0,0.8+0.5)[circle,fill,inner sep=1pt]{};
+%\node(f) at (0,1.5+0.3)[circle,fill,inner sep=1pt]{};
+%\node(f) at (0,0.3)[circle,fill,inner sep=1pt]{};
+
+%\node(f) at (-0.3,2) {$f(x)$};
+%
+%\node(f) at (-0.3,1) {$g(x)$};
+%
+%\node(f) at (-0.3,0.5) {$h(x)$};
+
+\node(ff) at (1.3,2.2) {{$f$}};
+\node(gg) at (1.2,0.7) {{$g$}};
+\node(gg) at (1,0.45) {{$h$}};
+
+%\draw[color=red] plot (\x,\x) node[right] {$f(x) =x$};
+% \x r means to convert ?\x? from degrees to _r_adians:
+\draw[color=blue] plot (\x,{0.8+ 0.5*(cos(\x r))}) ;
+\draw[color=orange] plot (\x,{1.5+0.3*exp(\x)}) ;
+\draw[color=red] plot (\x,{0.3}) ;
+
+
+
+\draw[dotted] (0,1.3) -- (2.6,1.3);
+\draw[dotted] (2,0.3) -- (3.5,0.3);
+\draw[dotted] (2,0.62) -- (2.8,0.62);
+\draw[dotted] (2,3.66) -- (3.5,3.66);
+
+%
+%\draw[dotted] (0,1.8) -- (2, 0.62);
+%\draw[dotted] (0,1.3) -- (2, 3.66);
+
+\draw[dashed,|<->| ] (2.4,3.66) -- node[right] {\tiny$d(f,g)$} (2.4,0.62);
+\draw[dashed,|<->| ] (2.6,1.3) -- node[above left] {\tiny$d(g,h)$} (2.6,0.3);
+
+\draw[dashed,|<->| ] (2.8,1.3) -- node[right] {\tiny$d(g,g)$} (2.8,0.62);
+
+%\draw[dashed,|<->| ] (3.5,2.96) -- node[above right] {\tiny$\begin{matrix}d(f,g)+d(g,h)\\ -d(g,g)\end{matrix}$} (3.5,0.3);
+
+\draw[dashed,|<->| ] (3.5,3.66) -- node[right] {\tiny$d(f,h)$} (3.5,0.3);
+
+\end{tikzpicture}$}
+}
+%
+\caption{\small Our new metric is a partial metric: in the example above it can be seen that $d(f,h) \leq d(f,g)+d(g,h)- d(g,g)$ (with all distances computed in the interval $[x-\varepsilon, x+\varepsilon]$).}% and 
+%
+%
+%minimum $\delta$ such that for all $y\in [x-\varepsilon, x+\varepsilon]$, both $g(y)\in [f(x)-\delta, f(x)+\delta]$ and $f(y)\in[g(x)-\delta, g(x)+\delta]$ hold. $\delta$ is thus $\max\{\delta_{1},\delta_{2}\}$ in the image above.}
+\label{fig:graph2bis}
+\end{subfigure} \ \ \ 
+\begin{subfigure}{0.48\textwidth}
+\parbox[h][4cm][c]{\textwidth}{
+\adjustbox{center}{$
+\begin{tikzpicture}[domain=-2:2, scale=0.9]
+%\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
+\draw[<->]   (-2,0) -- (2,0);
+\draw[<->] (0,-2) -- (0,2); % node[above] {$f(x)$};
+\node at (0,-2.4) {};
+
+\draw[|-|] (-1,0) -- (1,0);
+\node(r) at (-1,-0.3) {\tiny$-\varepsilon$};
+\node(r) at (1,-0.3) {\tiny$+\varepsilon$};
+   % \node at (0,0)[circle,fill,inner sep=1pt]{};
+%
+\draw[color=red, domain=-2:2, samples=40] plot (\x, {sin(\x r) } ) node[above] {\tiny$\sin(x)$};
+
+\draw[color=blue, domain=-2:2,samples=40] plot (\x,{\x  } ) node[below] {\tiny$x$};
+
+
+\draw[dotted] (-2,1) -- (2,1);
+\draw[dotted] (-2,-1) -- (2,-1);
+
+\draw[dotted] (-2,0.8) -- (2,0.8);
+\draw[dotted] (-2,-0.8) -- (2,-0.8);
+
+\draw[|<->|] (2.3,1) -- node[above right]{\tiny$\delta$} (2.3,-1);
+\draw[|<->|] (2.7,0.8) -- node[below right]{\tiny$\delta'$} (2.7,-0.8);
+
+
+\end{tikzpicture}$}
+}
+\caption{\small The self-distances $\delta,\delta'$ of $\sin(x)$ and $x$ in a small interval $[-\varepsilon,\varepsilon]$ of $0$ are very close.\\~\\~}
+\label{fig:sinid2}
+\end{subfigure}
+\caption{The sup-distance is inadequate for contextual transformations.}
+\label{fig:sinid}
+\end{figure}
 
 
 \subparagraph*{Diameter Space over a Cartesian Closed Category}
