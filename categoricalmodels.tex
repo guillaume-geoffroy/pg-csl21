@@ -69,7 +69,7 @@ Let $p = a \times b \in \intervals{A \times B}$. For all $v \in \lam(\psi)(a)$ a
  
 As in Section \ref{section:stlc}, we can find a kind of weak embedding from $\mathbb{C}$ to $\dsp(\mathbb{C})$. Namely, for all $\mathbb{C}$-diameter spaces $A$ and $B$, we define a monotone map $\partial : \mathbb{C}(\bs{A}, \bs{B}) \to \dsp\allowbreak(\mathbb{C})(A, B)$ by $\partial(f)(a) = \sup \{ \tointerval{f \circ t} \mid t \in a \}$. The following compatibility result is immediate and offers a counterpart to Remark \ref{remark:oplax-functor-stlc}:
 
-\begin{proposition} For all $\mathbb{C}$-diameter spaces $A, B, C$, all $f \in \mathbb{C}(A, B)$ and all $g \in \mathbb{C}(B, C)$, $\partial(g \circ f) \leq \partial(g) \circ \partial(f)$. In addition, $\partial(\operatorname{id}_{\bs{A}}) = \operatorname{id}_A$.
+\begin{proposition} For all $\mathbb{C}$-diameter spaces $A, B, C$, all $f \in \mathbb{C}(\bs A, \bs B)$ and all $g \in \mathbb{C}(\bs B, \bs C)$, $\partial(g \circ f) \leq \partial(g) \circ \partial(f)$. In addition, $\partial(\operatorname{id}_{\bs{A}}) = \operatorname{id}_A$.
 \end{proposition}
  
 One way to reformulate this result is that $\partial$ induces an oplax-functor from the category with the same objects as $\dsp(\mathbb{C})$ and the same morphisms as $\mathbb{C}$, to $\dsp(\mathbb{C})$.
