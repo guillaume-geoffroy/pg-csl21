@@ -180,24 +180,24 @@ We will now exploit this structure to define, for each type $A$ of $\STLC$, a ge
 % The definition of this space will exploit in an essential way the sets of approximate values $\intervals{A}$.
 
 
-The first step is to define, for every simple type $A$, a commutative integral quantale $(\distances{A}, \quantaleleq_A, \quantaleop_A)$ of \emph{distances of type $A$}:
+The first step is to define, for every simple type $A$, a commutative integral quantale $(\distances{A}, \quantalegeq_A, \quantaleop_A)$ of \emph{distances of type $A$}:
 \begin{itemize}
-\item $(\distances{\mathsf{Real}}, \quantaleleq_\mathsf{Real}, \quantaleop_\mathsf{Real}) = ([0,\infty], \geq, +)$,
+\item $(\distances{\mathsf{Real}}, \quantalegeq_\mathsf{Real}, \quantaleop_\mathsf{Real}) = ([0,\infty], \leq, +)$,
 \item $\distances{A \times B} = \distances{A} \times \distances{B}$,
-\item $\distances{A \to B} =\operatorname{Decr}(\intervals{A}, \distances{B})$.
+\item $\distances{A \to B} =\operatorname{Poset}(\intervals{A}, \distances{B})$.
 % \{ \text{monotonically decreasing functions from } \intervals{A} \text{ to } \distances{B} \}$.
 \end{itemize}
-where, for two ordered sets $Q,R$, $\operatorname{Decr}(Q,R)$ denotes the set of monotonically decreasing functions from $Q$ to $R$.
+where, for two posets $Q,R$, $\operatorname{Poset}(Q,R)$ denotes the set of monotone functions from $Q$ to $R$.
 Observe that the quantale $\distances{A\to B}$ is a set of functions over the approximate values of $A$.
 
 For all simple types $A$, we now define a \emph{distance function} $d_A : \Lambda_A \times \Lambda_A \to \distances{A}$:
 \begin{itemize}
 \item $d_\mathsf{Real}(t,u) = \left\vert r-s \right\vert$, where $r,s$ are the unique elements of $\mathbb{R}$ such that $t \to_\beta^* r$ and $u \to_\beta^* s$,
 \item $d_{A \times B}(t,u) = (d_A(\pi_L t, \pi_L u), d_B(\pi_R t, \pi_R u))$,
-\item $d_{A \to B}(t,u) = a \mapsto \inf \left\{ d_B(rv, sw) \mid r,s \in \{t,u\}, v,w \in a \right\}$.
+\item $d_{A \to B}(t,u) = a \mapsto \sup \left\{ d_B(rv, sw) \mid r,s \in \{t,u\}, v,w \in a \right\}$.
 \end{itemize}
 
-It would be tempting to define $d_{A \to B}(t,u)(a)$ simply as $\inf \left\{ d_B(tv, uw) \mid v,w \in a \right\}$, but then the axiom ``$d_{A \to B}(t,t) \leq d_{A \to B}(t,u)$'' of partial metric spaces would fail.
+It would be tempting to define $d_{A \to B}(t,u)(a)$ simply as $\sup \left\{ d_B(tv, uw) \mid v,w \in a \right\}$, but then the axiom ``$d_{A \to B}(t,t) \leq d_{A \to B}(t,u)$'' of partial metric spaces would fail.
 
 The maps $d_{A}$ are clearly compatible with observational equivalence (\textit{i.e.} if $a \oeq_A a'$ and $b \oeq_A b'$, then $d_A(a,b) = d_A(a',b')$). 
 
@@ -227,7 +227,7 @@ This property is at the heart of our generalization of diameters. Observe that t
 
 
 Our objective is now to prove that $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalized partial metric space.
-To this end, we define for all simple types $A$ a monotonically decreasing \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \inf \{ d_A(t,u) \mid t,u \in a \}$. The key to our objective will be to prove that $\diam_{A}$ is \emph{super-modular} on intersecting approximate values (Proposition \ref{prop:submodular}): this generalizes the fact that, on the (real-valued) metric space $\mathbb{R}$, the diameter is \emph{modular} over intersecting closed intervals (see Fig. \ref{fig:modular}).
+To this end, we define for all simple types $A$ a monotone \emph{diameter function} $\diam_A : \intervals{A} \to \distances{A}$ by $\diam_A(a) = \sup \{ d_A(t,u) \mid t,u \in a \}$. The key to our objective will be to prove that $\diam_{A}$ is \emph{sub-modular} on intersecting approximate values (henceforth, \emph{quasi-sub-modular} -- see Proposition \ref{prop:submodular}): this generalizes the fact that, on the (real-valued) metric space $\mathbb{R}$, the diameter is \emph{modular} over intersecting closed intervals (see Fig. \ref{fig:modular}).
  %-- or rather, using the quantale ordering convention, supermodular. 
  
  
@@ -242,7 +242,7 @@ $\diam_\mathsf{A \times B}(p)  = \left(\diam_A\left(\sup\left\{\tointerval{\pi_L
 This leads then to the following:
 %With that, we can prove that the diameter function $\diam_{A}$ is super-modular over intersecting approximate values: 
 %``quasi-supermodularity'':
-\begin{proposition}[$\diam_{A}$ is super-modular]\label{prop:submodular} For all simple types $A$ and all $a,b \in \intervals{A}$ such that $a \wedge b \neq \emptyset$, $\diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)$.
+\begin{proposition}[$\diam_{A}$ is quasi-sub-modular]\label{prop:submodular} For all simple types $A$ and all $a,b \in \intervals{A}$ such that $a \wedge b \neq \emptyset$, $\diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)$.
 \end{proposition}
 \begin{proof}
 We proceed by induction on types.
@@ -256,7 +256,7 @@ Let $f,g \in \intervals{A \to B}$ and $a \in \intervals{A}$. For all $h \in \int
 \end{proof}
 
 It is well-known  \cite{6845021} that any 
-function $\delta: L\to \mathbb [0,\infty]$ on a lattice $L$ that is monotone and \emph{submodular}  (\emph{i.e.}~ satisfying $\delta(a\vee b)+ \delta(a\wedge b) \leq \delta(a)+\delta(b)$ - recall that the order on $\mathbb [0,\infty]$, taken as a quantale, is opposite to the usual order) induces a pseudo-metric $d: L\times L \to \mathbb [0,\infty]$ by letting $d^*(a,b)=2\delta(a\vee b)-\delta(a)-\delta(b)$. In fact, one can decompose this construction: first, one defines a partial pseudometric $d$ on $L$ by $d(a,b) = \diam(a \vee b)$, and then $d^*$ is just the distance given by equation \eqref{eq:pmettomet}: $d^*(a,b) = 2d(a,b)-d(a,a)-d(b,b)$. We can use this way of reasoning to establish that the maps $d_{A}$ are indeed partial metrics:
+function $\delta: L\to \mathbb [0,\infty]$ on a lattice $L$ that is monotone and \emph{sub-modular} induces a pseudo-metric $d: L\times L \to \mathbb [0,\infty]$ by letting $d^*(a,b)=2\delta(a\vee b)-\delta(a)-\delta(b)$. In fact, one can decompose this construction: first, one defines a partial pseudometric $d$ on $L$ by $d(a,b) = \diam(a \vee b)$, and then $d^*$ is just the distance given by equation \eqref{eq:pmettomet}: $d^*(a,b) = 2d(a,b)-d(a,a)-d(b,b)$. We can use this way of reasoning to establish that the maps $d_{A}$ are indeed partial metrics:
 
 \begin{corollary} \label{corollary:stlc-metric} For all simple types $A$, $\left(\Lambda_A/\oeq_A, \distances{A}, d_A\right)$ is a generalized partial metric space, that is to say:
 \begin{enumerate}
@@ -267,11 +267,11 @@ function $\delta: L\to \mathbb [0,\infty]$ on a lattice $L$ that is monotone and
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-As mentioned above, for all $t,u\in\Lambda_A$, $d_A(t,u) = \diam_A(\tointerval{t} \vee \tointerval{u})$, which immediately gives point 3. Since $\delta_A$ is monotonically decreasing and $\tointerval{t} \vee \tointerval{t} \leq \tointerval{t} \vee \tointerval{u}$, we also get point 1.
+As mentioned above, for all $t,u\in\Lambda_A$, $d_A(t,u) = \diam_A(\tointerval{t} \vee \tointerval{u})$, which immediately gives point 3. Since $\delta_A$ is monotone and $\tointerval{t} \vee \tointerval{t} \leq \tointerval{t} \vee \tointerval{u}$, we also get point 1.
 
-One can check (by induction on types) that the restriction of $\diam_A$ to the ideal generated by the $\tointerval{t}$ (for $t \in \Lambda_A$) is \emph{strictly} decreasing. Therefore, if  $d_A(t,t) = d_A(t,u) = d_A(u,u)$, \textit{i.e.} $\diam_A(\tointerval{t}) = \diam_A(\tointerval{t} \vee \tointerval{u}) = \diam_A(\tointerval{u})$,  then $\tointerval{t} = \tointerval{t} \vee \tointerval{u} = \tointerval{u}$, so $t \oeq_A u$.
+One can check (by induction on types) that the restriction of $\diam_A$ to the ideal generated by the $\tointerval{t}$ (for $t \in \Lambda_A$) is \emph{strictly} monotone. Therefore, if  $d_A(t,t) = d_A(t,u) = d_A(u,u)$, \textit{i.e.} $\diam_A(\tointerval{t}) = \diam_A(\tointerval{t} \vee \tointerval{u}) = \diam_A(\tointerval{u})$,  then $\tointerval{t} = \tointerval{t} \vee \tointerval{u} = \tointerval{u}$, so $t \oeq_A u$.
 
-The triangular inequality is an immediate consequence of the quasi-supermodularity of $\diam_A$: $d(t,v) \quantaleop d(u,u) = \diam(\tointerval{t} \vee \tointerval{v}) \quantaleop \diam(\tointerval{u}) \quantalegeq \diam((\tointerval{t} \vee \tointerval{u}) \vee (\tointerval{u} \vee \tointerval{v})) \quantaleop \diam((\tointerval{t} \vee \tointerval{u}) \wedge (\tointerval{u} \vee \tointerval{v})) \quantalegeq \diam(\tointerval{t} \vee  \tointerval{u}) \quantaleop \diam(\tointerval{u} \vee  \tointerval{v}) = d(t,u) \quantaleop d(u,v)$.
+The triangular inequality is an immediate consequence of the quasi-sub-modularity of $\diam_A$: $d(t,v) \quantaleop d(u,u) = \diam(\tointerval{t} \vee \tointerval{v}) \quantaleop \diam(\tointerval{u}) \quantalegeq \diam((\tointerval{t} \vee \tointerval{u}) \vee (\tointerval{u} \vee \tointerval{v})) \quantaleop \diam((\tointerval{t} \vee \tointerval{u}) \wedge (\tointerval{u} \vee \tointerval{v})) \quantalegeq \diam(\tointerval{t} \vee  \tointerval{u}) \quantaleop \diam(\tointerval{u} \vee  \tointerval{v}) = d(t,u) \quantaleop d(u,v)$.
 \end{proof}
 
 %

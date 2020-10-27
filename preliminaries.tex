@@ -9,16 +9,16 @@ Partial metric spaces were  introduced in the early nineties as a variant of met
 In this paper we will only be concerned with partial metrics taking values over a \emph{commutative integral} quantale \cite{Hofmann2014}, of which we recall the definition below.
 % (which is the only kind of quantale we will consider here): %, as we will use these concepts throughout this paper.
 
-\begin{definition} A \emph{commutative integral quantale} is a triple $(Q, \quantaleop, \quantaleleq)$ where:
+\begin{definition} A \emph{commutative integral quantale} is a triple $(Q, \quantaleop, \quantalegeq)$ where:
 \begin{itemize}
-\item $(Q, \quantaleleq)$ is a complete lattice,
+\item $(Q, \quantalegeq)$ is a complete lattice,
 \item $(Q, \quantaleop)$ is a commutative monoid,
-\item $\quantaleop$ commutes with arbitrary $\sup$s,
-\item the largest element of $Q$ is neutral for $\quantaleop$.
+\item $\quantaleop$ commutes with arbitrary $\inf$s,
+\item the least element of $Q$ is neutral for $\quantaleop$.
 \end{itemize}
 \end{definition}
 
-For example, $([0,\infty], +, \geq)$ is a commutative integral quantale whose largest element is $0$ (notice the reversed ordering). It is straightforward to check that for all commutative integral quantales $Q,R$, the product monoid $Q \times R$ equipped with the product ordering is also a commutative integral quantale. In addition, for all posets $X$, the set of monotonically increasing (respectively, decreasing) functions from $X$ to $Q$, equipped with the pointwise monoid operation and the pointwise ordering, is also a commutative integral quantale. Another example of commutative integral quantale is given by the lattice of ideals of any commutative ring, with the product of ideals as the monoid operation.
+For readability, we have we have reversed the ordering with respect to the conventional definition, so that for example, $([0,\infty], +, \leq)$ is a commutative integral quantale whose least element is $0$  (as opposed to ``$([0,\infty], +, \geq)$ is a commutative integral quantale whose \emph{largest} element is $0$'', which is what we would get with the usual definition). It is straightforward to check that for all commutative integral quantales $Q,R$, the product monoid $Q \times R$ equipped with the product ordering is also a commutative integral quantale. In addition, for all posets $X$, the set of monotone functions from $X$ to $Q$, equipped with the pointwise monoid operation and the pointwise ordering, is also a commutative integral quantale. Another example of commutative integral quantale is given by the lattice of ideals of any commutative ring, with the product of ideals as the monoid operation.
 
 
 We recall now the definition of a generalized partial metric space:
@@ -32,7 +32,7 @@ We recall now the definition of a generalized partial metric space:
 \end{itemize}
 \end{definition}
 
-For every metric space $(X,d)$, the structure $(X, ([0,\infty], +, \geq), d)$ is a GPMS: notice that the triangular inequality in this definition is the opposite of the usual one, which corresponds to the fact that the quantale ordering on $\mathbb{R}$ is the dual of the usual ordering. 
+For every metric space $(X,d)$, the structure $(X, ([0,\infty], +, \leq), d)$ is a GPMS. 
 As is well-known \cite{bkmp:partial-metrics}, any real-valued GPMS $(X,[0,\infty],d)$ induces a metric $d^{*}$ by letting 
 \begin{equation}\label{eq:pmettomet} % Only works with a division quantale, e.g. [0,\infty]
 d^{*}(x,y)=2d(x,y)-d(x,x)-d(y,y)\tag{$\star$}

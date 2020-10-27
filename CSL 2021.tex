@@ -168,9 +168,9 @@ mysymbol/.style={start anchor=center,end anchor=center,draw=none}
 \newcommand{\intervals}[1]{\llbracket #1 \rrbracket}
 \newcommand{\distances}[1]{\llparenthesis #1 \rrparenthesis}
 \newcommand{\tointerval}[1]{\overline{#1}}
-\newcommand{\quantaleleq}{\sqsubseteq}
-\newcommand{\quantalegeq}{\sqsupseteq}
-\newcommand{\quantaleop}{\mathbin{\ast}}
+\newcommand{\quantaleleq}{\geq}
+\newcommand{\quantalegeq}{\leq}
+\newcommand{\quantaleop}{+}
 \newcommand{\diam}{\delta}
 \newcommand{\oeq}{\approx}
 
@@ -188,25 +188,11 @@ mysymbol/.style={start anchor=center,end anchor=center,draw=none}
 
 \maketitle
 
-%TODO mandatory: add short abstract of the document
 \begin{abstract}
 
 Program semantics is traditionally concerned with program equivalence. However, in fields like approximate, incremental and probabilistic computation, it is often useful to describe \emph{to which extent} two programs behave in a similar, although non equivalent way. This has motivated the study of program (pseudo)metrics, which have found widespread applications, \emph{e.g.}~in differential privacy. 
 In this paper we show that the standard metric on real numbers can be lifted to higher-order types in a novel way, yielding a metric semantics of the simply typed lambda-calculus in which types are interpreted as quantale-valued partial metric spaces. Using such metrics we define a class of higher-order denotational models, called diameter space models, that provide a quantitative semantics of approximate program transformations.
-Noticeably, the distances between objects of higher-types are elements of functional, thus non-numerical, quantales. This allows us to model contextual reasoning about arbitrary functions, thus deviating from classic metric semantics. 
-
-%
-%While program semantics usually focuses on program equivalence, in fields like approximate, incremental and probabilistic computation it is often more useful to describe to which extent two programs behave in a similar, although non equivalent way. This has motivated the study of program (pseudo)metrics, which have found widespread applications, \textit{e.g.} in differential privacy. 
-%
-%In this paper we show that the standard metric on real numbers can be lifted to higher-order types, yielding a metric semantics of the simply typed $\lambda$-calculus in which types are interpreted as quantale-valued partial metric spaces.
-%Using such metrics we define a class of higher-order denotational models, called \emph{diameter space models}, that provide a quantitative semantics of approximate program transformations.
-
-
-%
-% a cartesian lax-closed category whose objects are partial metric spaces with distances taken over an arbitrary quantale. While usual categories of metric spaces only model linear or sub-exponential fragments of the simply-typed lambda-calculus, our category provides a non-extensional model of the full calculus.
-
-\end{abstract}
-
+Noticeably, the distances between objects of higher-types are elements of functional, thus non-numerical, quantales. This allows us to model contextual reasoning about arbitrary functions, thus deviating from classic metric semantics. \end{abstract}
 
 \section{Introduction}
 

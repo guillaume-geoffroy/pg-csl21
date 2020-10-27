@@ -21,8 +21,8 @@ For the rest of this section, we fix a cartesian poset-enriched category $(\math
 \begin{definition} A \emph{$\mathbb{C}$-diameter space} $A$ is the data of \begin{itemize}
 \item an object $\bs{A}$ of $\mathbb{C}$. The poset $\mathbb{C}(1,\bs{A})$ will be denoted by $\Lambda_A$;
 \item a set $\intervals{A}$ of downwards-closed subsets of $\Lambda_A$ that is closed under arbitrary intersections. In particular, $\intervals{A}$ is a complete lattice whose meet is given by intersection, and for all $t\in\Lambda_A$, there is a least element of $\intervals{A}$ that contains $t$, which will be denoted by $\tointerval{t}$;
-\item a commutative integral quantale $(\distances{A}, \quantaleop, \quantaleleq)$;
-\item a monotonically decreasing function $\diam_A : \intervals{A} \to \distances{A}$ such that $$\forall a,b \in \intervals{A} \text{ s.t. } a \wedge b \neq \emptyset,~ \diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)\text{,}$$
+\item a commutative integral quantale $(\distances{A}, \quantaleop, \quantalegeq)$;
+\item a monotone function $\diam_A : \intervals{A} \to \distances{A}$ such that $$\forall a,b \in \intervals{A} \text{ s.t. } a \wedge b \neq \emptyset,~ \diam(a \wedge b) \quantaleop \diam(a \vee b) \quantalegeq \diam(a) \quantaleop \diam(b)\text{,}$$
 and such that for all $t,u \in \Lambda_A$, if $\diam_A(\tointerval{t}) = \diam_A(\tointerval{t} \vee \tointerval{u})$, then $\tointerval{t} = \tointerval{t} \vee \tointerval{u}$.
 \end{itemize}
 \end{definition}
@@ -37,7 +37,7 @@ Following Section \ref{section:stlc}, for all $\mathbb{C}$-diameter spaces $A$ a
 \item $\distances{A \times B} = \distances{A} \times \distances{B}$,
 \item $\diam_{A \times B}(c) = (\diam_A(\{ \pi_L \circ t \mid t \in c \}), \diam_B(\{ \pi_R \circ t \mid t \in c \}))$,
 \item $\intervals{\exp(A, B)} = \{ \{ t \in \mathbb{C}(1, \exp(\bs{A}, \bs{B})) \mid \forall u \in \Lambda_{A},~ \ev(t) \circ u \in I(u) \} \mid I\in \operatorname{Poset}(\Lambda_A, \intervals{B}) \}$,
-\item $\distances{\exp(A, B)} = \operatorname{Decr}(\intervals{A}, \distances{B})$,
+\item $\distances{\exp(A, B)} = \operatorname{Poset}(\intervals{A}, \distances{B})$,
 \item $\diam_\mathsf{\exp(A, B)}(c) = a \mapsto \diam_B\left(\sup\left\{\tointerval{\ev(v) \circ t} \mid t\in a, v \in c\right\}\right).$
 \end{itemize}
 
