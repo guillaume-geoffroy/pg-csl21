@@ -1,7 +1,7 @@
 % !TEX root = CSL 2021.tex
 
 %\subparagraph*{Measuring sensitivity and similarity of programs in a compositional way}
-In program semantics one is usually interested in capturing notions of behavioral equivalence between programs. However,  sin several fields like approximate \cite{Mittal2016}, incremental \cite{Cai2014, Picallo2019} and probabilistic \cite{10.1109/LICS.2015.64} computation, it is often more useful to be able to describe \emph{to which extent}  two programs behave in a similar, although non equivalent way, so that one can measure the change in the result produced by
+In program semantics one is usually interested in capturing notions of behavioral equivalence between programs. However,  in several fields like approximate \cite{Mittal2016}, incremental \cite{Cai2014, Picallo2019} and probabilistic \cite{10.1109/LICS.2015.64} computation, it is often more useful to be able to describe \emph{to which extent}  two programs behave in a similar, although non equivalent way, so that one can measure the change in the result produced by
 replacing one program by the other one.
 % produces a change in the result which can be quantified and bounded in some way.
 
@@ -195,87 +195,55 @@ The use of partial metrics with functional distances yields a rich and expressiv
 contextual transformations. For instance, we can express the closeness of $\lambda x.\sin(x)$ and $\lambda x.x$ around 0 by the fact that their distance, applied to a small interval $[-\varepsilon,\varepsilon]$ around 0, is very close to the {self-distance} of
 $\lambda x.\sin(x)$ on the same interval (as illustrated in Fig. \ref{fig:sinid2}). Moreover, the {triangular inequality} of partial metrics  can be used to infer new bounds from previously established ones in a compositional way.
 
-
 \begin{figure}
-\begin{subfigure}{0.48\textwidth}
-\parbox[h][4cm][c]{\textwidth}{
+\begin{minipage}{0.48\textwidth}
+\parbox[h][3.5cm][c]{\textwidth}{
 \adjustbox{center}{$
 \begin{tikzpicture}[domain=-2:2]
-%\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
 \draw[dashed, |<->|]   (-2,0) -- (2,0);
-%\draw[<->] (0,-0.4) -- (0,4); % node[above] {$f(x)$};
-
-   % \node at (0,0)[circle,fill,inner sep=1pt]{};
-%    \node at (-2,0)[circle,fill,inner sep=1pt]{};
-%    \node at (2,0)[circle,fill,inner sep=1pt]{};
-%\node(z) at (0.2,-0.2) {$x$};
 \node(-e) at (-2,-0.2) {$x-\varepsilon$};
 \node(e) at (2,-0.2) {$x+\varepsilon$};
-
-%
-%\node(f) at (0,0.8+0.5)[circle,fill,inner sep=1pt]{};
-%\node(f) at (0,1.5+0.3)[circle,fill,inner sep=1pt]{};
-%\node(f) at (0,0.3)[circle,fill,inner sep=1pt]{};
-
-%\node(f) at (-0.3,2) {$f(x)$};
-%
-%\node(f) at (-0.3,1) {$g(x)$};
-%
-%\node(f) at (-0.3,0.5) {$h(x)$};
 
 \node(ff) at (1.3,2.2) {{$f$}};
 \node(gg) at (1.2,0.7) {{$g$}};
 \node(gg) at (1,0.45) {{$h$}};
 
-%\draw[color=red] plot (\x,\x) node[right] {$f(x) =x$};
-% \x r means to convert ?\x? from degrees to _r_adians:
 \draw[color=blue] plot (\x,{0.8+ 0.5*(cos(\x r))}) ;
 \draw[color=orange] plot (\x,{1.5+0.3*exp(\x)}) ;
 \draw[color=red] plot (\x,{0.3}) ;
-
-
 
 \draw[dotted] (0,1.3) -- (2.6,1.3);
 \draw[dotted] (2,0.3) -- (3.5,0.3);
 \draw[dotted] (2,0.62) -- (2.8,0.62);
 \draw[dotted] (2,3.66) -- (3.5,3.66);
 
-%
-%\draw[dotted] (0,1.8) -- (2, 0.62);
-%\draw[dotted] (0,1.3) -- (2, 3.66);
-
 \draw[dashed,|<->| ] (2.4,3.66) -- node[right] {\tiny$d(f,g)$} (2.4,0.62);
 \draw[dashed,|<->| ] (2.6,1.3) -- node[above left] {\tiny$d(g,h)$} (2.6,0.3);
 
 \draw[dashed,|<->| ] (2.8,1.3) -- node[right] {\tiny$d(g,g)$} (2.8,0.62);
 
-%\draw[dashed,|<->| ] (3.5,2.96) -- node[above right] {\tiny$\begin{matrix}d(f,g)+d(g,h)\\ -d(g,g)\end{matrix}$} (3.5,0.3);
-
 \draw[dashed,|<->| ] (3.5,3.66) -- node[right] {\tiny$d(f,h)$} (3.5,0.3);
 
 \end{tikzpicture}$}
 }
-%
-\caption{\small Our new metric is a partial metric: in the example above it can be seen that $d(f,h) \leq d(f,g)+d(g,h)- d(g,g)$ (with all distances computed in the interval $[x-\varepsilon, x+\varepsilon]$).}% and 
-%
-%
-%minimum $\delta$ such that for all $y\in [x-\varepsilon, x+\varepsilon]$, both $g(y)\in [f(x)-\delta, f(x)+\delta]$ and $f(y)\in[g(x)-\delta, g(x)+\delta]$ hold. $\delta$ is thus $\max\{\delta_{1},\delta_{2}\}$ in the image above.}
+
+\captionof{figure}{\small Our new metric is a partial metric: in the example above it can be seen that $d(f,h) \leq d(f,g)+d(g,h)- d(g,g)$ (with all distances computed in the interval $[x-\varepsilon, x+\varepsilon]$).}
+
 \label{fig:graph2bis}
-\end{subfigure} \ \ \ 
-\begin{subfigure}{0.48\textwidth}
-\parbox[h][4cm][c]{\textwidth}{
+\end{minipage} \ \ \ 
+\begin{minipage}{0.48\textwidth}
+\parbox[h][3.5cm][c]{\textwidth}{
 \adjustbox{center}{$
 \begin{tikzpicture}[domain=-2:2, scale=0.9]
-%\draw[very thin,color=gray] (-0.1,-1.1) grid (3.9,3.9);
+
 \draw[<->]   (-2,0) -- (2,0);
-\draw[<->] (0,-2) -- (0,2); % node[above] {$f(x)$};
+\draw[<->] (0,-2) -- (0,2);
 \node at (0,-2.4) {};
 
 \draw[|-|] (-1,0) -- (1,0);
 \node(r) at (-1,-0.3) {\tiny$-\varepsilon$};
 \node(r) at (1,-0.3) {\tiny$+\varepsilon$};
-   % \node at (0,0)[circle,fill,inner sep=1pt]{};
-%
+
 \draw[color=red, domain=-2:2, samples=40] plot (\x, {sin(\x r) } ) node[above] {\tiny$\sin(x)$};
 
 \draw[color=blue, domain=-2:2,samples=40] plot (\x,{\x  } ) node[below] {\tiny$x$};
@@ -293,11 +261,11 @@ $\lambda x.\sin(x)$ on the same interval (as illustrated in Fig. \ref{fig:sinid2
 
 \end{tikzpicture}$}
 }
-\caption{\small The self-distances $\delta,\delta'$ of $\sin(x)$ and $x$ in a small interval $[-\varepsilon,\varepsilon]$ of $0$ are very close.\\~\\~}
+\captionof{figure}{\small The self-distances $\delta,\delta'$ of $\sin(x)$ and $x$ in a small interval $[-\varepsilon,\varepsilon]$ of $0$ are very~close.\\~\\~}
 \label{fig:sinid2}
-\end{subfigure}
-\caption{The sup-distance is inadequate for contextual transformations.}
-\label{fig:sinid}
+\end{minipage}
+%\caption{}%{The sup-distance is inadequate for contextual transformations.}
+%\label{fig:sinid}
 \end{figure}
 
 
