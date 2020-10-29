@@ -1,5 +1,5 @@
 
-\documentclass[a4paper,UKenglish,cleveref, autoref, english, thm-restate]{lipics-v2019}
+\documentclass[a4paper,USenglish,cleveref, autoref, thm-restate]{lipics-v2019}
 %This is a template for producing LIPIcs articles. 
 %See lipics-manual.pdf for further information.
 %for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
@@ -32,15 +32,15 @@
 %{johnqpublic@dummyuni.org}{https://orcid.org/0000-0002-1825-0097}{(Optional) author-specific funding acknowledgements}%TODO mandatory, please use full name; only 1 author per \author macro; first two parameters are mandatory, other parameters can be empty. Please provide at least the name of the affiliation and the country. The full address is optional
 
 
-\authorrunning{G. Geoffroy and P. Pistone} %TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
+\authorrunning{G. Geoffroy and P. Pistone} % mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
 
-\Copyright{G. Geoffroy and P. Pistone} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+\Copyright{G. Geoffroy and P. Pistone} % mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
 
-\ccsdesc[500]{Theory of computation~Denotational semantics} %TODO do this properly. Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm
+\ccsdesc[500]{Theory of computation~Denotational semantics} % Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm
 
-\keywords{Simply typed $\lambda$-calculus, program metrics, approximate program transformations, partial metric spaces}  %TODO mandatory; please add comma-separated list of keywords
+\keywords{Simply typed $\lambda$-calculus, program metrics, approximate program transformations, partial metric spaces}  % mandatory; please add comma-separated list of keywords
 
-\category{} %optional, e.g. invited paper
+%\category{} %optional, e.g. invited paper
 
 \relatedversion{} %optional, e.g. full version hosted on arXiv, HAL, or other respository/website
 %\relatedversion{A full version of the paper is available at \url{...}.}
@@ -56,17 +56,17 @@
 %\hideLIPIcs  %uncomment to remove references to LIPIcs series (logo, DOI, ...), e.g. when preparing a pre-final version to be uploaded to arXiv or another public repository
 
 %Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\EventEditors{John Q. Open and Joan R. Access}
+\EventEditors{Christel Baier and Jean Goubault-Larrecq}
 \EventNoEds{2}
-\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
-\EventShortTitle{CVIT 2016}
-\EventAcronym{CVIT}
-\EventYear{2016}
-\EventDate{December 24--27, 2016}
-\EventLocation{Little Whinging, United Kingdom}
+\EventLongTitle{29th EACSL Annual Conference on Computer Science Logic (CSL 2021)}
+\EventShortTitle{CSL 2021}
+\EventAcronym{CSL}
+\EventYear{2021}
+\EventDate{January 25--28, 2021}
+\EventLocation{Ljubljana, Slovenia (Virtual Conference)}
 \EventLogo{}
-\SeriesVolume{42}
-\ArticleNo{23}
+\SeriesVolume{183}
+\ArticleNo{32}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -111,9 +111,6 @@ mysymbol/.style={start anchor=center,end anchor=center,draw=none}
 %% Custom command definitions
 \newcommand{\ob}[1]{\operatorname{Ob}\left(#1\right)}
 \newcommand{\close}[1]{\overline{#1}}
-% \newcommand{\intervals}[1]{???}
-%\newcommand{\intervalsx}[1]{\left[#1\right]}
-%\newcommand{\intervals}[1]{\overline{\left[#1\right]}}
 \newcommand{\I}{\mathcal{I}}
 \newcommand{\J}{\mathcal{J}}
 \newcommand{\K}{\mathcal{K}}
@@ -146,15 +143,11 @@ mysymbol/.style={start anchor=center,end anchor=center,draw=none}
 \newcommand{\eff}{\operatorname{Eff}}
 \newcommand{\scott}{\operatorname{Scott}}
 
-%\newcommand{\oplam}{\operatorname{lam}}
-
 \newcommand{\STLC}{\mathsf{ST\lambda C}(\mathcal F_{n})}
 \newcommand{\QMet}{\mathsf{Met}_Q}
 \newcommand{\RMet}{\mathsf{Met}_{\R_+^\infty}}
-%\newcommand{\GPMS}{\mathsf{GPMet}}
 \newcommand{\gpms}[1]{#1}
 \newcommand{\real}{\R}
-%\newcommand{\Int}{\mathsf{Int}}
 \newcommand{\To}[2]{#1 \Rightarrow #2}
 \newcommand{\abs}{\lambda}
 
@@ -189,50 +182,41 @@ mysymbol/.style={start anchor=center,end anchor=center,draw=none}
 \maketitle
 
 \begin{abstract}
-
 Program semantics is traditionally concerned with program equivalence. However, in fields like approximate, incremental and probabilistic computation, it is often useful to describe \emph{to which extent} two programs behave in a similar, although non equivalent way. This has motivated the study of program (pseudo)metrics, which have found widespread applications, \emph{e.g.}~in differential privacy. 
 In this paper we show that the standard metric on real numbers can be lifted to higher-order types in a novel way, yielding a metric semantics of the simply typed lambda-calculus in which types are interpreted as quantale-valued partial metric spaces. Using such metrics we define a class of higher-order denotational models, called diameter space models, that provide a quantitative semantics of approximate program transformations.
-Noticeably, the distances between objects of higher-types are elements of functional, thus non-numerical, quantales. This allows us to model contextual reasoning about arbitrary functions, thus deviating from classic metric semantics. \end{abstract}
+Noticeably, the distances between objects of higher-types are elements of functional, thus non-numerical, quantales. This allows us to model contextual reasoning about arbitrary functions, thus deviating from classic metric semantics.
+\end{abstract}
 
 \section{Introduction}
 
-\input{intro}
+\input{section-introduction}
 
 
 \section{Generalized Partial Metric Spaces}
 
-\input{preliminaries}
+\input{section-preliminaries}
 
 \section{Approximate Programs for the Simply-Typed $\lambda$-Calculus over $\mathsf{Real}$}
 \label{section:stlc}
 
-\input{variation}
+\input{section-stlc}
 
 \section{Computing Program Distances using Partial Metrics}
 
-\input{examples}
+\input{section-examples}
 
 \section{Diameter Space Models Over a Cartesian Closed Category}
 
-\input{categoricalmodels}
+\input{section-categorical-models}
 
 \section{Conclusions}
 
-\input{relatedwork}
-
-
-%\input{conclusions}
+\input{section-conclusions}
 
 \bibliography{CSL2021.bib}
 
 %
 %\appendix
 %
-%\section{Generalized partial metric spaces}
-%
-%\input{partialmetricspaces}
-%
-%\section{Cartesian lax-closed categories}
-%
-%\input{cclaxc}
+
 \end{document}
